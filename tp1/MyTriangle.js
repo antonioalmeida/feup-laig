@@ -1,5 +1,5 @@
 /**
- * MyQuad
+ * MyTriangle
  * @constructor
  * @param scene
  * @param args - array containing the coordinates of each vertex
@@ -8,15 +8,21 @@
  * @param minT
  * @param maxT
  */
-function MyQuad(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+function MyTriangle(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     CGFobject.call(this,scene);
 
-    //Top left corner
+    //TO DO: use a "prettier" coordinates saving method
     this.x0 = args[0];
     this.y0 = args[1];
-    //Bottom right corner
-    this.x1 = args[2];
-    this.y1 = args[3];
+    this.z0 = args[2];
+
+    this.x1 = args[3];
+    this.y1 = args[4];
+    this.z1 = args[5];
+
+    this.x2 = args[6];
+    this.y2 = args[7];
+    this.z2 = args[8];
 
     this.minS = minS;
     this.maxS = maxS;
@@ -25,24 +31,22 @@ function MyQuad(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     this.initBuffers();
 };
 
-MyQuad.prototype = Object.create(CGFobject.prototype);
-MyQuad.prototype.constructor=MyQuad;
+MyTriangle.prototype = Object.create(CGFobject.prototype);
+MyTriangle.prototype.constructor=MyTriangle;
 
-MyQuad.prototype.initBuffers = function () {
+MyTriangle.prototype.initBuffers = function () {
     this.vertices = [
-        this.x0, this.y1, 0, //Bottom left corner
-        this.x1, this.y1, 0, //Bottom right corner
-        this.x0, this.y0, 0, //Top left corner
-        this.x1, this.y0, 0  //Top right corner
+        this.x0, this.y0, this.z0,
+        this.x1, this.y1, this.z1,
+        this.x2, this.y2, this.z2,
     ];
+    console.log("Vertices: " + this.vertices);
 
     this.indices = [
-        0, 1, 2,
-        3, 2, 1
+        0, 1, 2
     ];
 
     this.normals = [
-        0, 0, 1,
         0, 0, 1,
         0, 0, 1,
         0, 0, 1
