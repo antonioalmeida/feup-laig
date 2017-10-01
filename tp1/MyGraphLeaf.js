@@ -9,27 +9,27 @@ function MyGraphLeaf(graph, xmlelem) {
     this.type = graph.reader.getString(xmlelem, 'type');
     //console.log("TYPE : " + this.type);
 
-    var coordinatesStr = graph.reader.getString(xmlelem, 'args');
-    var coordinates = coordinatesStr.split(" ");
-    console.log("Args : " + coordinates);
+    var argsStr = graph.reader.getString(xmlelem, 'args');
+    var args = argsStr.split(" ");
+    console.log("Args : " + args);
 
     //Default value for now
-    this.primitive = new MyQuad(graph.scene, [0,0,0,0]);
 
     switch(this.type) {
         case 'rectangle':
-            this.primitive = new MyQuad(graph.scene, coordinates);
+            this.primitive = new MyQuad(graph.scene, args);
+            break;
         case 'cylinder':
-            //this.primitive = new MyCylinder(graph.scene, 2, 4);
+            this.primitive = new MyCylinder(graph.scene, args);
             break;
         case 'triangle':
-            this.primitive = new MyTriangle(graph.scene, coordinates);
+            this.primitive = new MyTriangle(graph.scene, args);
             break;
         case 'patch':
-            //this.primitive = new MyPatch(cenas);
+            this.primitive = new MyQuad(graph.scene, [0,0,0,0]);
             break;
         case 'sphere':
-            //this.primitive = new MyPatch(cenas);
+            this.primitive = new MySphere(graph.scene, args);
             break;
     }
 }

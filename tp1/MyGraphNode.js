@@ -5,9 +5,10 @@
 
 function MyGraphNode(graph, nodeID) {
     this.graph = graph;
+    this.visited = false;
 
     this.nodeID = nodeID;
-    
+
     // IDs of child nodes.
     this.children = [];
 
@@ -39,12 +40,29 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
 }
 
 /**
+ * Displays this node and it's leaves and children recursively
+ */
+MyGraphNode.prototype.display = function() {
+    this.graph.scene.pushMatrix();
+        this.graph.scene.multMatrix(this.transformMatrix);
+        this.displayLeaves();
+        this.displayChildren();
+    this.graph.scene.popMatrix();
+}
+
+/**
  * Displays this node's leaves
  */
 MyGraphNode.prototype.displayLeaves = function() {
-    for(var i = 0; i < this.leaves.length; i++) {
-        this.leaves[i].display();
-    }
+    for(let leaveID in this.leaves)
+        this.leaves[leaveID].display();
 }
 
-
+/**
+ * Displays this nodes's children
+ */
+MyGraphNode.prototype.displayChildren = function() {
+    for(let childrenID in this.children) {
+        this.graph.nodes[this.children[childrenID]].display();
+    }
+}
