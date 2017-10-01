@@ -10,17 +10,18 @@ function MyGraphLeaf(graph, xmlelem) {
     //console.log("TYPE : " + this.type);
 
     var argsStr = graph.reader.getString(xmlelem, 'args');
-    var args = argsStr.split(" ");
-    console.log("Args : " + args);
+    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g);
 
-    //Default value for now
+    var args2 = [];
+    for(let i = 0; i < args.length; i++)
+        args2[i] = parseInt(args[i]);
 
     switch(this.type) {
         case 'rectangle':
             this.primitive = new MyQuad(graph.scene, args);
             break;
         case 'cylinder':
-            this.primitive = new MyCylinder(graph.scene, args);
+            this.primitive = new MyCylinder(graph.scene, args2);
             break;
         case 'triangle':
             this.primitive = new MyTriangle(graph.scene, args);
