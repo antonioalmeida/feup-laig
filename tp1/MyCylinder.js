@@ -31,25 +31,6 @@ function MyCylinder(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     this.initBuffers();
 };
 
-/**
-function MyCylinder(scene, slices, stacks, minS = 0, maxS = 1, minT = 0, maxT = 1) {
-   CGFobject.call(this,scene);
-
-   this.slices = slices;
-   this.stacks = stacks;
- this.angle = 2 * Math.PI / this.slices;
-
- this.minS = minS;
- this.maxS = maxS;
- this.minT = minT;
- this.maxT = maxT;
-
- this.dS = (this.maxS - this.minS) / this.slices;
-   this.dT = (this.maxT - this.minT) / this.stacks;
-
-   this.initBuffers();
-};*/
-
 MyCylinder.prototype = Object.create(CGFobject.prototype);
 MyCylinder.prototype.constructor = MyCylinder;
 

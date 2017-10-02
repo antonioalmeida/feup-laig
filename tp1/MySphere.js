@@ -5,9 +5,9 @@
  function MySphere(scene, args) {
  	CGFobject.call(this,scene);
 
-	this.slices = args[0];
+	this.radius = args[0];
 	this.stacks = args[1];
-	this.radius = args[2];
+	this.slices = args[2];
 
  	this.initBuffers();
  };

@@ -30,7 +30,7 @@ function MyGraphLeaf(graph, xmlelem) {
             this.primitive = new MyQuad(graph.scene, [0,0,0,0]);
             break;
         case 'sphere':
-            this.primitive = new MySphere(graph.scene, args);
+            this.primitive = new MySphere(graph.scene, args2);
             break;
     }
 }
