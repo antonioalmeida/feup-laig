@@ -8,10 +8,16 @@
  * @param minT
  * @param maxT
  */
-function MyTriangle(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+function MyTriangle(scene, args) {
     CGFobject.call(this,scene);
 
-    //TO DO: use a "prettier" coordinates saving method
+    let chars = ['x','y','z'];
+    /* i%3 ensures chars array is looped x,y,z,x,y,z,... and i/3 ensures the sequence 0 0 0 1 1 1 2 2 2... so in the end we get all strings from x0 to z2 */
+    for(let i = 0; i < 9; i++)
+        this[chars[i%3]+Math.trunc(i/3)] = args[i];
+
+    //Ugly way by antonioalmeida
+    /*
     this.x0 = args[0];
     this.y0 = args[1];
     this.z0 = args[2];
@@ -23,11 +29,8 @@ function MyTriangle(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     this.x2 = args[6];
     this.y2 = args[7];
     this.z2 = args[8];
+    */
 
-    this.minS = minS;
-    this.maxS = maxS;
-    this.minT = minT;
-    this.maxT = maxT;
     this.initBuffers();
 };
 
@@ -46,17 +49,24 @@ MyTriangle.prototype.initBuffers = function () {
         0, 1, 2
     ];
 
+    let p0p1 = [this.x1-this.x0, this.y1-this.y0, this.z1-this.z0];
+    let p0p2 = [this.x2-this.x0, this.y2-this.y0, this.z2-this.z0];
+    let cross = [p0p1[1]*p0p2[2]-p0p1[2]*p0p1[2], p0p1[2]*p0p2[0]-p0p1[0]*p0p2[2], p0p1[0]*p0p2[1]-p0p1[1]*p0p2[0]];
     this.normals = [
-        0, 0, 1,
-        0, 0, 1,
-        0, 0, 1
+        cross[0], cross[1], cross[2],
+        cross[0], cross[1], cross[2],
+        cross[0], cross[1], cross[2]
     ];
 
+    let d_p0p1 = Math.sqrt(Math.pow(this.x0-this.x1, 2)+Math.pow(this.y0-this.y1, 2)+Math.pow(this.z0-this.z1, 2));
+    let d_p0p2 = Math.sqrt(Math.pow(this.x0-this.x2, 2)+Math.pow(this.y0-this.y2, 2)+Math.pow(this.z0-this.z2, 2));
+    let d_p1p2 = Math.sqrt(Math.pow(this.x1-this.x2, 2)+Math.pow(this.y1-this.y2, 2)+Math.pow(this.z1-this.z2, 2));
+    let cos = ((this.x2-this.x0)*(this.x1-this.x0)+(this.y2-this.y0)*(this.y1-this.y0)+(this.z2-this.z0)*(this.z1-this.z0))/(d_p0p1*d_p0p2);
+    let s_coord = cos*d_p0p2;
     this.texCoords = [
-        this.minS, this.maxT,
-        this.maxS, this.maxT,
-        this.minS, this.minT,
-        this.maxS, this.minT
+        0, 0,
+        d_p0p1/15, 0,
+        s_coord/15,Math.sqrt(Math.pow(d_p0p2,2)-Math.pow(s_coord,2))/10,
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;

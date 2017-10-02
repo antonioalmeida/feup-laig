@@ -1425,13 +1425,14 @@ MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
 	// remove log below to avoid performance issues
 	//this.log("Graph should be rendered here...");
-
+    this.textures["vidral"][0].bind();
     this.nodes[this.idRoot].display();
 }
 
 /**
  * Executes Depth first search on the graph
  */
+/*
 MySceneGraph.prototype.DFS = function() {
     var stack = [ this.idRoot ];
     console.log("Top of stack : " + stack[0]);
@@ -1457,3 +1458,4 @@ MySceneGraph.prototype.DFS = function() {
         }
     }
 }
+*/
