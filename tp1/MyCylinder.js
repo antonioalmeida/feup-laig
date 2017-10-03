@@ -17,11 +17,9 @@ function MyCylinder(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     this.angle = 2 * Math.PI / this.slices;
     //console.log("ANGLE : " + this.angle);
 
-    //this.bottomCircle = new MyCircle(this.scene, this.base, this.slices);
-    //this.topCircle = new MyCircle(this.scene, this.top, this.slices);
+    this.bottomCircle = new MyCircle(this.scene, this.base, this.slices);
+    this.topCircle = new MyCircle(this.scene, this.top, this.slices);
 
-    this.AfS = 1;
-    this.AfT = 1;
     this.initBuffers();
 };
 
