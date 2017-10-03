@@ -45,7 +45,7 @@ MyCylinder.prototype.initBuffers = function() {
     for(j = 0; j <= this.stacks; j++){
         for(i = 0; i <= this.slices; i++){
             //Push current vertex
-            this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j/this.stacks);
+            this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
             this.texCoords.push(this.minS + i*this.dS, this.minT + j*this.dT);
