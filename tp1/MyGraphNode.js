@@ -40,13 +40,55 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
 }
 
 /**
- * Displays this node and it's leaves and children recursively
+ * Displays this node and its leaves and children recursively
  */
 MyGraphNode.prototype.display = function() {
     this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
+        console.log("TEXTURE : " + this.graph.textures[this.graph.textureStack[0]]);
+        console.log("MATERIAL : " + this.graph.materials[this.graph.materialStack[0]]);
+        let toRemove = true;
+        let toRemoveMaterial = true;
+
+        if(this.materialID == 'null' || this.materialID === null) {
+            console.log("READ MATERIAL NULL");
+            toRemoveMaterial = false;
+        }
+        else if(this.graph.materials[this.graph.materialStack[0]] !== undefined) {
+            console.log("ADDED MATERIAL : " + this.graph.materials[this.graph.materialStack[0]]);
+            this.graph.materialStack.unshift(this.materialID);
+            this.graph.materials[this.graph.materialStack[0]].apply();
+        }
+
+        if(this.textureID == 'clear') {
+            console.log("READ CLEAR");
+            this.graph.textures[this.graph.textureStack[0]][0].unbind();
+            toRemove = false;
+        }
+        else if(this.textureID == 'null' || this.textureID === null) {
+            console.log("READ NULL");
+            toRemove = false;
+        }
+        else if(this.graph.textures[this.graph.textureStack[0]] !== undefined) {
+            console.log("ADDED : " + this.graph.textures[this.graph.textureStack[0]]);
+            this.graph.textureStack.unshift(this.textureID);
+            this.graph.textures[this.graph.textureStack[0]][0].bind();
+        }
+
+
         this.displayLeaves();
         this.displayChildren();
+
+        if(toRemove) {
+            console.log("REMOVED : " + this.graph.textures[this.graph.textureStack[0]]);
+            this.graph.textures[this.graph.textureStack[0]][0].unbind();
+            this.graph.textureStack.shift();
+        }
+        if(toRemoveMaterial) {
+            console.log("REMOVED MATERIAL : " + this.graph.materials[this.graph.materialStack[0]]);
+            this.graph.materials[this.graph.defaultMaterialID].apply();
+            this.graph.materialStack.shift();
+        }
     this.graph.scene.popMatrix();
 }
 

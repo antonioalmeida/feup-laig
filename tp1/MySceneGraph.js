@@ -25,6 +25,9 @@ function MySceneGraph(filename, scene) {
     this.nodes = [];
     this.idRoot = null;                    // The id of the root element.
 
+    this.textureStack = [];
+    this.materialStack = [];
+
     this.axisCoords = [];
     this.axisCoords['x'] = [1, 0, 0];
     this.axisCoords['y'] = [0, 1, 0];
@@ -38,7 +41,6 @@ function MySceneGraph(filename, scene) {
 	 * After the file is read, the reader calls onXMLReady on this object.
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
-
     this.reader.open('scenes/' + filename, this);
 }
 
@@ -1423,7 +1425,10 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
-    this.textures["vidral"][0].bind();
+    //this.textures["vidral"][0].bind();
+
+    this.textureStack.push(this.nodes[this.idRoot].textureID);
+    this.materialStack.push(this.nodes[this.idRoot].materialID);
     this.nodes[this.idRoot].display();
 }
 
