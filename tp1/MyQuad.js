@@ -8,7 +8,7 @@
  * @param minT
  * @param maxT
  */
-function MyQuad(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+function MyQuad(scene, args) {
     CGFobject.call(this,scene);
 
     //Top left corner
@@ -18,10 +18,6 @@ function MyQuad(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     this.x1 = args[2];
     this.y1 = args[3];
 
-    this.minS = minS;
-    this.maxS = maxS;
-    this.minT = minT;
-    this.maxT = maxT;
     this.initBuffers();
 };
 
@@ -48,11 +44,13 @@ MyQuad.prototype.initBuffers = function () {
         0, 0, 1
     ];
 
+    this.dx = this.x1-this.x0;
+    this.dy = this.y0-this.y1;
     this.texCoords = [
-        this.minS, this.maxT,
-        this.maxS, this.maxT,
-        this.minS, this.minT,
-        this.maxS, this.minT
+        0, 0,
+        this.dx, 0,
+        0, this.dy,
+        this.dx, this.dy
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;
@@ -60,8 +58,15 @@ MyQuad.prototype.initBuffers = function () {
 };
 
 MyQuad.prototype.updateTexCoords = function(afS, afT){
-  for(let i = 0; i < this.texCoords.length; i += 2){
-    this.texCoords[i] /= afS;
-    this.texCoords[i+1] /= afT;
-  }
+  let factS = 1/afS;
+  let factT = 1/afT;
+  
+  this.texCoords = [
+    0, 0,
+    this.dx/factS, 0,
+    0, this.dy/factT,
+    this.dx/factS, this.dy/factT
+  ];
+
+  this.updateTexCoordsGLBuffers();
 }

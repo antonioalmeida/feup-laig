@@ -11,23 +11,17 @@ function MyCylinder(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
     this.stacks = args[3];
     this.slices = args[4];
 
-    console.log("ARGS CYLINDER :" + this.height + ", " + this.top + ", " + this.bottom + ", " + this.stacks + ", " + this.slices);
-    console.log("ARGS TYPE :" + typeof this.height);
+    //console.log("ARGS CYLINDER :" + this.height + ", " + this.top + ", " + this.bottom + ", " + this.stacks + ", " + this.slices);
+    //console.log("ARGS TYPE :" + typeof this.height);
 
     this.angle = 2 * Math.PI / this.slices;
-    console.log("ANGLE : " + this.angle);
+    //console.log("ANGLE : " + this.angle);
 
-    this.minS = minS;
-    this.maxS = maxS;
-    this.minT = minT;
-    this.maxT = maxT;
+    //this.bottomCircle = new MyCircle(this.scene, this.base, this.slices);
+    //this.topCircle = new MyCircle(this.scene, this.top, this.slices);
 
-    this.dS = (this.maxS - this.minS) / this.slices;
-    this.dT = (this.maxT - this.minT) / this.stacks;
-
-    this.bottomCircle = new MyCircle(this.scene, this.base, this.slices);
-    this.topCircle = new MyCircle(this.scene, this.top, this.slices);
-
+    this.AfS = 1;
+    this.AfT = 1;
     this.initBuffers();
 };
 
@@ -48,7 +42,7 @@ MyCylinder.prototype.initBuffers = function() {
             this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(this.minS + i*this.dS, this.minT + j*this.dT);
+            this.texCoords.push(i*this.angle*this.top, j*this.height/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(Math.cos(i*this.angle), Math.sin(i*this.angle),0);
@@ -77,7 +71,7 @@ MyCylinder.prototype.initBuffers = function() {
             this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(this.minS + i*this.dS, this.minT + j*this.dT);
+            this.texCoords.push(i*this.angle*this.top, j*this.height/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(-Math.cos(i*this.angle), -Math.sin(i*this.angle),0);
@@ -115,8 +109,5 @@ MyCylinder.prototype.display = function () {
 }
 
 MyCylinder.prototype.updateTexCoords = function(afS, afT){
-  for(let i = 0; i < this.texCoords.length; i += 2){
-    this.texCoords[i] /= afS;
-    this.texCoords[i+1] /= afT;
-  }
+    /* Amplification factors do not apply to cylinders */
 }

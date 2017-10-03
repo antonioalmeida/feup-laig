@@ -104,8 +104,14 @@ MyGraphNode.prototype.removeTexture = function() {
  * Displays this node's leaves
  */
 MyGraphNode.prototype.displayLeaves = function() {
-    for(let leaveID in this.leaves)
-        this.leaves[leaveID].display();
+    for(let leaveID in this.leaves){
+        if(this.textureID != 'clear'){
+            let afS = this.graph.textures[this.graph.textureStack[0]][1];
+            let afT = this.graph.textures[this.graph.textureStack[0]][2];
+            this.leaves[leaveID].primitive.updateTexCoords(afS, afT);
+            this.leaves[leaveID].display();
+        }
+    }
 }
 
 /**

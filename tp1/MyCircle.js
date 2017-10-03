@@ -45,8 +45,5 @@ MyCircle.prototype.constructor = MyCircle;
  };
 
  MyCircle.prototype.updateTexCoords = function(afS, afT){
-   for(let i = 0; i < this.texCoords.length; i += 2){
-     this.texCoords[i] /= afS;
-     this.texCoords[i+1] /= afT;
-   }
+     /* Amplification factors do not apply to circles */
  }

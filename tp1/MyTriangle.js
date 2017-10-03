@@ -58,15 +58,14 @@ MyTriangle.prototype.initBuffers = function () {
         cross[0], cross[1], cross[2]
     ];
 
-    let d_p0p1 = Math.sqrt(Math.pow(this.x0-this.x1, 2)+Math.pow(this.y0-this.y1, 2)+Math.pow(this.z0-this.z1, 2));
-    let d_p0p2 = Math.sqrt(Math.pow(this.x0-this.x2, 2)+Math.pow(this.y0-this.y2, 2)+Math.pow(this.z0-this.z2, 2));
-    let d_p1p2 = Math.sqrt(Math.pow(this.x1-this.x2, 2)+Math.pow(this.y1-this.y2, 2)+Math.pow(this.z1-this.z2, 2));
-    let cos = ((this.x2-this.x0)*(this.x1-this.x0)+(this.y2-this.y0)*(this.y1-this.y0)+(this.z2-this.z0)*(this.z1-this.z0))/(d_p0p1*d_p0p2);
-    let s_coord = cos*d_p0p2;
+    this.d_p0p1 = Math.sqrt(Math.pow(this.x0-this.x1, 2)+Math.pow(this.y0-this.y1, 2)+Math.pow(this.z0-this.z1, 2));
+    this.d_p0p2 = Math.sqrt(Math.pow(this.x0-this.x2, 2)+Math.pow(this.y0-this.y2, 2)+Math.pow(this.z0-this.z2, 2));
+    let cos = ((this.x2-this.x0)*(this.x1-this.x0)+(this.y2-this.y0)*(this.y1-this.y0)+(this.z2-this.z0)*(this.z1-this.z0))/(this.d_p0p1*this.d_p0p2);
+    this.s_coord = cos*this.d_p0p2;
     this.texCoords = [
         0, 0,
-        d_p0p1, 0,
-        s_coord,-Math.sqrt(Math.pow(d_p0p2,2)-Math.pow(s_coord,2)),
+        this.d_p0p1, 0,
+        this.s_coord,-Math.sqrt(Math.pow(this.d_p0p2,2)-Math.pow(this.s_coord,2)),
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;
@@ -74,8 +73,12 @@ MyTriangle.prototype.initBuffers = function () {
 };
 
 MyTriangle.prototype.updateTexCoords = function(afS, afT){
-  for(let i = 0; i < this.texCoords.length; i += 2){
-    this.texCoords[i] /= afS;
-    this.texCoords[i+1] /= afT;
-  }
+    this.texCoords = [];
+    this.texCoords = [
+        0, 0,
+        this.d_p0p1/afS, 0,
+        this.s_coord/afS,-Math.sqrt(Math.pow(this.d_p0p2,2)-Math.pow(this.s_coord,2))/afT,
+    ];
+
+    this.updateTexCoordsGLBuffers();
 }
