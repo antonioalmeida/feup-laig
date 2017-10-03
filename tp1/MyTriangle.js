@@ -66,7 +66,7 @@ MyTriangle.prototype.initBuffers = function () {
     this.texCoords = [
         0, 0,
         d_p0p1/15, 0,
-        s_coord/15,Math.sqrt(Math.pow(d_p0p2,2)-Math.pow(s_coord,2))/10,
+        s_coord/15,-Math.sqrt(Math.pow(d_p0p2,2)-Math.pow(s_coord,2))/10,
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;
