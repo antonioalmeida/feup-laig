@@ -65,10 +65,17 @@ MyTriangle.prototype.initBuffers = function () {
     let s_coord = cos*d_p0p2;
     this.texCoords = [
         0, 0,
-        d_p0p1/15, 0,
-        s_coord/15,-Math.sqrt(Math.pow(d_p0p2,2)-Math.pow(s_coord,2))/10,
+        d_p0p1, 0,
+        s_coord,-Math.sqrt(Math.pow(d_p0p2,2)-Math.pow(s_coord,2)),
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;
     this.initGLBuffers();
 };
+
+MyTriangle.prototype.updateTexCoords = function(afS, afT){
+  for(let i = 0; i < this.texCoords.length; i += 2){
+    this.texCoords[i] /= afS;
+    this.texCoords[i+1] /= afT;
+  }
+}

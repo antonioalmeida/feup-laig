@@ -58,3 +58,10 @@ MyQuad.prototype.initBuffers = function () {
     this.primitiveType=this.scene.gl.TRIANGLES;
     this.initGLBuffers();
 };
+
+MyQuad.prototype.updateTexCoords = function(afS, afT){
+  for(let i = 0; i < this.texCoords.length; i += 2){
+    this.texCoords[i] /= afS;
+    this.texCoords[i+1] /= afT;
+  }
+}

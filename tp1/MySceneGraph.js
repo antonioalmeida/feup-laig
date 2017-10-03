@@ -1423,8 +1423,6 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
-	// remove log below to avoid performance issues
-	//this.log("Graph should be rendered here...");
     this.textures["vidral"][0].bind();
     this.nodes[this.idRoot].display();
 }
