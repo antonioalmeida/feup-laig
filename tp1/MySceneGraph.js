@@ -1,14 +1,6 @@
 var DEGREE_TO_RAD = Math.PI / 180;
 
-// Order of the groups in the XML document.
-var INITIALS_INDEX = 0;
-var ILLUMINATION_INDEX = 1;
-var LIGHTS_INDEX = 2;
-var TEXTURES_INDEX = 3;
-var MATERIALS_INDEX = 4;
-var LEAVES_INDEX = 5;
-var NODES_INDEX = 6;
-
+//What the fuck is this for?
 var STOP = false;
 
 /**
@@ -78,81 +70,50 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     // Reads the names of the nodes to an auxiliary buffer.
     var nodeNames = [];
 
-    for (var i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i++)
         nodeNames.push(nodes[i].nodeName);
-    }
 
     var error;
 
-    // Processes each node, verifying errors.
-
-    // <INITIALS>
+    // Processes each tag, in their natural order in the document, verifying errors.
     var index;
-    if ((index = nodeNames.indexOf("INITIALS")) == -1)
-        return "tag <INITIALS> missing";
-    else {
-        if (index != INITIALS_INDEX)
-            this.onXMLMinorError("tag <INITIALS> out of order");
+    var tagsArray = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "NODES"];
 
-        if ((error = this.parseInitials(nodes[index])) != null )
-            return error;
+    for(let arrIndex = 0; arrIndex < tagsArray.length; ++arrIndex){
+      if ((index = nodeNames.indexOf(tagsArray[arrIndex])) == -1)
+          return "tag <"+tagsArray[arrIndex]+"> missing";
+      else {
+          if (index != arrIndex)
+              this.onXMLMinorError("tag <"+tagsArray[arrIndex]+"> out of order");
+
+          if ((error = this.parseTag(index, nodes[index])) != null )
+              return error;
+      }
     }
+}
 
-    // <ILLUMINATION>
-    if ((index = nodeNames.indexOf("ILLUMINATION")) == -1)
-        return "tag <ILLUMINATION> missing";
-    else {
-        if (index != ILLUMINATION_INDEX)
-            this.onXMLMinorError("tag <ILLUMINATION> out of order");
-
-        if ((error = this.parseIllumination(nodes[index])) != null )
-            return error;
-    }
-
-    // <LIGHTS>
-    if ((index = nodeNames.indexOf("LIGHTS")) == -1)
-        return "tag <LIGHTS> missing";
-    else {
-        if (index != LIGHTS_INDEX)
-            this.onXMLMinorError("tag <LIGHTS> out of order");
-
-        if ((error = this.parseLights(nodes[index])) != null )
-            return error;
-    }
-
-    // <TEXTURES>
-    if ((index = nodeNames.indexOf("TEXTURES")) == -1)
-        return "tag <TEXTURES> missing";
-    else {
-        if (index != TEXTURES_INDEX)
-            this.onXMLMinorError("tag <TEXTURES> out of order");
-
-        if ((error = this.parseTextures(nodes[index])) != null )
-            return error;
-    }
-
-    // <MATERIALS>
-    if ((index = nodeNames.indexOf("MATERIALS")) == -1)
-        return "tag <MATERIALS> missing";
-    else {
-        if (index != MATERIALS_INDEX)
-            this.onXMLMinorError("tag <MATERIALS> out of order");
-
-        if ((error = this.parseMaterials(nodes[index])) != null )
-            return error;
-    }
-
-    // <NODES>
-    if ((index = nodeNames.indexOf("NODES")) == -1)
-        return "tag <NODES> missing";
-    else {
-        if (index != NODES_INDEX)
-            this.onXMLMinorError("tag <NODES> out of order");
-
-        if ((error = this.parseNodes(nodes[index])) != null )
-            return error;
-    }
-
+/**
+  * Calls a specific parsing function according to the tag index received
+  */
+MySceneGraph.prototype.parseTag = function(index, element){
+  switch(index){
+    case 0:
+      return this.parseInitials(element);
+    case 1:
+      return this.parseIllumination(element);
+    case 2:
+      return this.parseLights(element);
+    case 3:
+      return this.parseTextures(element);
+    case 4:
+      return this.parseMaterials(element);
+    case 5:
+      return null; //TODO Parse leafs?
+    case 6:
+      return this.parseNodes(element);
+    default:
+      return -1; // Unknown tag
+  }
 }
 
 /**
@@ -164,16 +125,15 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
 
     var nodeNames = [];
 
-    for (var i = 0; i < children.length; i++)
+    for (let i = 0; i < children.length; i++)
         nodeNames.push(children[i].nodeName);
 
     // Frustum planes.
     this.near = 0.1;
     this.far = 500;
     var indexFrustum = nodeNames.indexOf("frustum");
-    if (indexFrustum == -1) {
+    if (indexFrustum == -1)
         this.onXMLMinorError("frustum planes missing; assuming 'near = 0.1' and 'far = 500'");
-    }
     else {
         this.near = this.reader.getFloat(children[indexFrustum], 'near');
         this.far = this.reader.getFloat(children[indexFrustum], 'far');
@@ -1372,7 +1332,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
  * Callback to be executed on any read error
  */
 MySceneGraph.prototype.onXMLError = function(message) {
-    console.error("XML Loading Error: " + message);
+    console.error("ERROR: " + message);
     this.loadedOk = false;
 }
 
@@ -1380,7 +1340,7 @@ MySceneGraph.prototype.onXMLError = function(message) {
  * Callback to be executed on any minor error, showing a warning on the console.
  */
 MySceneGraph.prototype.onXMLMinorError = function(message) {
-    console.warn("Warning: " + message);
+    console.warn("WARNING: " + message);
 }
 
 MySceneGraph.prototype.log = function(message) {
@@ -1434,34 +1394,3 @@ MySceneGraph.prototype.displayScene = function() {
     this.materialStack.push(this.nodes[this.idRoot].materialID);
     this.nodes[this.idRoot].display();
 }
-
-/**
- * Executes Depth first search on the graph
- */
-/*
-MySceneGraph.prototype.DFS = function() {
-    var stack = [ this.idRoot ];
-    console.log("Top of stack : " + stack[0]);
-    for(var nodeID in this.nodes)
-        this.nodes[nodeID].visited = false;
-
-    //Add root node to stack
-    while(stack.length > 0) {
-        this.log("Stack length = " + stack.length);
-        var currentNodeID = stack.shift() //Removes node on top of stack and returns it
-        this.log("Current node ID : " + currentNodeID);
-        if(!this.nodes[currentNodeID].visited) {
-            this.nodes[currentNodeID].visited = true;
-            this.nodes[currentNodeID].display();
-            this.log("Visited : " + currentNodeID);
-
-            for(var childrenID in this.nodes[currentNodeID].children) {
-                if(!this.nodes[currentNodeID].children[childrenID].visited) {
-                    this.log("ID : " + this.nodes[currentNodeID].children[childrenID]);
-                    stack.unshift(this.nodes[currentNodeID].children[childrenID]); //Add node to the top of the stack
-                }
-            }
-        }
-    }
-}
-*/
