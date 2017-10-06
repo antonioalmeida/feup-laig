@@ -327,117 +327,55 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
   for (var i = 0; i < children.length; i++)
     nodeNames.push(children[i].nodeName);
 
+  var components = ['r','g','b','a'];
+
   // Retrieves the global ambient illumination.
-  this.ambientIllumination = [0, 0, 0, 1];
+  this.ambientIllumination = [0.1, 0.1, 0.1, 1];
   var ambientIndex = nodeNames.indexOf("ambient");
   if (ambientIndex != -1) {
-    // R.
-    var r = this.reader.getFloat(children[ambientIndex], 'r');
-    if (r != null) {
-      if (isNaN(r))
-        return "ambient 'r' is a non numeric value on the ILLUMINATION block";
-      else if (r < 0 || r > 1)
-        return "ambient 'r' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.ambientIllumination[0] = r;
-    } else
-      this.onXMLMinorError("unable to parse R component of the ambient illumination; assuming R = 0");
-
-    // G.
-    var g = this.reader.getFloat(children[ambientIndex], 'g');
-    if (g != null) {
-      if (isNaN(g))
-        return "ambient 'g' is a non numeric value on the ILLUMINATION block";
-      else if (g < 0 || g > 1)
-        return "ambient 'g' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.ambientIllumination[1] = g;
-    } else
-      this.onXMLMinorError("unable to parse G component of the ambient illumination; assuming G = 0");
-
-    // B.
-    var b = this.reader.getFloat(children[ambientIndex], 'b');
-    if (b != null) {
-      if (isNaN(b))
-        return "ambient 'b' is a non numeric value on the ILLUMINATION block";
-      else if (b < 0 || b > 1)
-        return "ambient 'b' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.ambientIllumination[2] = b;
-    } else
-      this.onXMLMinorError("unable to parse B component of the ambient illumination; assuming B = 0");
-
-    // A.
-    var a = this.reader.getFloat(children[ambientIndex], 'a');
-    if (a != null) {
-      if (isNaN(a))
-        return "ambient 'a' is a non numeric value on the ILLUMINATION block";
-      else if (a < 0 || a > 1)
-        return "ambient 'a' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.ambientIllumination[3] = a;
-    } else
-      this.onXMLMinorError("unable to parse A component of the ambient illumination; assuming A = 1");
+    let ambientError = null;
+    // Retrieve each component and throw error if failure occurs in any of the iterations
+    for(let i = 0; i < components.length; ++i){
+      if((ambientError = this.parseGlobalIlluminationComponent(children[ambientIndex], components[i], "ambientIllumination", i)) != null)
+        return ambientError;
+    }
   } else
-    this.onXMLMinorError("global ambient illumination undefined; assuming Ia = (0, 0, 0, 1)");
+    this.onXMLMinorError("global ambient illumination undefined; assuming Ia = (0.1, 0.1, 0.1, 1)");
 
   // Retrieves the background clear color.
   this.background = [0, 0, 0, 1];
   var backgroundIndex = nodeNames.indexOf("background");
   if (backgroundIndex != -1) {
-    // R.
-    var r = this.reader.getFloat(children[backgroundIndex], 'r');
-    if (r != null) {
-      if (isNaN(r))
-        return "background 'r' is a non numeric value on the ILLUMINATION block";
-      else if (r < 0 || r > 1)
-        return "background 'r' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.background[0] = r;
-    } else
-      this.onXMLMinorError("unable to parse R component of the background colour; assuming R = 0");
-
-    // G.
-    var g = this.reader.getFloat(children[backgroundIndex], 'g');
-    if (g != null) {
-      if (isNaN(g))
-        return "background 'g' is a non numeric value on the ILLUMINATION block";
-      else if (g < 0 || g > 1)
-        return "background 'g' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.background[1] = g;
-    } else
-      this.onXMLMinorError("unable to parse G component of the background colour; assuming G = 0");
-
-    // B.
-    var b = this.reader.getFloat(children[backgroundIndex], 'b');
-    if (b != null) {
-      if (isNaN(b))
-        return "background 'b' is a non numeric value on the ILLUMINATION block";
-      else if (b < 0 || b > 1)
-        return "background 'b' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.background[2] = b;
-    } else
-      this.onXMLMinorError("unable to parse B component of the background colour; assuming B = 0");
-
-    // A.
-    var a = this.reader.getFloat(children[backgroundIndex], 'a');
-    if (a != null) {
-      if (isNaN(a))
-        return "background 'a' is a non numeric value on the ILLUMINATION block";
-      else if (a < 0 || a > 1)
-        return "background 'a' must be a value between 0 and 1 on the ILLUMINATION block"
-      else
-        this.background[3] = a;
-    } else
-      this.onXMLMinorError("unable to parse A component of the background colour; assuming A = 1");
+    let backgroundError = null;
+    // Retrieve each component and throw error if failure occurs in any of the iterations
+    for(let i = 0; i < components.length; ++i){
+      if((backgroundError = this.parseGlobalIlluminationComponent(children[backgroundIndex], components[i], "background", i)) != null)
+        return backgroundError;
+    }
   } else
     this.onXMLMinorError("background clear colour undefined; assuming (R, G, B, A) = (0, 0, 0, 1)");
 
   console.log("Parsed illumination");
 
   return null;
+}
+
+/**
+  * Parse a specific component from the global illumination attributes
+  */
+MySceneGraph.prototype.parseGlobalIlluminationComponent = function(attribute, component, array, index){
+  var comp = this.reader.getFloat(attribute, component);
+  if (comp != null) {
+    if (isNaN(comp))
+      return array + component + " is a non numeric value on the ILLUMINATION block";
+    if (comp < 0 || comp > 1)
+      return array + component + " must be a value between 0 and 1 on the ILLUMINATION block";
+
+    this[array][index] = comp;
+    return null;
+  }
+
+  return "unable to parse "+component+" component of the " + array + " colour";
 }
 
 /**
