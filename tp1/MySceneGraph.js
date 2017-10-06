@@ -320,12 +320,24 @@ MySceneGraph.prototype.parseRotationAngle = function(rotElem, initialRotations, 
  * Parses the <ILLUMINATION> block.
  */
 MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
-
-  // Reads the ambient and background values.
   var children = illuminationNode.children;
   var nodeNames = [];
   for (var i = 0; i < children.length; i++)
     nodeNames.push(children[i].nodeName);
+
+  // Read the doubleside option and, if not present, don't do anything in the WebGL scene
+  var doublesideIndex = nodeNames.indexOf("doubleside");
+  if(doublesideIndex != -1){
+    var useDoubleside = this.reader.getFloat(children[doublesideIndex], "value");
+    if (useDoubleside != null && !isNaN(useDoubleside) && (useDoubleside == 0 || useDoubleside == 1))
+      console.log("Success reading doubleside!");
+      //A call along these lines... this is the appropriate function, apparently, but not being recognised
+      //this.scene.gl.lightModeli(this.scene.gl.GL_LIGHT_MODEL_TWO_SIDE, useDoubleside);
+    else
+      return "failed to parse valid value from doubleside tag";
+  }
+  else
+    this.onXMLMinorError("doubleside feature undefined; using WebGL default value");
 
   var components = ['r','g','b','a'];
 
