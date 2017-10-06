@@ -58,14 +58,11 @@ MyQuad.prototype.initBuffers = function () {
 };
 
 MyQuad.prototype.updateTexCoords = function(afS, afT){
-  let factS = 1/afS;
-  let factT = 1/afT;
-  
   this.texCoords = [
     0, 0,
-    this.dx/factS, 0,
-    0, this.dy/factT,
-    this.dx/factS, this.dy/factT
+    this.dx/afS, 0,
+    0, this.dy/afT,
+    this.dx/afS, this.dy/afT
   ];
 
   this.updateTexCoordsGLBuffers();

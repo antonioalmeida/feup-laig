@@ -161,7 +161,7 @@
     <!-- The root node -->
     <NODE id="root">
         <MATERIAL id="defaultMaterial" />
-        <TEXTURE id="vidral" />
+        <TEXTURE id="null" />
 
         <DESCENDANTS>
 

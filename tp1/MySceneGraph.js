@@ -1425,9 +1425,12 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
-    //this.textures["vidral"][0].bind();
+    this.textureStack = [];
+    this.materialStack = [];
 
-    this.textureStack.push(this.nodes[this.idRoot].textureID);
+    if(this.nodes[this.idRoot].textureID != 'null' && this.nodes[this.idRoot].textureID !== null)
+      this.textureStack.push(this.nodes[this.idRoot].textureID);
+    console.log("Initial size: "+this.textureStack.length);
     this.materialStack.push(this.nodes[this.idRoot].materialID);
     this.nodes[this.idRoot].display();
 }

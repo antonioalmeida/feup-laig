@@ -77,12 +77,13 @@ MyGraphNode.prototype.applyTexture = function() {
     let toRemove = true;
 
     if(this.textureID == 'clear') {
-        this.graph.textures[this.graph.textureStack[0]][0].unbind();
+        if(this.graph.textureStack.length)
+          this.graph.textures[this.graph.textureStack[0]][0].unbind();
         toRemove = false;
     }
     else if(this.textureID == 'null' || this.textureID === null)
         toRemove = false;
-    else if(this.graph.textures[this.graph.textureStack[0]] !== undefined) {
+    else {
         this.graph.textureStack.unshift(this.textureID);
         this.graph.textures[this.graph.textureStack[0]][0].bind();
     }
@@ -105,12 +106,12 @@ MyGraphNode.prototype.removeTexture = function() {
  */
 MyGraphNode.prototype.displayLeaves = function() {
     for(let leaveID in this.leaves){
-        if(this.textureID != 'clear'){
+        if(this.textureID != 'clear' && this.graph.textureStack.length){
             let afS = this.graph.textures[this.graph.textureStack[0]][1];
             let afT = this.graph.textures[this.graph.textureStack[0]][2];
             this.leaves[leaveID].primitive.updateTexCoords(afS, afT);
-            this.leaves[leaveID].display();
         }
+        this.leaves[leaveID].display();
     }
 }
 
