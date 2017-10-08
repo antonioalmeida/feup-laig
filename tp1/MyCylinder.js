@@ -10,6 +10,8 @@ function MyCylinder(scene, args) {
     this.top = args[2];
     this.stacks = args[3];
     this.slices = args[4];
+    this.drawBottom = (args[5] == 0 ? false : true);
+    this.drawTop = (args[6] == 0 ? false: true);
 
     this.angle = 2 * Math.PI / this.slices;
 
@@ -93,12 +95,16 @@ MyCylinder.prototype.initBuffers = function() {
 MyCylinder.prototype.display = function () {
     CGFobject.prototype.display.call(this);
     this.scene.pushMatrix();
-    this.scene.rotate(Math.PI, 1, 0, 0)
-    this.bottomCircle.display();
-    this.scene.translate(0, 0, -this.height);
-    this.scene.rotate(Math.PI, 1, 0, 0)
-    this.scene.rotate(Math.PI, 0, 0, 1)
-    this.topCircle.display();
+    if(this.drawBottom){
+      this.scene.rotate(Math.PI, 1, 0, 0)
+      this.bottomCircle.display();
+    }
+    if(this.drawTop){
+      this.scene.translate(0, 0, -this.height);
+      this.scene.rotate(Math.PI, 1, 0, 0)
+      this.scene.rotate(Math.PI, 0, 0, 1)
+      this.topCircle.display();
+    }
     this.scene.popMatrix();
 }
 
