@@ -179,10 +179,30 @@
     <NODE id="patchDemo">
         <MATERIAL id="null" />
         <TEXTURE id="clear" />
-        
+
+        <TRANSLATION x="15" y="15" z="10" />
+
         <DESCENDANTS>
-					<LEAF  type="patch" args="0 4 5 0" />
-				</DESCENDANTS>
+            <LEAF type="patch" args="2 3" />
+            <CPLINE>
+                <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
+                <CPOINT xx="-2.0" yy="-2.0" zz="2.0" ww="1" />
+                <CPOINT xx="-2.0" yy="2.0" zz="2.0" ww="1" />
+                <CPOINT xx="-1.5" yy="1.5" zz="0.0" ww="1" />
+            </CPLINE>
+            <CPLINE>
+                <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
+                <CPOINT xx="0" yy="-2.0" zz="3.0" ww="1" />
+                <CPOINT xx="0" yy="2.0" zz="3.0" ww="1" />
+                <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
+            </CPLINE>
+            <CPLINE>
+                <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
+                <CPOINT xx="2.0" yy="-2.0" zz="2.0" ww="1" />
+                <CPOINT xx="2.0" yy="2.0" zz="2.0" ww="1" />
+                <CPOINT xx="1.5" yy="1.5" zz="0.0" ww="1" />
+            </CPLINE>
+        </DESCENDANTS>
 
     </NODE>
 

@@ -2,7 +2,7 @@
  * MyGraphLeaf class, representing a leaf in the scene graph.
  * @constructor
 **/
-function MyGraphLeaf(graph, xmlelem) {
+function MyGraphLeaf(graph, xmlelem, controlPoints) {
     this.graph = graph;
 
     //Getting leaf type ('rectangle', 'cylinder', 'sphere', 'triangle', 'patch')
@@ -27,28 +27,7 @@ function MyGraphLeaf(graph, xmlelem) {
             this.primitive = new MyTriangle(graph.scene, args);
             break;
         case 'patch':
-            this.primitive = new MyPatch(graph.scene, [2,3], 20, 20, [// U = 0
-						[ // V = 0..3;
-							 [ -2.0, -2.0, 1.0, 1 ],
-							 [ -2.0, -1.0, -2.0, 1 ],
-							 [ -2.0, 1.0, 5.0, 1 ],
-							 [ -2.0, 2.0, -1.0, 1 ]
-						],
-						// U = 1
-						[ // V = 0..3
-							 [ 0, -2.0, 0, 1 ],
-							 [ 0, -1.0, -1.0, 1 ],
-							 [ 0, 1.0, 1.5, 1 ],
-							 [ 0, 2.0, 0, 1 ]
-						],
-						// U = 2
-						[ // V = 0..3
-							 [ 2.0, -2.0, -1.0, 1 ],
-							 [ 2.0, -1.0, 2.0, 1 ],
-							 [ 2.0, 1.0, -5.0, 1 ],
-							 [ 2.0, 2.0, 1.0, 1 ]
-						]
-					]);
+            this.primitive = new MyPatch(graph.scene, args2, controlPoints); // Not sure where those parameters are defined, keeping it 20, 20 for now
             break;
         case 'sphere':
             this.primitive = new MySphere(graph.scene, args2);

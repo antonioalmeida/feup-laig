@@ -2,9 +2,15 @@
 * MyPatch
 * @constructor
 */
-function MyPatch(scene, args, divX, divY, controlPoints) {
+function MyPatch(scene, args,  controlPoints) {
     this.orderU = args[0];
     this.orderV = args[1];
+
+    // Default values for now
+    this.divX = 20;
+    this.divY = 20;
+
+    this.controlPoints = controlPoints;
 
     var knots1 = this.getKnotsVector(this.orderU);
     var knots2 = this.getKnotsVector(this.orderV);
@@ -14,7 +20,7 @@ function MyPatch(scene, args, divX, divY, controlPoints) {
         return nurbsSurface.getPoint(u, v);
     };
 
-    this.patch = new CGFnurbsObject(scene, getSurfacePoint, divX, divY);
+    this.patch = new CGFnurbsObject(scene, getSurfacePoint, this.divX, this.divY);
 };
 
 MyPatch.prototype = Object.create(CGFobject.prototype);

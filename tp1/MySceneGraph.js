@@ -1349,8 +1349,31 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 						else
 							this.warn("Error in leaf");
 
+                        let controlPoints = [];
+                        if(type == 'patch') {
+
+                            for(let k = j+1; k < descendants.length; k++) { // for each CLINE
+                                let currentCPLine = [];
+
+                                for(let index = 0; index < descendants[k].children.length; index++) { // for each CPOINT
+
+                                    let cPointXX = this.reader.getFloat(descendants[k].children[index], 'xx');
+                                    let cPointYY = this.reader.getFloat(descendants[k].children[index], 'yy');
+                                    let cPointZZ = this.reader.getFloat(descendants[k].children[index], 'zz');
+                                    let cPointWW = this.reader.getFloat(descendants[k].children[index], 'ww');
+
+                                    let currentCPoint = [cPointXX, cPointYY, cPointZZ, cPointWW];
+                                    currentCPLine[index] = currentCPoint;
+                                }
+
+                                controlPoints.push(currentCPLine);
+                            }
+
+                            console.log(" CP LINES BEFORE : " + controlPoints);
+                        }
+
 						//parse leaf
-						this.nodes[nodeID].addLeaf(new MyGraphLeaf(this,descendants[j]));
+						this.nodes[nodeID].addLeaf(new MyGraphLeaf(this,descendants[j], controlPoints));
                         sizeChildren++;
 					}
 					else
