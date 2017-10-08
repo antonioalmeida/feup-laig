@@ -58,7 +58,7 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
           this.graph.materials[materialID].apply();
 
         if(this.textureID == "clear"){
-          if(textureID != null && textureID != 'null')
+          if(textureID != null && textureID != "null")
             this.graph.textures[textureID][0].unbind();
           textureToPassOn = "null";
         }
