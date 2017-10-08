@@ -159,6 +159,7 @@
         <NODEREF id="aprons" />
         <NODEREF id="postes" />
         <NODEREF id="cordas" />
+        <NODEREF id="paredesExteriores" />
         <NODEREF id="escadas" />
         <!--
         <NODEREF id="objetos" />
@@ -166,14 +167,14 @@
       </DESCENDANTS>
     </NODE>
 
-    <!-- Cobertura para evitar cuscos (TODO: Scale up para cobrir a zona à volta do ringue)-->
+    <!-- Cobertura para evitar cuscos / chão por fora do ringue (TODO: meter double sided)-->
     <NODE id="coberturaInferior">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
-      <TRANSLATION x="0" y="-2.75" z="-20" />
-      <SCALE sx="5" sy="1" sz="5" />
-      <ROTATION axis="x" angle="90" />
+      <TRANSLATION x="-10" y="-3" z="10" />
+      <SCALE sx="10" sy="1" sz="10" />
+      <ROTATION axis="x" angle="-90" />
 
       <DESCENDANTS>
         <NODEREF id="protecaoChao" />
@@ -561,6 +562,54 @@
 
     <DESCENDANTS>
       <LEAF type="cylinder" args="16.5 0.1 0.1 20 20 0 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Ringside walls -->
+  <NODE id="paredesExteriores">
+    <MATERIAL id="matMaterial" /> <!-- TODO: change this-->
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="topWall" />
+      <NODEREF id="bottomWall" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First ring side wall, on the top side from the initial POV -->
+  <NODE id="topWall">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="-10.25" y="0" z="-30" />
+
+    <DESCENDANTS>
+      <NODEREF id="ringSideWall" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First ring side wall, on the bottom side from the initial POV -->
+  <NODE id="bottomWall">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="29.25" y="0" z="-30" />
+
+    <DESCENDANTS>
+      <NODEREF id="ringSideWall" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- A generic ringside wall (straight part only) -->
+  <NODE id="ringSideWall">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <SCALE sx="0.1" sy="1" sz="4" />
+    <TRANSLATION x="0" y="-7" z="0" /> <!-- bring it down to the floor -->
+
+    <DESCENDANTS>
+      <NODEREF id="cube" />
     </DESCENDANTS>
   </NODE>
 

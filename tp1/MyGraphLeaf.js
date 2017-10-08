@@ -27,7 +27,28 @@ function MyGraphLeaf(graph, xmlelem) {
             this.primitive = new MyTriangle(graph.scene, args);
             break;
         case 'patch':
-            this.primitive = new MyQuad(graph.scene, [0,0,0,0]);
+            this.primitive = new MyPatch(graph.scene, [2,3], 20, 20, [// U = 0
+						[ // V = 0..3;
+							 [ -2.0, -2.0, 1.0, 1 ],
+							 [ -2.0, -1.0, -2.0, 1 ],
+							 [ -2.0, 1.0, 5.0, 1 ],
+							 [ -2.0, 2.0, -1.0, 1 ]
+						],
+						// U = 1
+						[ // V = 0..3
+							 [ 0, -2.0, 0, 1 ],
+							 [ 0, -1.0, -1.0, 1 ],
+							 [ 0, 1.0, 1.5, 1 ],
+							 [ 0, 2.0, 0, 1 ]
+						],
+						// U = 2
+						[ // V = 0..3
+							 [ 2.0, -2.0, -1.0, 1 ],
+							 [ 2.0, -1.0, 2.0, 1 ],
+							 [ 2.0, 1.0, -5.0, 1 ],
+							 [ 2.0, 2.0, 1.0, 1 ]
+						]
+					]);
             break;
         case 'sphere':
             this.primitive = new MySphere(graph.scene, args2);

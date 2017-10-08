@@ -170,7 +170,19 @@
             <NODEREF id="arvores" />
             <NODEREF id="chao" />
             <NODEREF id="bancos" />
+            <NODEREF id="patchDemo" />
         </DESCENDANTS>
+
+    </NODE>
+
+    <!-- The patch -->
+    <NODE id="patchDemo">
+        <MATERIAL id="null" />
+        <TEXTURE id="clear" />
+        
+        <DESCENDANTS>
+					<LEAF  type="patch" args="0 4 5 0" />
+				</DESCENDANTS>
 
     </NODE>
 

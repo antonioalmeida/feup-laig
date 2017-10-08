@@ -1342,7 +1342,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                 else
 					if (descendants[j].nodeName == "LEAF")
 					{
-						var type=this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle']);
+						var type=this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch']);
 
 						if (type != null)
 							this.log("   Leaf: "+ type);
@@ -1436,34 +1436,3 @@ MySceneGraph.prototype.displayScene = function() {
 
     this.nodes[this.idRoot].display('null', this.defaultMaterialID);
 }
-
-/**
- * Executes Depth first search on the graph
- */
-/*
-MySceneGraph.prototype.DFS = function() {
-    var stack = [ this.idRoot ];
-    console.log("Top of stack : " + stack[0]);
-    for(var nodeID in this.nodes)
-        this.nodes[nodeID].visited = false;
-
-    //Add root node to stack
-    while(stack.length > 0) {
-        this.log("Stack length = " + stack.length);
-        var currentNodeID = stack.shift() //Removes node on top of stack and returns it
-        this.log("Current node ID : " + currentNodeID);
-        if(!this.nodes[currentNodeID].visited) {
-            this.nodes[currentNodeID].visited = true;
-            this.nodes[currentNodeID].display();
-            this.log("Visited : " + currentNodeID);
-
-            for(var childrenID in this.nodes[currentNodeID].children) {
-                if(!this.nodes[currentNodeID].children[childrenID].visited) {
-                    this.log("ID : " + this.nodes[currentNodeID].children[childrenID]);
-                    stack.unshift(this.nodes[currentNodeID].children[childrenID]); //Add node to the top of the stack
-                }
-            }
-        }
-    }
-}
-*/
