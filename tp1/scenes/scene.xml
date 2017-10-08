@@ -1,0 +1,435 @@
+<SCENE>
+
+<!-- Initial values -->
+<INITIALS>
+    <frustum near="0.1" far="500"/>
+    <translation x="0" y="0" z="0" />
+    <rotation axis="x" angle="0" />
+    <rotation axis="y" angle="0" />
+    <rotation axis="z" angle="0" />
+    <scale sx="0.2" sy="0.2" sz="0.2" />
+    <reference length="3" />
+</INITIALS>
+
+
+<!-- Illumination and clear colour -->
+<ILLUMINATION>
+    <ambient r="0.2" g="0.2" b="0.2" a="1" />
+    <background r="0.15" g="0.15" b="0.15" a="1" />
+</ILLUMINATION>
+
+
+<!-- Lights -->
+<LIGHTS>
+	<LIGHT id="light0">
+        <enable value ="1" />
+        <position  x="0" y="20" z="0" w="1" />
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    </LIGHT>
+
+	<LIGHT id="light1">
+        <enable value ="1" />
+        <position x="20" y="20" z="0" w="1" />
+        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    </LIGHT>
+
+    <LIGHT id="light2">
+          <enable value ="1" />
+          <position  x="20" y="20" z="20" w="1" />
+          <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+          <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+          <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+      </LIGHT>
+
+    <LIGHT id="light3">
+          <enable value ="1" />
+          <position x="0" y="20" z="20" w="1" />
+          <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+          <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+          <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+      </LIGHT>
+</LIGHTS>
+
+<!-- Textures -->
+<TEXTURES>
+  <!-- Ring apron texture #1 -->
+  <TEXTURE id="apronRaw">
+      <file path="images_ring/rawApron.png" />
+      <amplif_factor s="19.5" t="5" />
+  </TEXTURE>
+
+  <!-- Ring apron texture #2 -->
+  <TEXTURE id="apronSD">
+      <file path="images_ring/SDApron.jpg" />
+      <amplif_factor s="19.5" t="5" />
+  </TEXTURE>
+</TEXTURES>
+
+
+<MATERIALS>
+	<!-- Pyramid material -->
+
+    <!-- Black color material -->
+    <MATERIAL id="blackMaterial">
+        <shininess value="2" />
+        <specular r="0.0" g="0.0" b="0.0" a="1" />
+        <diffuse r="0.0" g="0.0" b="0.0" a="1" />
+        <ambient r="0.0" g="0.0" b="0.0" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Slighlty "dirty" white color material -->
+    <MATERIAL id="matMaterial">
+        <shininess value="100" />
+        <specular r="0.7" g="0.7" b="0.7" a="1" />
+        <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+        <ambient r="0.0" g="0.0" b="0.0" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Polished silver material to use in ring corners -->
+    <MATERIAL id="posteMaterial">
+      <shininess value="89.6" />
+      <specular r="0.773911" g="0.773911" b="0.773911" a="1" />
+      <diffuse r="0.2775" g="0.2775" b="0.2775" a="1" />
+      <ambient r="0.23125" g="0.23125" b="0.23125" a="1" />
+      <emission r="0" g="0" b="0" a="1" />
+    </MATERIAL>
+
+    <!-- A default material -->
+    <MATERIAL id="defaultMaterial">
+        <shininess value="1" />
+        <specular r="0.0" g="0.0" b="0.0" a="1" />
+        <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+        <ambient r="0.4" g="0.4" b="0.4" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+</MATERIALS>
+
+
+<!-- The leaves -->
+<LEAVES>
+</LEAVES>
+
+
+<!-- The nodes -->
+<NODES>
+
+    <ROOT id="root" />
+
+    <!-- The root node -->
+    <NODE id="root">
+        <MATERIAL id="defaultMaterial" />
+        <TEXTURE id="null" />
+
+        <DESCENDANTS>
+            <NODEREF id="ringue" />
+        </DESCENDANTS>
+
+    </NODE>
+
+    <!-- The wrestling ring -->
+    <NODE id="ringue">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="10" y="0" z="10" />
+
+      <DESCENDANTS>
+        <NODEREF id="coberturaInferior" />
+        <NODEREF id="chao" />
+        <NODEREF id="aprons" />
+        <NODEREF id="postes" />
+        <!--
+        <NODEREF id="cordas" />
+        <NODEREF id="escadas" />
+        <NODEREF id="objetos" />
+        -->
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Cobertura para evitar cuscos -->
+    <!-- TODO: Adicionar textura a mandar passear o cusco -->
+    <NODE id="coberturaInferior">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="-2.75" z="-20" />
+      <SCALE sx="5" sy="1" sz="5" />
+      <ROTATION axis="x" angle="90" />
+
+      <DESCENDANTS>
+        <NODEREF id="protecaoChao" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The ring floor -->
+    <NODE id="chao" >
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="2" z="0" />
+      <SCALE sx="5" sy="1" sz="5" />
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <NODEREF id="protecaoChao" />
+        <NODEREF id="ringMat" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Protecao para suportar o peso sobre o ringue -->
+    <NODE id="protecaoChao">
+      <MATERIAL id="blackMaterial" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <LEAF type="rectangle" args="0 4 4 0" />
+      </DESCENDANTS>
+  </NODE>
+
+  <!-- Ring mat onde a ação se desenrola propriamente -->
+  <NODE id="ringMat">
+    <MATERIAL id="matMaterial" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0" y="0.05" z="0.05" />
+
+    <DESCENDANTS>
+      <LEAF type="rectangle" args="0 3.9 3.9 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Ringside aprons -->
+  <NODE id="aprons">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="apron1" />
+      <NODEREF id="apron2" />
+      <NODEREF id="apron3" />
+      <NODEREF id="apron4" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First apron -->
+  <NODE id="apron1">
+    <MATERIAL id="null" />
+    <TEXTURE id="apronRaw" />
+
+    <TRANSLATION x="0" y="-2.75" z="-0.03" />
+
+    <DESCENDANTS>
+      <LEAF type="rectangle" args="0 5 20 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Second apron -->
+  <NODE id="apron2">
+    <MATERIAL id="null" />
+    <TEXTURE id="apronSD" />
+
+    <ROTATION axis="y" angle="90" />
+    <TRANSLATION x="0" y="-2.75" z="20" />
+
+    <DESCENDANTS>
+      <LEAF type="rectangle" args="0 5 20 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Third apron -->
+  <NODE id="apron3">
+    <MATERIAL id="null" />
+    <TEXTURE id="apronSD" />
+
+    <ROTATION axis="y" angle="-90" />
+    <TRANSLATION x="-20" y="-2.75" z="0" />
+
+    <DESCENDANTS>
+      <LEAF type="rectangle" args="0 5 20 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Fourth apron -->
+  <NODE id="apron4">
+    <MATERIAL id="null" />
+    <TEXTURE id="apronRaw" />
+
+    <ROTATION axis="y" angle="180" />
+    <TRANSLATION x="-20" y="-2.75" z="20" />
+
+    <DESCENDANTS>
+      <LEAF type="rectangle" args="0 5 20 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- The ring posts -->
+  <NODE id="postes">
+    <MATERIAL id="posteMaterial" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="poste1" />
+      <NODEREF id="poste2" />
+      <NODEREF id="poste3" />
+      <NODEREF id="poste4" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First corner -->
+  <NODE id="poste1">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0.5" y="2.25" z="-0.75" />
+
+    <DESCENDANTS>
+      <NODEREF id="poste" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="poste2">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0.5" y="2.25" z="-19.25" />
+    <ROTATION axis="y" angle="-90" />
+
+    <DESCENDANTS>
+      <NODEREF id="poste" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="poste3">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="19" y="2.25" z="-0.75" />
+    <ROTATION axis="y" angle="90" />
+
+    <DESCENDANTS>
+      <NODEREF id="poste" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="poste4">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="19" y="2.25" z="-19.25" />
+    <ROTATION axis="y" angle="180" />
+
+    <DESCENDANTS>
+      <NODEREF id="poste" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- A generic corner -->
+  <NODE id="poste">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="x" angle="-90" />
+
+    <DESCENDANTS>
+      <NODEREF id="posteBase" />
+      <NODEREF id="ropeHolders" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="posteBase">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="5 0.4 0.4 30 20" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="ropeHolders">
+    <MATERIAL id="blackMaterial" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="ropeHolder1" />
+      <NODEREF id="ropeHolder2" />
+      <NODEREF id="ropeHolder3" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="ropeHolder1">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0" y="0" z="4" />
+
+    <DESCENDANTS>
+      <NODEREF id="ropeHolder" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="ropeHolder2">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0" y="0" z="2.75" />
+
+    <DESCENDANTS>
+      <NODEREF id="ropeHolder" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="ropeHolder3">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0" y="0" z="1.5" />
+
+    <DESCENDANTS>
+      <NODEREF id="ropeHolder" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="ropeHolder">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="cableHolder" />
+      <NODEREF id="sphereHolder" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="cableHolder">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="x" angle="90" />
+    <ROTATION axis="y" angle="-45" />
+    <TRANSLATION x="0" y="0" z="-1.25" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="1 0.1 0.1 5 20" />
+    </DESCENDANTS>
+  </NODE>
+
+  <NODE id="sphereHolder">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="1" y="1" z="0" />
+
+    <DESCENDANTS>
+      <LEAF type="sphere" args="0.25 10 20" />
+    </DESCENDANTS>
+  </NODE>
+
+</NODES>
+
+</SCENE>

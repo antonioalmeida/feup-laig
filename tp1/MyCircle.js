@@ -7,7 +7,6 @@
 
 	this.slices = slices;
 	this.radius = radius;
-	this.radius = radius;
  	this.initBuffers();
  };
 
@@ -16,10 +15,10 @@ MyCircle.prototype.constructor = MyCircle;
 
  MyCircle.prototype.initBuffers = function() {
 
-	this.vertices = [0, 0, 0,];
-	this.normals = [0, 0, 1,];
+	this.vertices = [0, 0, 0];
+	this.normals = [0, 0, 1];
 	this.indices = [];
-	this.texCoords = [0.5, 0.5,];
+	this.texCoords = [0.5, 0.5];
 
 	var ang = Math.PI*2/this.slices;
  	var x, y;
@@ -30,7 +29,7 @@ MyCircle.prototype.constructor = MyCircle;
 		y = Math.sin(i * ang);
 
 		this.vertices.push(this.radius * x, this.radius * y, 0);
-		this.normals.push(x, y, 0);
+		this.normals.push(0, 0, 1);
 		this.texCoords.push(x/2 +0.5,y/2 + 0.5);
 	}
 

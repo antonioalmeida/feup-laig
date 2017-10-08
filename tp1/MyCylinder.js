@@ -2,23 +2,19 @@
 * MyCylinder
 * @constructor
 */
-function MyCylinder(scene, args, minS = 0, maxS = 1, minT = 0, maxT = 1) {
+function MyCylinder(scene, args) {
     CGFobject.call(this,scene);
 
     this.height = args[0];
-    this.top = args[1];
-    this.bottom = args[2];
+    this.bottom = args[1];
+    this.top = args[2];
     this.stacks = args[3];
     this.slices = args[4];
 
-    //console.log("ARGS CYLINDER :" + this.height + ", " + this.top + ", " + this.bottom + ", " + this.stacks + ", " + this.slices);
-    //console.log("ARGS TYPE :" + typeof this.height);
-
     this.angle = 2 * Math.PI / this.slices;
-    //console.log("ANGLE : " + this.angle);
 
-    this.bottomCircle = new MyCircle(this.scene, this.base, this.slices);
-    this.topCircle = new MyCircle(this.scene, this.top, this.slices);
+    this.bottomCircle = new MyCircle(scene, this.bottom, this.slices);
+    this.topCircle = new MyCircle(scene, this.top, this.slices);
 
     this.initBuffers();
 };
@@ -32,15 +28,16 @@ MyCylinder.prototype.initBuffers = function() {
     this.indices = [];
     this.texCoords = [];
 
+    var radiusIncrement = (this.top-this.bottom)/this.stacks;
     //Exterior part
     var i, j;
     for(j = 0; j <= this.stacks; j++){
         for(i = 0; i <= this.slices; i++){
             //Push current vertex
-            this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j*this.height/this.stacks);
+            this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(i*this.angle*this.top, j*this.height/this.stacks);
+            this.texCoords.push(i*this.angle*this.top/this.slices, j*this.height/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(Math.cos(i*this.angle), Math.sin(i*this.angle),0);
@@ -62,14 +59,13 @@ MyCylinder.prototype.initBuffers = function() {
     }
 
     //Interior part
-    var i, j;
     for(j = 0; j <= this.stacks; j++){
         for(i = 0; i <= this.slices; i++){
             //Push current vertex
-            this.vertices.push(Math.cos(i*this.angle),Math.sin(i*this.angle),j*this.height/this.stacks);
+            this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(i*this.angle*this.top, j*this.height/this.stacks);
+            this.texCoords.push(i*this.angle*this.top/this.slices, j*this.height/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(-Math.cos(i*this.angle), -Math.sin(i*this.angle),0);

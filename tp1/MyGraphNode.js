@@ -42,24 +42,48 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
 /**
  * Displays this node and its leaves and children recursively
  */
-MyGraphNode.prototype.display = function() {
-    this.graph.scene.pushMatrix();
+MyGraphNode.prototype.display = function(textureID, materialID) {
+        this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
 
-        let toRemoveMaterial = this.applyMaterial();
-        let toRemoveTexture = this.applyTexture();
+        //let toRemoveMaterial = this.applyMaterial();
+        //let toRemoveTexture = this.applyTexture();
+        var materialToPassOn = materialID;
+        var textureToPassOn = textureID;
+        if(this.materialID != "null" && this.materialID != null){
+          this.graph.materials[this.materialID].apply();
+          materialToPassOn = this.materialID;
+        }
+        else
+          this.graph.materials[materialID].apply();
 
-        this.displayLeaves();
-        this.displayChildren();
+        if(this.textureID == "clear"){
+          if(textureID != null && textureID != 'null')
+            this.graph.textures[textureID][0].unbind();
+          textureToPassOn = "null";
+        }
+        else if(this.textureID != null && this.textureID != "null"){
+          this.graph.textures[this.textureID][0].bind();
+          textureToPassOn = this.textureID;
+        }
+        else{
+          if(textureID != null && textureID != "null")
+            this.graph.textures[textureID][0].bind();
+        }
 
-        if(toRemoveTexture)
-            this.removeTexture();
+        this.displayLeaves(textureToPassOn);
 
-        if(toRemoveMaterial)
-            this.removeMaterial();
+        this.displayChildren(textureToPassOn, materialToPassOn);
+
+        //if(toRemoveTexture)
+            //this.removeTexture();
+
+        //if(toRemoveMaterial)
+            //this.removeMaterial();
     this.graph.scene.popMatrix();
 }
 
+/*
 MyGraphNode.prototype.applyMaterial = function() {
     let toRemove = true;
 
@@ -100,15 +124,19 @@ MyGraphNode.prototype.removeTexture = function() {
     this.graph.textures[this.graph.textureStack[0]][0].unbind();
     this.graph.textureStack.shift();
 }
+*/
 
 /**
  * Displays this node's leaves
  */
-MyGraphNode.prototype.displayLeaves = function() {
+MyGraphNode.prototype.displayLeaves = function(texture) {
     for(let leaveID in this.leaves){
-        if(this.textureID != 'clear' && this.graph.textureStack.length){
-            let afS = this.graph.textures[this.graph.textureStack[0]][1];
-            let afT = this.graph.textures[this.graph.textureStack[0]][2];
+        //if(this.textureID != 'clear'){ && this.graph.textureStack.length){
+        if(texture != null && texture != "null"){
+            //let afS = this.graph.textures[this.graph.textureStack[0]][1];
+            //let afT = this.graph.textures[this.graph.textureStack[0]][2];
+            let afS = this.graph.textures[texture][1];
+            let afT = this.graph.textures[texture][2];
             this.leaves[leaveID].primitive.updateTexCoords(afS, afT);
         }
         this.leaves[leaveID].display();
@@ -118,8 +146,8 @@ MyGraphNode.prototype.displayLeaves = function() {
 /**
  * Displays this nodes's children
  */
-MyGraphNode.prototype.displayChildren = function() {
+MyGraphNode.prototype.displayChildren = function(texture, material) {
     for(let childrenID in this.children) {
-        this.graph.nodes[this.children[childrenID]].display();
+        this.graph.nodes[this.children[childrenID]].display(texture, material);
     }
 }

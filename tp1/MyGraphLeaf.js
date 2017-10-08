@@ -14,7 +14,7 @@ function MyGraphLeaf(graph, xmlelem) {
 
     var args2 = [];
     for(let i = 0; i < args.length; i++)
-        args2[i] = parseInt(args[i]);
+        args2[i] = parseFloat(args[i]);
 
     switch(this.type) {
         case 'rectangle':
