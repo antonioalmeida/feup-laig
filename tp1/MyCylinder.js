@@ -39,7 +39,7 @@ MyCylinder.prototype.initBuffers = function() {
             this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(i*this.angle*this.top/this.slices, j*this.height/this.stacks);
+            this.texCoords.push(i/this.slices, j/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(Math.cos(i*this.angle), Math.sin(i*this.angle),0);
@@ -67,7 +67,7 @@ MyCylinder.prototype.initBuffers = function() {
             this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(i*this.angle*this.top/this.slices, j*this.height/this.stacks);
+            this.texCoords.push(i/this.slices, j/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(-Math.cos(i*this.angle), -Math.sin(i*this.angle),0);

@@ -73,6 +73,30 @@
       <file path="images_ring/steel.png" />
       <amplif_factor s="2" t="2" /> <!-- TBD -->
   </TEXTURE>
+
+  <!-- Wood texture for hammer -->
+ <TEXTURE id="wood1">
+     <file path="images_ring/wood1.png" />
+     <amplif_factor s="1" t="1" /> <!-- Irrelevant as it's only going to be used in a cylinder -->
+ </TEXTURE>
+
+ <!-- Wood texture for table -->
+ <TEXTURE id="wood2">
+     <file path="images_ring/wood2.jpg" />
+     <amplif_factor s="5" t="2" />
+ </TEXTURE>
+
+ <!-- Trash can texture for the trash can -->
+ <TEXTURE id="trashCan">
+     <file path="images_ring/trashCan.jpg" />
+     <amplif_factor s="1" t="1" />
+ </TEXTURE>
+
+ <!-- Wood texture for 2x4 -->
+ <TEXTURE id="wood3">
+     <file path="images_ring/wood3.jpg" />
+     <amplif_factor s="5" t="2" />
+ </TEXTURE>
 </TEXTURES>
 
 
@@ -161,9 +185,7 @@
         <NODEREF id="cordas" />
         <NODEREF id="paredesExteriores" />
         <NODEREF id="escadas" />
-        <!--
         <NODEREF id="objetos" />
-        -->
       </DESCENDANTS>
     </NODE>
 
@@ -800,6 +822,245 @@
       </DESCENDANTS>
 
   </NODE>
+
+  <!-- Weapons laying around the ring -->
+  <NODE id="objetos">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="martelo" />
+      <NODEREF id="mesa" />
+      <NODEREF id="2x4" />
+      <NODEREF id="caixote" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- A hammer -->
+  <NODE id="martelo">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="5" y="2.25" z="-7" />
+    <ROTATION axis="y" angle="-22.5" />
+
+    <DESCENDANTS>
+      <NODEREF id="marteloPega" />
+      <NODEREF id="marteloTopo" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Hammer's grabing part -->
+  <NODE id="marteloPega">
+    <MATERIAL id="null" />
+    <TEXTURE id="wood1" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="4 0.1 0.1 20 20 1 1" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- The hammer's toughest part -->
+  <NODE id="marteloTopo">
+    <MATERIAL id="blackMaterial" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="y" angle="90" />
+    <TRANSLATION x="0" y="0" z="-0.35" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="0.7 0.15 0.15 5 20 1 1" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Table -->
+  <NODE id="mesa">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="10" y="5.25" z="-15" />
+
+    <DESCENDANTS>
+      <NODEREF id="pernas" />
+      <NODEREF id="ligacoesPernasTopo" />
+      <NODEREF id="mesaTopo" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Table legs -->
+  <NODE id="pernas">
+    <MATERIAL id="blackMaterial" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="x" angle="90" />
+
+    <DESCENDANTS>
+      <NODEREF id="perna1" />
+      <NODEREF id="perna2" />
+      <NODEREF id="perna3" />
+      <NODEREF id="perna4" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First table leg -->
+  <NODE id="perna1">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0.9" y="-1" z="0" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="3 0.1 0.1 20 20 1 1" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Second table leg -->
+  <NODE id="perna2">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="-5.9" y="-1" z="0" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="3 0.1 0.1 20 20 1 1" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Third table leg -->
+  <NODE id="perna3">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="-5.9" y="2.25" z="0" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="3 0.1 0.1 20 20 1 1" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Fourth table leg -->
+  <NODE id="perna4">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0.9" y="2.25" z="0" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="3 0.1 0.1 20 20 1 1" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Table top -->
+  <NODE id="mesaTopo">
+    <MATERIAL id="null" />
+    <TEXTURE id="wood2" />
+
+    <TRANSLATION x="-10" y="-0.3" z="-3.5" />
+    <SCALE sx="1.5" sy="0.05" sz="0.8" />
+
+    <DESCENDANTS>
+      <NODEREF id="box" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Connection from legs to table top to hold the table together -->
+  <NODE id="ligacoesPernasTopo">
+    <MATERIAL id="blackMaterial" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="ligacao1" />
+      <NODEREF id="ligacao2" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First leg-top connection -->
+  <NODE id="ligacao1">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <TRANSLATION x="0.9" y="-1.5" z="-1" />
+
+    <DESCENDANTS>
+      <NODEREF id="ligacao" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- First leg-top connection -->
+  <NODE id="ligacao2">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="y" angle="180" />
+    <TRANSLATION x="5.9" y="-1.5" z="-2.25" />
+
+    <DESCENDANTS>
+      <NODEREF id="ligacao" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Generic leg-top connection -->
+  <NODE id="ligacao">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <NODEREF id="connectionLegs" />
+      <NODEREF id="connectionMidTop" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Connection between two legs -->
+  <NODE id="connectionLegs">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="3.2 0.1 0.1 5 20 0 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Connection between legs connection and top table part -->
+  <NODE id="connectionMidTop">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="y" angle="90" />
+    <ROTATION axis="x" angle="25" />
+    <TRANSLATION x="-1.75" y="0" z="-3.35" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="3.3 0.1 0.1 5 20 0 0" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- 2x4 standing by the ropes -->
+  <NODE id="2x4">
+    <MATERIAL id="null" />
+    <TEXTURE id="wood3" />
+
+    <ROTATION axis="z" angle="-15" />
+    <TRANSLATION x="15.1" y="2" z="-7.1" />
+    <SCALE sx="0.075" sy="1.15" sz="0.075" />
+
+    <DESCENDANTS>
+      <NODEREF id="box" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Trash can laying around -->
+  <NODE id="caixote">
+    <MATERIAL id="null" />
+    <TEXTURE id="trashCan" />
+
+    <ROTATION axis="x" angle="90" />
+    <TRANSLATION x="11" y="-5.5" z="-6.25" />
+
+    <DESCENDANTS>
+      <LEAF type="cylinder" args="4 1.5 1.5 20 40 1 0" />
+    </DESCENDANTS>
+  </NODE>
+
 </NODES>
 
 </SCENE>
