@@ -609,7 +609,7 @@
     <TRANSLATION x="0" y="-7" z="0" /> <!-- bring it down to the floor -->
 
     <DESCENDANTS>
-      <NODEREF id="cube" />
+      <NODEREF id="box" />
     </DESCENDANTS>
   </NODE>
 
@@ -669,7 +669,7 @@
     <SCALE sx="1" sy="0.33" sz="0.5" />
 
     <DESCENDANTS>
-      <NODEREF id="cube" />
+      <NODEREF id="box" />
     </DESCENDANTS>
   </NODE>
 
@@ -683,7 +683,7 @@
     <SCALE sx="1" sy="0.4" sz="0.75" />
 
     <DESCENDANTS>
-      <NODEREF id="cube" />
+      <NODEREF id="box" />
     </DESCENDANTS>
   </NODE>
 
@@ -697,27 +697,27 @@
     <SCALE sx="1" sy="0.5" sz="1" />
 
     <DESCENDANTS>
-      <NODEREF id="cube" />
+      <NODEREF id="box" />
     </DESCENDANTS>
   </NODE>
 
-  <!-- A generic cube -->
-  <NODE id="cube">
+  <!-- A generic box -->
+  <NODE id="box">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
 
     <DESCENDANTS>
-      <NODEREF id="cubeFace1" />
-      <NODEREF id="cubeFace2" />
-      <NODEREF id="cubeFace3" />
-      <NODEREF id="cubeFace4" />
-      <NODEREF id="cubeFace5" />
-      <NODEREF id="cubeFace6" />
+      <NODEREF id="boxFace1" />
+      <NODEREF id="boxFace2" />
+      <NODEREF id="boxFace3" />
+      <NODEREF id="boxFace4" />
+      <NODEREF id="boxFace5" />
+      <NODEREF id="boxFace6" />
     </DESCENDANTS>
   </NODE>
 
-  <!-- A cube face -->
-  <NODE id="cubeFace1">
+  <!-- A box face -->
+  <NODE id="boxFace1">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -729,8 +729,8 @@
 
   </NODE>
 
-  <!-- Another cube face -->
-   <NODE id="cubeFace2">
+  <!-- Another box face -->
+   <NODE id="boxFace2">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -743,8 +743,8 @@
 
   </NODE>
 
-  <!-- Another cube face -->
-  <NODE id="cubeFace3">
+  <!-- Another box face -->
+  <NODE id="boxFace3">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -757,8 +757,8 @@
 
   </NODE>
 
-  <!-- Another cube face -->
-  <NODE id="cubeFace4">
+  <!-- Another box face -->
+  <NODE id="boxFace4">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -771,8 +771,8 @@
 
   </NODE>
 
-  <!-- Another cube face -->
-  <NODE id="cubeFace5">
+  <!-- Another box face -->
+  <NODE id="boxFace5">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -786,8 +786,8 @@
 
   </NODE>
 
-  <!-- Another cube face -->
-  <NODE id="cubeFace6">
+  <!-- Another box face -->
+  <NODE id="boxFace6">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
