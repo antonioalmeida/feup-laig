@@ -67,6 +67,12 @@
       <file path="images_ring/SDApron.jpg" />
       <amplif_factor s="19.5" t="5" />
   </TEXTURE>
+
+  <!-- Steel texture for ring steps -->
+  <TEXTURE id="steel">
+      <file path="images_ring/steel.png" />
+      <amplif_factor s="2" t="2" /> <!-- TBD -->
+  </TEXTURE>
 </TEXTURES>
 
 
@@ -155,8 +161,8 @@
         <NODEREF id="aprons" />
         <NODEREF id="postes" />
         <NODEREF id="cordas" />
-        <!--
         <NODEREF id="escadas" />
+        <!--
         <NODEREF id="objetos" />
         -->
       </DESCENDANTS>
@@ -302,6 +308,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Second corner -->
   <NODE id="poste2">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -314,6 +321,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Third corner -->
   <NODE id="poste3">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -326,6 +334,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Fourth corner -->
   <NODE id="poste4">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -351,6 +360,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Corner support -->
   <NODE id="posteBase">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -360,6 +370,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Ropeholders -->
   <NODE id="ropeHolders">
     <MATERIAL id="blackMaterial" />
     <TEXTURE id="null" />
@@ -371,6 +382,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- First ropeholder -->
   <NODE id="ropeHolder1">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -382,6 +394,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Second ropeholder -->
   <NODE id="ropeHolder2">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -393,6 +406,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Third ropeholder -->
   <NODE id="ropeHolder3">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -404,6 +418,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Generic ropeholder -->
   <NODE id="ropeHolder">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -414,6 +429,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Cable to support sphere -->
   <NODE id="cableHolder">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -427,6 +443,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Structure where ropes will pass through -->
   <NODE id="sphereHolder">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -438,6 +455,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Ring ropes -->
   <NODE id="cordas">
     <MATERIAL id="redMaterial" />
     <TEXTURE id="null" />
@@ -450,6 +468,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- First set of ropes -->
   <NODE id="cordas1">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -461,6 +480,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Second set of ropes -->
   <NODE id="cordas2">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -473,6 +493,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Third set of ropes -->
   <NODE id="cordas3">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -485,6 +506,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Fourth set of ropes -->
   <NODE id="cordas4">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -496,6 +518,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- A generic set of ropes -->
   <NODE id="cordaSet">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -507,6 +530,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Top rope in a rope set -->
   <NODE id="cordaSet1">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -518,6 +542,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Middle rope in a rope set -->
   <NODE id="cordaSet2">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
@@ -529,6 +554,7 @@
     </DESCENDANTS>
   </NODE>
 
+  <!-- Bottom rope in a rope set -->
   <NODE id="cordaSet3">
     <MATERIAL id="null" />
     <TEXTURE id="null" />
