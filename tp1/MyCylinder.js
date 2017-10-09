@@ -95,8 +95,8 @@ MyCylinder.prototype.initBuffers = function() {
 MyCylinder.prototype.display = function () {
     CGFobject.prototype.display.call(this);
     this.scene.pushMatrix();
+    this.scene.rotate(Math.PI, 1, 0, 0)
     if(this.drawBottom){
-      this.scene.rotate(Math.PI, 1, 0, 0)
       this.bottomCircle.display();
     }
     if(this.drawTop){

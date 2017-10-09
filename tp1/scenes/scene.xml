@@ -15,7 +15,7 @@
 <!-- Illumination and clear colour -->
 <ILLUMINATION>
     <ambient r="0.2" g="0.2" b="0.2" a="1" />
-    <background r="0.15" g="0.15" b="0.15" a="1" />
+    <background r="0" g="0" b="0" a="1" />
 </ILLUMINATION>
 
 
@@ -23,32 +23,32 @@
 <LIGHTS>
 	<LIGHT id="light0">
         <enable value ="1" />
-        <position  x="0" y="20" z="0" w="1" />
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <position  x="20" y="20" z="0" w="1" />
+        <ambient r="0.4" g="0.2" b="0.2" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
     </LIGHT>
 
 	<LIGHT id="light1">
         <enable value ="1" />
-        <position x="20" y="20" z="0" w="1" />
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <position x="20" y="20" z="20" w="1" />
+        <ambient r="0.4" g="0.2" b="0.2" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
     </LIGHT>
 
     <LIGHT id="light2">
           <enable value ="1" />
-          <position  x="20" y="20" z="20" w="1" />
-          <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+          <position  x="20" y="20" z="40" w="1" />
+          <ambient r="0.4" g="0.2" b="0.2" a="1.0" />
           <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
           <specular r="1.0" g="1.0" b="1.0" a="1.0" />
       </LIGHT>
 
     <LIGHT id="light3">
           <enable value ="1" />
-          <position x="0" y="20" z="20" w="1" />
-          <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+          <position x="20" y="20" z="60" w="1" />
+          <ambient r="0.4" g="0.2" b="0.2" a="1.0" />
           <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
           <specular r="1.0" g="1.0" b="1.0" a="1.0" />
       </LIGHT>
@@ -58,7 +58,7 @@
 <TEXTURES>
   <!-- Ring apron texture #1 -->
   <TEXTURE id="apronRaw">
-      <file path="images_ring/rawApron1.png" />
+      <file path="images_ring/rawApron.png" />
       <amplif_factor s="19.5" t="5" />
   </TEXTURE>
 
@@ -78,6 +78,18 @@
   <TEXTURE id="concrete">
       <file path="images_ring/concrete.jpg" />
       <amplif_factor s="3" t="3" /> <!-- TBD -->
+  </TEXTURE>
+
+  <!-- Metal texture for the ringside walls-->
+  <TEXTURE id="wallMetal">
+      <file path="images_ring/wallMetal.jpg" />
+      <amplif_factor s="1" t="2" />
+  </TEXTURE>
+
+  <!-- Metal texture for the ringside walls-->
+  <TEXTURE id="floor">
+      <file path="images_ring/floor.jpg" />
+      <amplif_factor s="4" t="4" />
   </TEXTURE>
 
   <!-- Texture for the ramp-->
@@ -115,6 +127,12 @@
      <file path="images_ring/wood3.jpg" />
      <amplif_factor s="5" t="2" />
  </TEXTURE>
+
+ <!-- Texture for the background-->
+ <TEXTURE id="smoke">
+     <file path="images_ring/red-background.jpg" />
+     <amplif_factor s="6" t="6" />
+ </TEXTURE>
 </TEXTURES>
 
 
@@ -137,13 +155,22 @@
         <emission r="0.0" g="0.0" b="0.0" a="1" />
     </MATERIAL>
 
-    <!-- Brushed aluminum material to use in ringside walls -->
-    <MATERIAL id="wallMaterial">
+    <!-- Brushed aluminum material to use in darker elements -->
+    <MATERIAL id="metalMaterial">
       <shininess value="89.6" />
       <specular r="0.773911" g="0.773911" b="0.773911" a="1" />
-      <diffuse r="0.115" g="0.115" b="0.115" a="1" />
+      <diffuse r="0.315" g="0.315" b="0.315" a="1" />
       <ambient r="0.115" g="0.115" b="0.115" a="1" />
       <emission r="0" g="0" b="0" a="1" />
+    </MATERIAL>
+
+    <!-- Big screen material-->
+    <MATERIAL id="screenMaterial">
+      <shininess value="100" />
+      <specular r="0.773911" g="0.773911" b="0.773911" a="1" />
+      <diffuse r="0.315" g="0.315" b="0.315" a="1" />
+      <ambient r="0.115" g="0.115" b="0.115" a="1" />
+      <emission r="0.5" g="0.5" b="0.5" a="1" />
     </MATERIAL>
 
     <!-- Polished silver material to use in ring corners TODO: darken a little bit -->
@@ -158,9 +185,9 @@
     <!-- Red material to use in the ring ropes TODO: Lel make it better and more red -->
     <MATERIAL id="redMaterial">
       <shininess value="10" />
-      <specular r="0.8" g="0.3" b="0.3" a="1" />
+      <specular r="1" g="0.3" b="0.3" a="1" />
       <diffuse r="1" g="0.5" b="0.5" a="1" />
-      <ambient r="0.5" g="0.1" b="0.1" a="1" />
+      <ambient r="0.2" g="0" b="0" a="1" />
       <emission r="0" g="0" b="0" a="1" />
     </MATERIAL>
 
@@ -206,8 +233,9 @@
       <TRANSLATION x="10" y="0" z="10" />
 
       <DESCENDANTS>
+        <NODEREF id="chaoExterior" />
         <NODEREF id="coberturaInferior" />
-        <NODEREF id="chao" />
+        <NODEREF id="chaoRingue" />
         <NODEREF id="aprons" />
         <NODEREF id="postes" />
         <NODEREF id="cordas" />
@@ -215,12 +243,27 @@
         <NODEREF id="escadas" />
         <NODEREF id="objetos" />
         <NODEREF id="ramp" />
+        <NODEREF id="background" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Cobertura para evitar cuscos / chão por fora do ringue (TODO: meter double sided)-->
+    <NODE id="chaoExterior">
+      <MATERIAL id="metalMaterial" />
+      <TEXTURE id="floor" />
+
+      <TRANSLATION x="-10" y="-3.05" z="70" />
+      <SCALE sx="10" sy="1" sz="20" />
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <LEAF type="rectangle" args="0 4 4 0" />
       </DESCENDANTS>
     </NODE>
 
     <!-- Cobertura para evitar cuscos / chão por fora do ringue (TODO: meter double sided)-->
     <NODE id="coberturaInferior">
-      <MATERIAL id="wallMaterial" />
+      <MATERIAL id="metalMaterial" />
       <TEXTURE id="concrete" />
 
       <TRANSLATION x="-10" y="-3" z="10" />
@@ -233,7 +276,7 @@
     </NODE>
 
     <!-- The ring floor -->
-    <NODE id="chao" >
+    <NODE id="chaoRingue" >
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -618,13 +661,15 @@
 
   <!-- Ringside walls -->
   <NODE id="paredesExteriores">
-    <MATERIAL id="wallMaterial" /> <!-- TODO: change this-->
-    <TEXTURE id="null" />
+    <MATERIAL id="posteMaterial" />
+    <TEXTURE id="wallMetal" />
 
     <DESCENDANTS>
       <NODEREF id="topWall" />
       <NODEREF id="bottomWall" />
       <NODEREF id="rightWall" />
+      <NODEREF id="frontWall1" />
+      <NODEREF id="frontWall2" />
     </DESCENDANTS>
   </NODE>
 
@@ -659,6 +704,34 @@
 
     <ROTATION axis="y" angle="90" />
     <TRANSLATION x="29.25" y="0" z="-30" />
+
+    <DESCENDANTS>
+      <NODEREF id="ringSideWall" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- On the small walls on the ringside front -->
+  <NODE id="frontWall1">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="y" angle="90" />
+    <SCALE sx="1" sy="1" sz="0.3" />
+    <TRANSLATION x="-10.3" y="0" z="39" />
+
+    <DESCENDANTS>
+      <NODEREF id="ringSideWall" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- The other small wall on the ringside front -->
+  <NODE id="frontWall2">
+    <MATERIAL id="null" />
+    <TEXTURE id="null" />
+
+    <ROTATION axis="y" angle="90" />
+    <SCALE sx="1" sy="1" sz="0.3" />
+    <TRANSLATION x="-10.3" y="0" z="-53.3" />
 
     <DESCENDANTS>
       <NODEREF id="ringSideWall" />
@@ -707,7 +780,7 @@
 
   <!-- Side of ramp -->
   <NODE id="rampSide1">
-    <MATERIAL id="wallMaterial" />
+    <MATERIAL id="metalMaterial" />
     <TEXTURE id="null" />
     <DESCENDANTS>
 
@@ -717,7 +790,7 @@
 
   <!-- Other side of ramp -->
   <NODE id="rampSide2">
-    <MATERIAL id="wallMaterial" />
+    <MATERIAL id="metalMaterial" />
     <TEXTURE id="null" />
     <DESCENDANTS>
 
@@ -735,6 +808,7 @@
     <DESCENDANTS>
       <NODEREF id="entranceFloor" />
       <NODEREF id="bigScreen" />
+      <NODEREF id="bigScreenCover" />
       <NODEREF id="entranceColumn1" />
       <NODEREF id="entranceColumn2" />
     </DESCENDANTS>
@@ -754,11 +828,24 @@
 
   <!-- Entrance big screen -->
   <NODE id="bigScreen">
-    <MATERIAL id="null" />
+    <MATERIAL id="screenMaterial" />
     <TEXTURE id="raw-big" />
 
     <TRANSLATION x="-5" y="-4.5" z="24.5" />
     <SCALE sx="7" sy="4" sz="0.2" />
+
+    <DESCENDANTS>
+      <NODEREF id="box" />
+    </DESCENDANTS>
+  </NODE>
+
+  <!-- Big screen cover -->
+  <NODE id="bigScreenCover">
+    <MATERIAL id="blackMaterial" />
+    <TEXTURE id="clear" />
+
+    <TRANSLATION x="-7.5" y="-7.5" z="25.5" />
+    <SCALE sx="7.5" sy="4.5" sz="0.1" />
 
     <DESCENDANTS>
       <NODEREF id="box" />
@@ -1215,6 +1302,21 @@
     <DESCENDANTS>
       <LEAF type="cylinder" args="4 1.5 1.5 20 40 1 0" />
     </DESCENDANTS>
+  </NODE>
+
+  <!-- Red smoke background -->
+  <NODE id="background">
+      <MATERIAL id="null" />
+      <TEXTURE id="smoke" />
+
+      <TRANSLATION x="0" y="500" z="0" />
+      <ROTATION axis="x" angle="90" />
+      <SCALE sx="-1" sy="1" sz="1" />
+
+      <DESCENDANTS>
+          <LEAF type="cylinder" args="1000 200 200 20 20 0 0" />
+      </DESCENDANTS>
+
   </NODE>
 
 </NODES>
