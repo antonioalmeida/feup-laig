@@ -183,26 +183,27 @@
         <TRANSLATION x="15" y="15" z="10" />
 
         <DESCENDANTS>
-            <LEAF type="patch" args="2 3" />
-            <CPLINE>
-                <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
-                <CPOINT xx="-2.0" yy="-2.0" zz="2.0" ww="1" />
-                <CPOINT xx="-2.0" yy="2.0" zz="2.0" ww="1" />
-                <CPOINT xx="-1.5" yy="1.5" zz="0.0" ww="1" />
-            </CPLINE>
-            <CPLINE>
-                <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
-                <CPOINT xx="0" yy="-2.0" zz="3.0" ww="1" />
-                <CPOINT xx="0" yy="2.0" zz="3.0" ww="1" />
-                <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
-            </CPLINE>
-            <CPLINE>
-                <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
-                <CPOINT xx="2.0" yy="-2.0" zz="2.0" ww="1" />
-                <CPOINT xx="2.0" yy="2.0" zz="2.0" ww="1" />
-                <CPOINT xx="1.5" yy="1.5" zz="0.0" ww="1" />
-            </CPLINE>
-        </DESCENDANTS>
+            <LEAF type="patch" args="20 20" >
+                <CPLINE>
+                    <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
+                    <CPOINT xx="-2.0" yy="-2.0" zz="2.0" ww="1" />
+                    <CPOINT xx="-2.0" yy="2.0" zz="2.0" ww="1" />
+                    <CPOINT xx="-1.5" yy="1.5" zz="0.0" ww="1" />
+                </CPLINE>
+                <CPLINE>
+                    <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
+                    <CPOINT xx="0" yy="-2.0" zz="3.0" ww="1" />
+                    <CPOINT xx="0" yy="2.0" zz="3.0" ww="1" />
+                    <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
+                </CPLINE>
+                <CPLINE>
+                    <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
+                    <CPOINT xx="2.0" yy="-2.0" zz="2.0" ww="1" />
+                    <CPOINT xx="2.0" yy="2.0" zz="2.0" ww="1" />
+                    <CPOINT xx="1.5" yy="1.5" zz="0.0" ww="1" />
+                </CPLINE>
+            </LEAF>
+    </DESCENDANTS>
 
     </NODE>
 

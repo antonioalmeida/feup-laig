@@ -1352,15 +1352,17 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         let controlPoints = [];
                         if(type == 'patch') {
 
-                            for(let k = j+1; k < descendants.length; k++) { // for each CLINE
+                            let patchChildren = descendants[j].children;
+
+                            for(let k = j; k < patchChildren.length; k++) { // for each CLINE
                                 let currentCPLine = [];
 
-                                for(let index = 0; index < descendants[k].children.length; index++) { // for each CPOINT
+                                for(let index = 0; index < patchChildren[k].children.length; index++) { // for each CPOINT
 
-                                    let cPointXX = this.reader.getFloat(descendants[k].children[index], 'xx');
-                                    let cPointYY = this.reader.getFloat(descendants[k].children[index], 'yy');
-                                    let cPointZZ = this.reader.getFloat(descendants[k].children[index], 'zz');
-                                    let cPointWW = this.reader.getFloat(descendants[k].children[index], 'ww');
+                                    let cPointXX = this.reader.getFloat(patchChildren[k].children[index], 'xx');
+                                    let cPointYY = this.reader.getFloat(patchChildren[k].children[index], 'yy');
+                                    let cPointZZ = this.reader.getFloat(patchChildren[k].children[index], 'zz');
+                                    let cPointWW = this.reader.getFloat(patchChildren[k].children[index], 'ww');
 
                                     let currentCPoint = [cPointXX, cPointYY, cPointZZ, cPointWW];
                                     currentCPLine[index] = currentCPoint;
@@ -1373,7 +1375,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         }
 
 						//parse leaf
-						this.nodes[nodeID].addLeaf(new MyGraphLeaf(this,descendants[j], controlPoints));
+						this.nodes[nodeID].addLeaf(new MyGraphLeaf(this, descendants[j], controlPoints));
                         sizeChildren++;
 					}
 					else

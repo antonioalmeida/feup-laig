@@ -89,7 +89,7 @@
   <!-- Raw big screen -->
   <TEXTURE id="raw-big">
       <file path="images_ring/raw-big.jpg" />
-      <amplif_factor s="5" t="5" /> <!-- TBD -->
+      <amplif_factor s="5" t="4" /> <!-- TBD -->
   </TEXTURE>
 
   <!-- Wood texture for hammer -->
