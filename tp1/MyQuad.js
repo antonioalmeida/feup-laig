@@ -47,10 +47,10 @@ MyQuad.prototype.initBuffers = function () {
     this.dx = this.x1-this.x0;
     this.dy = this.y0-this.y1;
     this.texCoords = [
-        0, 0,
-        this.dx, 0,
-        0, this.dy,
-        this.dx, this.dy
+      0, this.dy,
+      this.dx, this.dy,
+      0, 0,
+      this.dx, 0
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;
@@ -59,10 +59,10 @@ MyQuad.prototype.initBuffers = function () {
 
 MyQuad.prototype.updateTexCoords = function(afS, afT){
   this.texCoords = [
-    0, 0,
-    this.dx/afS, 0,
     0, this.dy/afT,
-    this.dx/afS, this.dy/afT
+    this.dx/afS, this.dy/afT,
+    0, 0,
+    this.dx/afS, 0
   ];
 
   this.updateTexCoordsGLBuffers();

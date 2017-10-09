@@ -1,2 +1,10 @@
 .DS_Store
 .idea/
+*.exe
+
+tp1/scenes/airplane.xml
+
+tp1/scenes/room.xml
+
+tp1/scenes/myimages/*
+tp1/scenes/images_room/*
