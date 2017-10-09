@@ -185,8 +185,8 @@
     <!-- Red material to use in the ring ropes TODO: Lel make it better and more red -->
     <MATERIAL id="redMaterial">
       <shininess value="10" />
-      <specular r="1" g="0.3" b="0.3" a="1" />
-      <diffuse r="1" g="0.5" b="0.5" a="1" />
+      <specular r="1" g="0.2" b="0.2" a="1" />
+      <diffuse r="1" g="0.3" b="0.3" a="1" />
       <ambient r="0.2" g="0" b="0" a="1" />
       <emission r="0" g="0" b="0" a="1" />
     </MATERIAL>
@@ -765,7 +765,7 @@
 
   <!-- Top of ramp -->
   <NODE id="rampTop">
-    <MATERIAL id="null" />
+    <MATERIAL id="redMaterial" />
     <TEXTURE id="rampTexture" />
 
     <SCALE sx="3" sy="1" sz="29" />
