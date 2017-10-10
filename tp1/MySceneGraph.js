@@ -135,31 +135,22 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     this.far = 500;
     var indexFrustum = nodeNames.indexOf("frustum");
     if (indexFrustum == -1) {
-        this.onXMLMinorError("frustum planes missing; assuming 'near = 0.1' and 'far = 500'");
+        this.onXMLMinorError("frustum planes missing. Assuming near=0.1 and far=500");
     }
     else {
         this.near = this.reader.getFloat(children[indexFrustum], 'near');
         this.far = this.reader.getFloat(children[indexFrustum], 'far');
+        var frustumError = null;
 
-        if (this.near == null ) {
+        if((frustumError = this.checkNullAndNaN(this.near, "unable to parse value for near plane", "non-numeric value found for near plane")) != null)
+          return frustumErrror;
+
+        if((frustumError = this.checkNullAndNaN(this.far, "unable to parse value for far plane", "non-numeric value found for far plane")) != null)
+          return frustumErrror;
+
+        if(this.near <= 0) {
             this.near = 0.1;
-            this.onXMLMinorError("unable to parse value for near plane; assuming 'near = 0.1'");
-        }
-        else if (this.far == null ) {
-            this.far = 500;
-            this.onXMLMinorError("unable to parse value for far plane; assuming 'far = 500'");
-        }
-        else if (isNaN(this.near)) {
-            this.near = 0.1;
-            this.onXMLMinorError("non-numeric value found for near plane; assuming 'near = 0.1'");
-        }
-        else if (isNaN(this.far)) {
-            this.far = 500;
-            this.onXMLMinorError("non-numeric value found for far plane; assuming 'far = 500'");
-        }
-        else if (this.near <= 0) {
-            this.near = 0.1;
-            this.onXMLMinorError("'near' must be positive; assuming 'near = 0.1'");
+            this.onXMLMinorError("'near' plane must be positive; clamping to 0.1");
         }
 
         if (this.near >= this.far)
@@ -204,13 +195,13 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         var tz = this.reader.getFloat(children[translationIndex], 'z');
         var translationError = null;
 
-        if((translationError = this.checkTransformationNullAndNaN(tx, 'x', 'translation')) != null)
+        if((translationError = this.checkNullAndNaN(tx, 'unable to parse x-value of initial translation', 'x-value of initial translation is non-numeric')) != null)
           return translationError;
 
-        if((translationError = this.checkTransformationNullAndNaN(ty, 'y', 'translation')) != null)
+        if((translationError = this.checkNullAndNaN(ty, 'unable to parse y-value of initial translation', 'y-value of initial translation is non-numeric')) != null)
           return translationError;
 
-        if((translationError = this.checkTransformationNullAndNaN(tz, 'z', 'translation')) != null)
+        if((translationError = this.checkNullAndNaN(tz, 'unable to parse z-value of initial translation', 'z-value of initial translation is non-numeric')) != null)
           return translationError;
 
         mat4.translate(this.initialTransforms, this.initialTransforms, [tx, ty, tz]);
@@ -228,45 +219,19 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
 
     var axis;
     var rotationOrder = [];
+    var rotationError = null;
 
     // Third rotation (first rotation defined).
-        axis = this.reader.getItem(children[thirdRotationIndex], 'axis', ['x', 'y', 'z']);
-        if (axis != null ) {
-            var angle = this.reader.getFloat(children[thirdRotationIndex], 'angle');
-            if (angle != null && !isNaN(angle)) {
-                initialRotations[axis] += angle;
-                if (!rotationDefined[axis])
-                    rotationOrder.push(axis);
-                rotationDefined[axis] = true;
-            }
-            else this.onXMLMinorError("failed to parse third initial rotation 'angle'");
-        }
+    if((rotationError = this.parseRotation(children[thirdRotationIndex], initialRotations, rotationDefined)) != null)
+      return rotationError;
 
     // Second rotation.
-        axis = this.reader.getItem(children[secondRotationIndex], 'axis', ['x', 'y', 'z']);
-        if (axis != null ) {
-            var angle = this.reader.getFloat(children[secondRotationIndex], 'angle');
-            if (angle != null && !isNaN(angle)) {
-                initialRotations[axis] += angle;
-                if (!rotationDefined[axis])
-                    rotationOrder.push(axis);
-                rotationDefined[axis] = true;
-            }
-            else this.onXMLMinorError("failed to parse second initial rotation 'angle'");
-        }
+    if((rotationError = this.parseRotation(children[secondRotationIndex], initialRotations, rotationDefined)) != null)
+      return rotationError;
 
     // First rotation.
-        axis = this.reader.getItem(children[firstRotationIndex], 'axis', ['x', 'y', 'z']);
-        if (axis != null ) {
-            var angle = this.reader.getFloat(children[firstRotationIndex], 'angle');
-            if (angle != null && !isNaN(angle)) {
-                initialRotations[axis] += angle;
-                if (!rotationDefined[axis])
-                    rotationOrder.push(axis);
-                rotationDefined[axis] = true;
-            }
-            else this.onXMLMinorError("failed to parse first initial rotation 'angle'");
-        }
+    if((rotationError = this.parseRotation(children[firstRotationIndex], initialRotations, rotationDefined)) != null)
+      return rotationError;
 
     // Checks for undefined rotations.
     if (!rotationDefined['x'])
@@ -281,25 +246,21 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         mat4.rotate(this.initialTransforms, this.initialTransforms, DEGREE_TO_RAD * initialRotations[rotationOrder[i]], this.axisCoords[rotationOrder[i]]);
 
     // Scaling.
-    if (scalingIndex == -1)
-        this.onXMLMinorError("initial scaling undefined; assuming S = (1, 1, 1)");
-    else {
         var sx = this.reader.getFloat(children[scalingIndex], 'sx');
         var sy = this.reader.getFloat(children[scalingIndex], 'sy');
         var sz = this.reader.getFloat(children[scalingIndex], 'sz');
         var scalingError = null;
 
-        if((scalingError = this.checkTransformationNullAndNaN(sx, 'x', 'scale')) != null)
+        if((scalingError = this.checkNullAndNaN(sx, 'x', 'scale')) != null)
           return scalingError;
 
-        if((scalingError = this.checkTransformationNullAndNaN(sy, 'y', 'scale')) != null)
+        if((scalingError = this.checkNullAndNaN(sy, 'y', 'scale')) != null)
           return scalingError;
 
-        if((scalingError = this.checkTransformationNullAndNaN(sz, 'z', 'scale')) != null)
+        if((scalingError = this.checkNullAndNaN(sz, 'z', 'scale')) != null)
           return scalingError;
 
         mat4.scale(this.initialTransforms, this.initialTransforms, [sx, sy, sz]);
-    }
 
     // ----------
     // Reference length.
@@ -310,32 +271,42 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         this.onXMLMinorError("reference length undefined; assuming 'length = 1'");
     else {
         // Reads the reference length.
-        var length = this.reader.getFloat(children[indexReference], 'length');
+        this.referenceLength = this.reader.getFloat(children[indexReference], 'length');
+        var lengthError = null;
 
-        if (length != null ) {
-            if (isNaN(length))
-                this.onXMLMinorError("found non-numeric value for reference length; assuming 'length = 1'");
-            else if (length <= 0)
-                this.onXMLMinorError("reference length must be a positive value; assuming 'length = 1'");
-            else
-                this.referenceLength = length;
-        }
-        else
-            this.onXMLMinorError("unable to parse reference length; assuming 'length = 1'");
+        if((lengthError = this.checkNullAndNaN(this.referenceLength, "unable to parse reference length value", "reference length value is non-numeric")) != null)
+          return lengthError;
 
+        if(length < 0)
+          this.onXMLMinorError("reference length must be a non-negative value; clamping to 1");
     }
 
     console.log("Parsed initials");
-
-    return null ;
+    return null;
 }
 
-MySceneGraph.prototype.checkTransformationNullAndNaN = function(valToCheck, valString, transformation) {
+MySceneGraph.prototype.checkNullAndNaN = function(valToCheck, nullError, nanError) {
   if (valToCheck == null )
       return "failed to parse "+valString+"-coordinate of initial "+transformation;
   if (isNaN(valToCheck))
       return "found non-numeric value for "+valString+"-coordinate of initial "+transformation;
   return null;
+}
+
+MySceneGraph.prototype.parseRotation = function(elem, initialRotations, rotationDefined) {
+  var axis = this.reader.getItem(elem, 'axis', ['x', 'y', 'z']);
+  if (axis != null ) {
+      var angle = this.reader.getFloat(elem, 'angle');
+      if (angle != null && !isNaN(angle)) {
+          initialRotations[axis] += angle;
+          if (!rotationDefined[axis])
+              rotationOrder.push(axis);
+          rotationDefined[axis] = true;
+          return null;
+      }
+      else return "failed to parse initial rotation angle";
+  }
+  return "failed to parse initial rotation axis";
 }
 
 /**
