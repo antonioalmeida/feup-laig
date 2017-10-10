@@ -6,7 +6,6 @@ var ILLUMINATION_INDEX = 1;
 var LIGHTS_INDEX = 2;
 var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
-var LEAVES_INDEX = 5;
 var NODES_INDEX = 6;
 
 var STOP = false;
@@ -78,81 +77,45 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     // Reads the names of the nodes to an auxiliary buffer.
     var nodeNames = [];
 
-    for (var i = 0; i < nodes.length; i++) {
+    for (var i = 0; i < nodes.length; i++)
         nodeNames.push(nodes[i].nodeName);
-    }
 
     var error;
 
     // Processes each node, verifying errors.
 
-    // <INITIALS>
+    var tags=["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "NODES"];
+    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, NODES_INDEX];
     var index;
-    if ((index = nodeNames.indexOf("INITIALS")) == -1)
-        return "tag <INITIALS> missing";
-    else {
-        if (index != INITIALS_INDEX)
-            this.onXMLMinorError("tag <INITIALS> out of order");
 
-        if ((error = this.parseInitials(nodes[index])) != null )
-            return error;
+    for(let i = 0; i < tags.length; ++i){
+      if ((index = nodeNames.indexOf(tags[i])) == -1)
+          return "tag <"+tags[i]+"> missing";
+      else {
+          if (index != indexes[i])
+              this.onXMLMinorError("tag <"+tags[i]+"> out of order");
+
+          if ((error = this.parseElement(index, nodes[index])) != null )
+              return error;
+      }
     }
+}
 
-    // <ILLUMINATION>
-    if ((index = nodeNames.indexOf("ILLUMINATION")) == -1)
-        return "tag <ILLUMINATION> missing";
-    else {
-        if (index != ILLUMINATION_INDEX)
-            this.onXMLMinorError("tag <ILLUMINATION> out of order");
-
-        if ((error = this.parseIllumination(nodes[index])) != null )
-            return error;
-    }
-
-    // <LIGHTS>
-    if ((index = nodeNames.indexOf("LIGHTS")) == -1)
-        return "tag <LIGHTS> missing";
-    else {
-        if (index != LIGHTS_INDEX)
-            this.onXMLMinorError("tag <LIGHTS> out of order");
-
-        if ((error = this.parseLights(nodes[index])) != null )
-            return error;
-    }
-
-    // <TEXTURES>
-    if ((index = nodeNames.indexOf("TEXTURES")) == -1)
-        return "tag <TEXTURES> missing";
-    else {
-        if (index != TEXTURES_INDEX)
-            this.onXMLMinorError("tag <TEXTURES> out of order");
-
-        if ((error = this.parseTextures(nodes[index])) != null )
-            return error;
-    }
-
-    // <MATERIALS>
-    if ((index = nodeNames.indexOf("MATERIALS")) == -1)
-        return "tag <MATERIALS> missing";
-    else {
-        if (index != MATERIALS_INDEX)
-            this.onXMLMinorError("tag <MATERIALS> out of order");
-
-        if ((error = this.parseMaterials(nodes[index])) != null )
-            return error;
-    }
-
-    // <NODES>
-    if ((index = nodeNames.indexOf("NODES")) == -1)
-        return "tag <NODES> missing";
-    else {
-        if (index != NODES_INDEX)
-            this.onXMLMinorError("tag <NODES> out of order");
-
-        if ((error = this.parseNodes(nodes[index])) != null )
-            return error;
-    }
-
+MySceneGraph.prototype.parseElement = function(index, element) {
+  switch(index){
+    case INITIALS_INDEX:
+      return this.parseInitials(element);
+    case ILLUMINATION_INDEX:
+      return this.parseIllumination(element);
+    case LIGHTS_INDEX:
+      return this.parseLights(element);
+    case TEXTURES_INDEX:
+      return this.parseTextures(element);
+    case MATERIALS_INDEX:
+      return this.parseMaterials(element);
+    case NODES_INDEX:
+      return this.parseNodes(element);
+  }
 }
 
 /**
@@ -204,14 +167,14 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     }
 
     // Checks if at most one translation, three rotations, and one scaling are defined.
-    if (initialsNode.getElementsByTagName('translation').length > 1)
-        return "no more than one initial translation may be defined";
+    if (initialsNode.getElementsByTagName('translation').length != 1)
+        return "exactly one initial translation must be defined";
 
-    if (initialsNode.getElementsByTagName('rotation').length > 3)
-        return "no more than three initial rotations may be defined";
+    if (initialsNode.getElementsByTagName('rotation').length != 3)
+        return "exactly three initial rotations must be defined";
 
-    if (initialsNode.getElementsByTagName('scale').length > 1)
-        return "no more than one scaling may be defined";
+    if (initialsNode.getElementsByTagName('scale').length != 1)
+        return "exactly one initial scaling must be defined";
 
     // Initial transforms.
     this.initialTranslate = [];
@@ -225,49 +188,32 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     var firstRotationIndex = nodeNames.lastIndexOf("rotation");
     var scalingIndex = nodeNames.indexOf("scale");
 
+    // Check initial transformations' order
+    if (translationIndex > thirdRotationIndex || translationIndex > scalingIndex)
+        this.onXMLMinorError("initial translation out of order; result may not be as expected");
+
+    if (scalingIndex < firstRotationIndex)
+        this.onXMLMinorError("initial scaling out of order; result may not be as expected");
+
     // Checks if the indices are valid and in the expected order.
     // Translation.
     this.initialTransforms = mat4.create();
     mat4.identity(this.initialTransforms);
-    if (translationIndex == -1)
-        this.onXMLMinorError("initial translation undefined; assuming T = (0, 0, 0)");
-    else {
         var tx = this.reader.getFloat(children[translationIndex], 'x');
         var ty = this.reader.getFloat(children[translationIndex], 'y');
         var tz = this.reader.getFloat(children[translationIndex], 'z');
+        var translationError = null;
 
-        if (tx == null ) {
-            tx = 0;
-            this.onXMLMinorError("failed to parse x-coordinate of initial translation; assuming tx = 0");
-        }
-        else if (isNaN(tx)) {
-            tx = 0;
-            this.onXMLMinorError("found non-numeric value for x-coordinate of initial translation; assuming tx = 0");
-        }
+        if((translationError = this.checkTransformationNullAndNaN(tx, 'x', 'translation')) != null)
+          return translationError;
 
-        if (ty == null ) {
-            ty = 0;
-            this.onXMLMinorError("failed to parse y-coordinate of initial translation; assuming ty = 0");
-        }
-        else if (isNaN(ty)) {
-            ty = 0;
-            this.onXMLMinorError("found non-numeric value for y-coordinate of initial translation; assuming ty = 0");
-        }
+        if((translationError = this.checkTransformationNullAndNaN(ty, 'y', 'translation')) != null)
+          return translationError;
 
-        if (tz == null ) {
-            tz = 0;
-            this.onXMLMinorError("failed to parse z-coordinate of initial translation; assuming tz = 0");
-        }
-        else if (isNaN(tz)) {
-            tz = 0;
-            this.onXMLMinorError("found non-numeric value for z-coordinate of initial translation; assuming tz = 0");
-        }
-
-        if (translationIndex > thirdRotationIndex || translationIndex > scalingIndex)
-            this.onXMLMinorError("initial translation out of order; result may not be as expected");
+        if((translationError = this.checkTransformationNullAndNaN(tz, 'z', 'translation')) != null)
+          return translationError;
 
         mat4.translate(this.initialTransforms, this.initialTransforms, [tx, ty, tz]);
-    }
 
     // Rotations.
     var initialRotations = [];
@@ -284,7 +230,6 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     var rotationOrder = [];
 
     // Third rotation (first rotation defined).
-    if (thirdRotationIndex != -1) {
         axis = this.reader.getItem(children[thirdRotationIndex], 'axis', ['x', 'y', 'z']);
         if (axis != null ) {
             var angle = this.reader.getFloat(children[thirdRotationIndex], 'angle');
@@ -296,10 +241,8 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
             }
             else this.onXMLMinorError("failed to parse third initial rotation 'angle'");
         }
-    }
 
     // Second rotation.
-    if (secondRotationIndex != -1) {
         axis = this.reader.getItem(children[secondRotationIndex], 'axis', ['x', 'y', 'z']);
         if (axis != null ) {
             var angle = this.reader.getFloat(children[secondRotationIndex], 'angle');
@@ -311,10 +254,8 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
             }
             else this.onXMLMinorError("failed to parse second initial rotation 'angle'");
         }
-    }
 
     // First rotation.
-    if (firstRotationIndex != -1) {
         axis = this.reader.getItem(children[firstRotationIndex], 'axis', ['x', 'y', 'z']);
         if (axis != null ) {
             var angle = this.reader.getFloat(children[firstRotationIndex], 'angle');
@@ -326,7 +267,6 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
             }
             else this.onXMLMinorError("failed to parse first initial rotation 'angle'");
         }
-    }
 
     // Checks for undefined rotations.
     if (!rotationDefined['x'])
@@ -347,36 +287,16 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         var sx = this.reader.getFloat(children[scalingIndex], 'sx');
         var sy = this.reader.getFloat(children[scalingIndex], 'sy');
         var sz = this.reader.getFloat(children[scalingIndex], 'sz');
+        var scalingError = null;
 
-        if (sx == null ) {
-            sx = 1;
-            this.onXMLMinorError("failed to parse x parameter of initial scaling; assuming sx = 1");
-        }
-        else if (isNaN(sx)) {
-            sx = 1;
-            this.onXMLMinorError("found non-numeric value for x parameter of initial scaling; assuming sx = 1");
-        }
+        if((scalingError = this.checkTransformationNullAndNaN(sx, 'x', 'scale')) != null)
+          return scalingError;
 
-        if (sy == null ) {
-            sy = 1;
-            this.onXMLMinorError("failed to parse y parameter of initial scaling; assuming sy = 1");
-        }
-        else if (isNaN(sy)) {
-            sy = 1;
-            this.onXMLMinorError("found non-numeric value for y parameter of initial scaling; assuming sy = 1");
-        }
+        if((scalingError = this.checkTransformationNullAndNaN(sy, 'y', 'scale')) != null)
+          return scalingError;
 
-        if (sz == null ) {
-            sz = 1;
-            this.onXMLMinorError("failed to parse z parameter of initial scaling; assuming sz = 1");
-        }
-        else if (isNaN(sz)) {
-            sz = 1;
-            this.onXMLMinorError("found non-numeric value for z parameter of initial scaling; assuming sz = 1");
-        }
-
-        if (scalingIndex < firstRotationIndex)
-            this.onXMLMinorError("initial scaling out of order; result may not be as expected");
+        if((scalingError = this.checkTransformationNullAndNaN(sz, 'z', 'scale')) != null)
+          return scalingError;
 
         mat4.scale(this.initialTransforms, this.initialTransforms, [sx, sy, sz]);
     }
@@ -408,6 +328,14 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     console.log("Parsed initials");
 
     return null ;
+}
+
+MySceneGraph.prototype.checkTransformationNullAndNaN = function(valToCheck, valString, transformation) {
+  if (valToCheck == null )
+      return "failed to parse "+valString+"-coordinate of initial "+transformation;
+  if (isNaN(valToCheck))
+      return "found non-numeric value for "+valString+"-coordinate of initial "+transformation;
+  return null;
 }
 
 /**
@@ -1450,14 +1378,5 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
 	// entry point for graph rendering
-    /*this.textureStack = [];
-    this.materialStack = [];
-
-    if(this.nodes[this.idRoot].textureID != 'null' && this.nodes[this.idRoot].textureID !== null)
-      this.textureStack.push(this.nodes[this.idRoot].textureID);
-    console.log("Initial size: "+this.textureStack.length);
-    this.materialStack.push(this.nodes[this.idRoot].materialID);
-    */
-
-    this.nodes[this.idRoot].display('null', this.defaultMaterialID);
+  this.nodes[this.idRoot].display('null', this.defaultMaterialID);
 }

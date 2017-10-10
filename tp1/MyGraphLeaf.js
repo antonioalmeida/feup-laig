@@ -7,7 +7,6 @@ function MyGraphLeaf(graph, xmlelem, controlPoints) {
 
     //Getting leaf type ('rectangle', 'cylinder', 'sphere', 'triangle', 'patch')
     this.type = graph.reader.getString(xmlelem, 'type');
-    //console.log("TYPE : " + this.type);
 
     var argsStr = graph.reader.getString(xmlelem, 'args');
     var args = argsStr.match(/[+-]?\d+(\.\d+)?/g);
