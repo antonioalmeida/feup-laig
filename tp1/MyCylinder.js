@@ -10,8 +10,8 @@ function MyCylinder(scene, args) {
     this.top = args[2];
     this.stacks = args[3];
     this.slices = args[4];
-    this.drawBottom = (args[5] == 0 ? false : true);
-    this.drawTop = (args[6] == 0 ? false: true);
+    this.drawTop = (args[5] == 0 ? false: true);
+    this.drawBottom = (args[6] == 0 ? false : true);
 
     this.angle = 2 * Math.PI / this.slices;
 

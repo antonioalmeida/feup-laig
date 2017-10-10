@@ -1300,7 +1300,7 @@
     <TRANSLATION x="11" y="-5.5" z="-6.25" />
 
     <DESCENDANTS>
-      <LEAF type="cylinder" args="4 1.5 1.5 20 40 1 0" />
+      <LEAF type="cylinder" args="4 1.5 1.5 20 40 0 1" />
     </DESCENDANTS>
   </NODE>
 
