@@ -43,7 +43,6 @@ MyTriangle.prototype.initBuffers = function () {
         this.x1, this.y1, this.z1,
         this.x2, this.y2, this.z2,
     ];
-    console.log("Vertices: " + this.vertices);
 
     this.indices = [
         0, 1, 2
@@ -58,14 +57,19 @@ MyTriangle.prototype.initBuffers = function () {
         cross[0], cross[1], cross[2]
     ];
 
+    /*Similar mechanism to the one described in the auxiliar slides, but with two changes:
+        1 - No use of sin: After discovering the length of one side, the other can be discovered through the Pythagorean Theorem
+        2 - Usage of a translation of value (0, -v) so the coordinates are easier to calculate
+    */
     this.d_p0p1 = Math.sqrt(Math.pow(this.x0-this.x1, 2)+Math.pow(this.y0-this.y1, 2)+Math.pow(this.z0-this.z1, 2));
     this.d_p0p2 = Math.sqrt(Math.pow(this.x0-this.x2, 2)+Math.pow(this.y0-this.y2, 2)+Math.pow(this.z0-this.z2, 2));
     let cos = ((this.x2-this.x0)*(this.x1-this.x0)+(this.y2-this.y0)*(this.y1-this.y0)+(this.z2-this.z0)*(this.z1-this.z0))/(this.d_p0p1*this.d_p0p2);
     this.s_coord = cos*this.d_p0p2;
+    this.t_coord = -Math.sqrt(Math.pow(this.d_p0p2,2)-Math.pow(this.s_coord,2));
     this.texCoords = [
         0, 0,
         this.d_p0p1, 0,
-        this.s_coord,-Math.sqrt(Math.pow(this.d_p0p2,2)-Math.pow(this.s_coord,2)),
+        this.s_coord,-this.t_coord,
     ];
 
     this.primitiveType=this.scene.gl.TRIANGLES;
@@ -73,11 +77,10 @@ MyTriangle.prototype.initBuffers = function () {
 };
 
 MyTriangle.prototype.updateTexCoords = function(afS, afT){
-    this.texCoords = [];
     this.texCoords = [
         0, 0,
         this.d_p0p1/afS, 0,
-        this.s_coord/afS,-Math.sqrt(Math.pow(this.d_p0p2,2)-Math.pow(this.s_coord,2))/afT,
+        this.s_coord/afS,-this.t_coord/afT,
     ];
 
     this.updateTexCoordsGLBuffers();

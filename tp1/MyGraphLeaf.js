@@ -27,7 +27,7 @@ function MyGraphLeaf(graph, xmlelem, controlPoints) {
             this.primitive = new MyTriangle(graph.scene, args);
             break;
         case 'patch':
-            this.primitive = new MyPatch(graph.scene, args2, controlPoints); // Not sure where those parameters are defined, keeping it 20, 20 for now
+            this.primitive = new MyPatch(graph.scene, args2, controlPoints);
             break;
         case 'sphere':
             this.primitive = new MySphere(graph.scene, args2);

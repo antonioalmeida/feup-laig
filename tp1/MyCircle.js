@@ -24,20 +24,20 @@ MyCircle.prototype.constructor = MyCircle;
  	var x, y;
 
 	for(var i = 0; i <= this.slices; i++){
-		//posição x e y dos dois vértices de uma mesma face
 		x = Math.cos(i * ang);
 		y = Math.sin(i * ang);
 
 		this.vertices.push(this.radius * x, this.radius * y, 0);
 		this.normals.push(0, 0, 1);
-		this.texCoords.push(x/2 +0.5,y/2 + 0.5);
+		this.texCoords.push(0.5*(1+x), 0.5*(1+y));
 	}
 
 	for(var i = 1; i <= this.slices; i++){
-	    if(i == this.slices){this.indices.push(i, 1, 0)}
- 			else this.indices.push(i, i+1, 0);
+	    if(i == this.slices)
+            this.indices.push(i, 1, 0);
+ 		else
+            this.indices.push(i, i+1, 0);
  	}
-
 
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
