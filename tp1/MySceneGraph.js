@@ -529,7 +529,7 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
             return "failed to parse texture ID";
         if (this.textures[textureID] != null)
             return "texture ID must unique (conflict with ID = " + textureID + ")";
-        if(textureID === "null" || textureID == "clear")
+        if (textureID === "null" || textureID == "clear")
             return "texture ID cannot be a keyword (null or clear)";
 
         var texSpecs = textureArr[i].children;
@@ -546,8 +546,7 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
                 filepath = this.reader.getString(texSpecs[j], 'path');
                 if (filepath == null)
                     return "unable to parse texture file path for ID = " + textureID;
-            }
-            else if (name == "amplif_factor") {
+            } else if (name == "amplif_factor") {
                 if (amplifFactorS != null || amplifFactorT != null)
                     return "duplicate amplification factors in texture with ID " + textureID;
 
@@ -562,8 +561,7 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
                     return "'amplifFactorT' is a non numeric value for texture with ID " + textureID;
                 else if (amplifFactorS <= 0 || amplifFactorT <= 0)
                     return "value for amplifFactors must be positive for texture with ID " + textureID;
-            }
-            else
+            } else
                 this.onXMLMinorError("unknown tag name <" + name + ">");
         }
 
@@ -579,27 +577,26 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
  */
 MySceneGraph.prototype.parseMaterials = function(materialsNode) {
 
-    var children = materialsNode.children;
-    // Each material.
-
+    var materialArr = materialsNode.children;
     this.materials = [];
-
     var oneMaterialDefined = false;
 
-    for (var i = 0; i < children.length; i++) {
-        if (children[i].nodeName != "MATERIAL") {
-            this.onXMLMinorError("unknown tag name <" + children[i].nodeName + ">");
+    for (var i = 0; i < materialArr.length; i++) {
+        if (materialArr[i].nodeName != "MATERIAL") {
+            this.onXMLMinorError("unknown tag name <" + materialArr[i].nodeName + ">");
             continue;
         }
 
-        var materialID = this.reader.getString(children[i], 'id');
+        //Validate material ID
+        var materialID = this.reader.getString(materialArr[i], 'id');
         if (materialID == null)
             return "no ID defined for material";
-
         if (this.materials[materialID] != null)
             return "ID must be unique for each material (conflict: ID = " + materialID + ")";
+        if (materialID === "null")
+            return "Material ID cannot be keyword null";
 
-        var materialSpecs = children[i].children;
+        var materialSpecs = materialArr[i].children;
 
         var nodeNames = [];
 
@@ -607,185 +604,56 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
             nodeNames.push(materialSpecs[j].nodeName);
 
         // Determines the values for each field.
+        var vars = ['r', 'g', 'b', 'a'];
         // Shininess.
         var shininessIndex = nodeNames.indexOf("shininess");
         if (shininessIndex == -1)
             return "no shininess value defined for material with ID = " + materialID;
         var shininess = this.reader.getFloat(materialSpecs[shininessIndex], 'value');
-        if (shininess == null)
-            return "unable to parse shininess value for material with ID = " + materialID;
-        else if (isNaN(shininess))
-            return "'shininess' is a non numeric value";
-        else if (shininess <= 0)
-            return "'shininess' must be positive";
+        var shininessError = null;
+        if ((shininessError = this.checkNullAndNaN(shininess, "unable to parse shininess value for material with ID " + materialID, "shininess is a non numeric value")) != null)
+            return shininessError;
+        if (shininess <= 0)
+            return "'shininess' must be positive for material with ID " + materialID;
 
         // Specular component.
         var specularIndex = nodeNames.indexOf("specular");
         if (specularIndex == -1)
             return "no specular component defined for material with ID = " + materialID;
         var specularComponent = [];
-        // R.
-        var r = this.reader.getFloat(materialSpecs[specularIndex], 'r');
-        if (r == null)
-            return "unable to parse R component of specular reflection for material with ID = " + materialID;
-        else if (isNaN(r))
-            return "specular 'r' is a non numeric value on the MATERIALS block";
-        else if (r < 0 || r > 1)
-            return "specular 'r' must be a value between 0 and 1 on the MATERIALS block"
-        specularComponent.push(r);
-        // G.
-        var g = this.reader.getFloat(materialSpecs[specularIndex], 'g');
-        if (g == null)
-            return "unable to parse G component of specular reflection for material with ID = " + materialID;
-        else if (isNaN(g))
-            return "specular 'g' is a non numeric value on the MATERIALS block";
-        else if (g < 0 || g > 1)
-            return "specular 'g' must be a value between 0 and 1 on the MATERIALS block";
-        specularComponent.push(g);
-        // B.
-        var b = this.reader.getFloat(materialSpecs[specularIndex], 'b');
-        if (b == null)
-            return "unable to parse B component of specular reflection for material with ID = " + materialID;
-        else if (isNaN(b))
-            return "specular 'b' is a non numeric value on the MATERIALS block";
-        else if (b < 0 || b > 1)
-            return "specular 'b' must be a value between 0 and 1 on the MATERIALS block";
-        specularComponent.push(b);
-        // A.
-        var a = this.reader.getFloat(materialSpecs[specularIndex], 'a');
-        if (a == null)
-            return "unable to parse A component of specular reflection for material with ID = " + materialID;
-        else if (isNaN(a))
-            return "specular 'a' is a non numeric value on the MATERIALS block";
-        else if (a < 0 || a > 1)
-            return "specular 'a' must be a value between 0 and 1 on the MATERIALS block";
-        specularComponent.push(a);
+        var specularError = null;
 
         // Diffuse component.
         var diffuseIndex = nodeNames.indexOf("diffuse");
         if (diffuseIndex == -1)
             return "no diffuse component defined for material with ID = " + materialID;
         var diffuseComponent = [];
-        // R.
-        r = this.reader.getFloat(materialSpecs[diffuseIndex], 'r');
-        if (r == null)
-            return "unable to parse R component of diffuse reflection for material with ID = " + materialID;
-        else if (isNaN(r))
-            return "diffuse 'r' is a non numeric value on the MATERIALS block";
-        else if (r < 0 || r > 1)
-            return "diffuse 'r' must be a value between 0 and 1 on the MATERIALS block";
-        diffuseComponent.push(r);
-        // G.
-        g = this.reader.getFloat(materialSpecs[diffuseIndex], 'g');
-        if (g == null)
-            return "unable to parse G component of diffuse reflection for material with ID = " + materialID;
-        else if (isNaN(g))
-            return "diffuse 'g' is a non numeric value on the MATERIALS block";
-        else if (g < 0 || g > 1)
-            return "diffuse 'g' must be a value between 0 and 1 on the MATERIALS block";
-        diffuseComponent.push(g);
-        // B.
-        b = this.reader.getFloat(materialSpecs[diffuseIndex], 'b');
-        if (b == null)
-            return "unable to parse B component of diffuse reflection for material with ID = " + materialID;
-        else if (isNaN(b))
-            return "diffuse 'b' is a non numeric value on the MATERIALS block";
-        else if (b < 0 || b > 1)
-            return "diffuse 'b' must be a value between 0 and 1 on the MATERIALS block";
-        diffuseComponent.push(b);
-        // A.
-        a = this.reader.getFloat(materialSpecs[diffuseIndex], 'a');
-        if (a == null)
-            return "unable to parse A component of diffuse reflection for material with ID = " + materialID;
-        else if (isNaN(a))
-            return "diffuse 'a' is a non numeric value on the MATERIALS block";
-        else if (a < 0 || a > 1)
-            return "diffuse 'a' must be a value between 0 and 1 on the MATERIALS block";
-        diffuseComponent.push(a);
+        var diffuseError = null;
 
         // Ambient component.
         var ambientIndex = nodeNames.indexOf("ambient");
         if (ambientIndex == -1)
             return "no ambient component defined for material with ID = " + materialID;
         var ambientComponent = [];
-        // R.
-        r = this.reader.getFloat(materialSpecs[ambientIndex], 'r');
-        if (r == null)
-            return "unable to parse R component of ambient reflection for material with ID = " + materialID;
-        else if (isNaN(r))
-            return "ambient 'r' is a non numeric value on the MATERIALS block";
-        else if (r < 0 || r > 1)
-            return "ambient 'r' must be a value between 0 and 1 on the MATERIALS block";
-        ambientComponent.push(r);
-        // G.
-        g = this.reader.getFloat(materialSpecs[ambientIndex], 'g');
-        if (g == null)
-            return "unable to parse G component of ambient reflection for material with ID = " + materialID;
-        else if (isNaN(g))
-            return "ambient 'g' is a non numeric value on the MATERIALS block";
-        else if (g < 0 || g > 1)
-            return "ambient 'g' must be a value between 0 and 1 on the MATERIALS block";
-        ambientComponent.push(g);
-        // B.
-        b = this.reader.getFloat(materialSpecs[ambientIndex], 'b');
-        if (b == null)
-            return "unable to parse B component of ambient reflection for material with ID = " + materialID;
-        else if (isNaN(b))
-            return "ambient 'b' is a non numeric value on the MATERIALS block";
-        else if (b < 0 || b > 1)
-            return "ambient 'b' must be a value between 0 and 1 on the MATERIALS block";
-        ambientComponent.push(b);
-        // A.
-        a = this.reader.getFloat(materialSpecs[ambientIndex], 'a');
-        if (a == null)
-            return "unable to parse A component of ambient reflection for material with ID = " + materialID;
-        else if (isNaN(a))
-            return "ambient 'a' is a non numeric value on the MATERIALS block";
-        else if (a < 0 || a > 1)
-            return "ambient 'a' must be a value between 0 and 1 on the MATERIALS block";
-        ambientComponent.push(a);
+        var ambientError = null;
 
         // Emission component.
         var emissionIndex = nodeNames.indexOf("emission");
         if (emissionIndex == -1)
             return "no emission component defined for material with ID = " + materialID;
         var emissionComponent = [];
-        // R.
-        r = this.reader.getFloat(materialSpecs[emissionIndex], 'r');
-        if (r == null)
-            return "unable to parse R component of emission for material with ID = " + materialID;
-        else if (isNaN(r))
-            return "emisson 'r' is a non numeric value on the MATERIALS block";
-        else if (r < 0 || r > 1)
-            return "emisson 'r' must be a value between 0 and 1 on the MATERIALS block";
-        emissionComponent.push(r);
-        // G.
-        g = this.reader.getFloat(materialSpecs[emissionIndex], 'g');
-        if (g == null)
-            return "unable to parse G component of emission for material with ID = " + materialID;
-        if (isNaN(g))
-            return "emisson 'g' is a non numeric value on the MATERIALS block";
-        else if (g < 0 || g > 1)
-            return "emisson 'g' must be a value between 0 and 1 on the MATERIALS block";
-        emissionComponent.push(g);
-        // B.
-        b = this.reader.getFloat(materialSpecs[emissionIndex], 'b');
-        if (b == null)
-            return "unable to parse B component of emission for material with ID = " + materialID;
-        else if (isNaN(b))
-            return "emisson 'b' is a non numeric value on the MATERIALS block";
-        else if (b < 0 || b > 1)
-            return "emisson 'b' must be a value between 0 and 1 on the MATERIALS block";
-        emissionComponent.push(b);
-        // A.
-        a = this.reader.getFloat(materialSpecs[emissionIndex], 'a');
-        if (a == null)
-            return "unable to parse A component of emission for material with ID = " + materialID;
-        else if (isNaN(a))
-            return "emisson 'a' is a non numeric value on the MATERIALS block";
-        else if (a < 0 || a > 1)
-            return "emisson 'a' must be a value between 0 and 1 on the MATERIALS block";
-        emissionComponent.push(a);
+        var emissionError = null;
+
+        for (let i = 0; i < vars.length; ++i) {
+            if ((specularError = this.parseRGBAvalue(materialSpecs[specularIndex], specularComponent, "specular", vars[i], "MATERIALS")) != null)
+                return specularError;
+            if ((diffuseError = this.parseRGBAvalue(materialSpecs[diffuseIndex], diffuseComponent, "diffuse", vars[i], "MATERIALS")) != null)
+                return specularError;
+            if ((ambientError = this.parseRGBAvalue(materialSpecs[ambientIndex], ambientComponent, "ambient", vars[i], "MATERIALS")) != null)
+                return specularError;
+            if ((emissionError = this.parseRGBAvalue(materialSpecs[emissionIndex], emissionComponent, "emission", vars[i], "MATERIALS")) != null)
+                return specularError;
+        }
 
         // Creates material with the specified characteristics.
         var newMaterial = new CGFappearance(this.scene);
@@ -800,8 +668,7 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
 
     if (!oneMaterialDefined)
         return "at least one material must be defined on the MATERIALS block";
-
-    // Generates a default material.
+        
     this.generateDefaultMaterial();
 
     console.log("Parsed materials");
