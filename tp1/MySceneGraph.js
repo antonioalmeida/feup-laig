@@ -442,78 +442,46 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
     }
 
     // Retrieves the light position.
+    var coords = ['x', 'y', 'z', 'w'];
     var positionLight = [];
     if (positionIndex == -1)
       return "light position undefined for ID = " + lightId;
-
     var coordinateError = null;
-    // x
-    var x = this.reader.getFloat(lightProperties[positionIndex], 'x');
-    if ((coordinateError = this.checkNullAndNaN(x, "unable to parse x-coordinate of position for light with ID " + lightId, "x-coordinate of position for light with ID " + lightId + " is non-numeric")) != null)
-      return coordinateError;
+    for(let i = 0; i < coords.length; ++i){
+        let currentCoord = this.reader.getFloat(lightProperties[positionIndex], coords[i]);
+        if ((coordinateError = this.checkNullAndNaN(currentCoord, "unable to parse "+coords[i]+"-coordinate of position for light with ID " + lightId, coords[i]+"-coordinate of position for light with ID " + lightId + " is non-numeric")) != null)
+          return coordinateError;
 
-    // y
-    var y = this.reader.getFloat(lightProperties[positionIndex], 'y');
-    if ((coordinateError = this.checkNullAndNaN(y, "unable to parse y-coordinate of position for light with ID " + lightId, "y-coordinate of position for light with ID " + lightId + " is non-numeric")) != null)
-      return coordinateError;
+        if(i == 3){ //Parsing 'w'
+            if (currentCoord != 0 && currentCoord != 1)
+                return "w value of light position in light with ID " + lightId + " must be 0 or 1";
+        }
 
-    // z
-    var z = this.reader.getFloat(lightProperties[positionIndex], 'z');
-    if ((coordinateError = this.checkNullAndNaN(z, "unable to parse z-coordinate of position for light with ID " + lightId, "z-coordinate of position for light with ID " + lightId + " is non-numeric")) != null)
-      return coordinateError;
+        positionLight.push(currentCoord);
+    }
 
-    // w
-    var w = this.reader.getFloat(lightProperties[positionIndex], 'w');
-    if ((coordinateError = this.checkNullAndNaN(w, "unable to parse w-coordinate of position for light with ID " + lightId, "w-coordinate of position for light with ID " + lightId + " is non-numeric")) != null)
-      return coordinateError;
-    if (w != 0 && w != 1)
-      return "w value of light position in light with ID " + lightId + " must be 0 or 1";
-
-    positionLight.push(x, y, z, w);
+    //Retrieve illumination aspects
+    var vars = ['r', 'g', 'b', 'a'];
 
     // Retrieves the ambient component.
     var ambientIllumination = [];
     if (ambientIndex == -1)
       return "ambient component undefined for light with ID " + lightId;
-
     var ambientError = null;
-    // R
-    if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", 'r', "LIGHTS")) != null)
+    for(let i = 0; i < vars.length; ++i){
+    if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", vars[i], "LIGHTS")) != null)
       return ambientError;
-
-    // G
-    if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", 'g', "LIGHTS")) != null)
-      return ambientError;
-
-    // B
-    if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", 'b', "LIGHTS")) != null)
-      return ambientError;
-
-    // A
-    if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", 'a', "LIGHTS")) != null)
-      return ambientError;
+    }
 
     // Retrieves the diffuse component
     var diffuseIllumination = [];
     if(diffuseIndex == -1)
       return "diffuse component undefined for light with ID "+lightId;
     var diffuseError = null;
-
-    // R
-    if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", 'r', "LIGHTS")) != null)
+    for(let i = 0; i < vars.length; ++i){
+    if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", vars[i], "LIGHTS")) != null)
       return diffuseError;
-
-    // G
-    if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", 'g', "LIGHTS")) != null)
-      return diffuseError;
-
-    // B
-    if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", 'b', "LIGHTS")) != null)
-      return diffuseError;
-
-    // A
-    if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", 'a', "LIGHTS")) != null)
-      return diffuseError;
+    }
 
     // Retrieves the specular component
     if (specularIndex == -1)
@@ -521,21 +489,10 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
 
     var specularIllumination = [];
     var specularError = null;
-      // R
-      if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", 'r', "LIGHTS")) != null)
+    for(let i = 0; i < vars.length; ++i){
+      if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", vars[i], "LIGHTS")) != null)
         return specularError;
-
-      // G
-      if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", 'g', "LIGHTS")) != null)
-        return specularError;
-
-      // B
-      if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", 'b', "LIGHTS")) != null)
-        return specularError;
-
-      // A
-      if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", 'a', "LIGHTS")) != null)
-        return specularError;
+    }
 
     // Light global information.
     this.lights[lightId] = [enableLight, positionLight, ambientIllumination, diffuseIllumination, specularIllumination];
