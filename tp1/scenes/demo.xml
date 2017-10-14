@@ -170,13 +170,13 @@
             <NODEREF id="arvores" />
             <NODEREF id="chao" />
             <NODEREF id="bancos" />
-            <!--<NODEREF id="patchDemo" />-->
+            <NODEREF id="patchDemo" />
         </DESCENDANTS>
 
     </NODE>
 
     <!-- The patch -->
-    <!--<NODE id="patchDemo">
+    <NODE id="patchDemo">
         <MATERIAL id="null" />
         <TEXTURE id="clear" />
 
@@ -206,7 +206,7 @@
     </DESCENDANTS>
 
     </NODE>
--->
+
 
     <!-- The floor -->
     <NODE id="chao">

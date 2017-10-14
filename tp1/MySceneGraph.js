@@ -838,11 +838,15 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     console.log("   Leaf: " + type);
 
                     var argsStr = this.reader.getString(descendants[j], 'args');
-                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Parse numbers from string (integer or decimal)
+                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Split numbers from string (integer or decimal) - returns values as strings
+                    var argsFloat = [];
+                    for(let m = 0; m < args.length; m++) // Parse args values to float
+                        argsFloat[m] = parseFloat(args[m]);
+
                     var argsError = null;
-                    if((argsError = this.checkLeafArgs(type, args)) != null)
+                    if((argsError = this.checkLeafArgs(type, argsFloat)) != null)
                         return argsError;
-                    leafInfo.args = args;
+                    leafInfo.args = argsFloat;
 
                     let controlPoints = [];
                     if (type == 'patch') {
