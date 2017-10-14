@@ -170,13 +170,13 @@
             <NODEREF id="arvores" />
             <NODEREF id="chao" />
             <NODEREF id="bancos" />
-            <NODEREF id="patchDemo" />
+            <!--<NODEREF id="patchDemo" />-->
         </DESCENDANTS>
 
     </NODE>
 
     <!-- The patch -->
-    <NODE id="patchDemo">
+    <!--<NODE id="patchDemo">
         <MATERIAL id="null" />
         <TEXTURE id="clear" />
 
@@ -206,6 +206,7 @@
     </DESCENDANTS>
 
     </NODE>
+-->
 
     <!-- The floor -->
     <NODE id="chao">
@@ -322,7 +323,7 @@
         <ROTATION axis="x" angle="-90" />
 
         <DESCENDANTS>
-					<LEAF id="cylinder1" type="cylinder" args="4 1 1 20 20" />
+					<LEAF id="cylinder1" type="cylinder" args="4 1 1 20 20 1 1" />
         </DESCENDANTS>
 
     </NODE>
@@ -444,7 +445,7 @@
         <TRANSLATION x="5" y="5" z="-4" />
 
         <DESCENDANTS>
-					<LEAF type="cylinder" args="4 1 1 20 20" />
+					<LEAF type="cylinder" args="4 1 1 20 20 1 1" />
         </DESCENDANTS>
 
     </NODE>

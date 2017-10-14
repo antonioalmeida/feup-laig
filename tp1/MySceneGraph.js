@@ -826,13 +826,23 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     }
                 }
                 else if (descendants[j].nodeName == "LEAF") {
-                    var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch']);
+                    var leafInfo = {};
 
+                    var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch']);
                     if (type == null){
                         this.onXMLMinorError("leaf type for node " + nodeID + " descendant unrecognised or couldn't be parsed; skipping");
                         continue;
                     }
+
+                    leafInfo.type = type;
                     console.log("   Leaf: " + type);
+
+                    var argsStr = this.reader.getString(descendants[j], 'args');
+                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Parse numbers from string (integer or decimal)
+                    var argsError = null;
+                    if((argsError = this.checkLeafArgs(type, args)) != null)
+                        return argsError;
+                    leafInfo.args = args;
 
                     let controlPoints = [];
                     if (type == 'patch') {
@@ -857,10 +867,10 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         }
 
                         console.log(" CP LINES BEFORE : " + controlPoints);
+                        leafInfo.controlPoints = controlPoints;
                     }
 
-                    //parse leaf
-                    this.nodes[nodeID].addLeaf(new MyGraphLeaf(this, descendants[j], controlPoints));
+                    this.nodes[nodeID].addLeaf(new MyGraphLeaf(this, leafInfo));
                     sizeChildren++;
                 } else
                     this.onXMLMinorError("unknown tag <" + descendants[j].nodeName + ">");
@@ -875,6 +885,36 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
     console.log("Parsed nodes");
     return null;
+}
+
+MySceneGraph.prototype.checkLeafArgs = function(type, args) {
+    switch(type){
+        case 'rectangle':
+            if(args.length != 4) return "wrong number of arguments for primitive rectangle";
+            //topLeft=(x0,y0) bottomRight=(x1,y1) if x0>=x1 or y0<=y1 points given can't be top left followed by bottom right
+            if(args[0] >= args[2] || args[1] <= args[3]) return "invalid vertices for primitive rectangle, expecting top left followed by bottom right";
+            return null;
+        case 'cylinder':
+            if(args.length != 7) return "wrong number of arguments for primitive cylinder";
+            if(args.slice(0, 5).filter(function(a){return a > 0;}).length != 5) return "cylinder dimension args (height, radius, slices, stacks) must be positive values";
+            if((args[5] != 0 && args[5] != 1) || (args[6] != 0 && args[6] != 1)) return "cylinder cover args must be booleans (0 or 1)";
+            return null;
+        case 'triangle':
+            if(args.length != 9) return "wrong number of arguments for primitive triangle";
+            return null;
+        case 'patch':
+            if(args.length != 2) return "wrong number of arguments for primitive patch";
+            if(args.filter(function(a){return a > 0;}).length != 2) return "patch's number of divisions on each axis must be a positive value";
+            return null;
+        case 'sphere':
+            if(args.length != 3) return "wrong number of arguments for primitive sphere";
+            if(args.filter(function(a){return a > 0;}).length != 3) return "sphere args must be positive values";
+            return null;
+    }
+}
+
+MySceneGraph.prototype.checkControlPoints = function(elem){
+
 }
 
 /*
