@@ -855,7 +855,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
                         let patchChildren = descendants[j].children;
 
-                        for (let k = j; k < patchChildren.length; k++) { // for each CLINE
+                        for (let k = 0; k < patchChildren.length; k++) { // for each CLINE
                             let currentCPLine = [];
 
                             for (let index = 0; index < patchChildren[k].children.length; index++) { // for each CPOINT
@@ -902,7 +902,9 @@ MySceneGraph.prototype.checkLeafArgs = function(type, args) {
             return null;
         case 'cylinder':
             if(args.length != 7) return "wrong number of arguments for primitive cylinder";
-            if(args.slice(0, 5).filter(function(a){return a > 0;}).length != 5) return "cylinder dimension args (height, radius, slices, stacks) must be positive values";
+            if(args[0] <= 0) return "cylinder dimension args (height, slices, stacks) must be positive values";
+            if(args.slice(1, 3).filter(function(a){return a>=0;}).length != 2) return "cylinder radius values must be non-negative";
+            if(args.slice(3, 5).filter(function(a){return a > 0;}).length != 2) return "cylinder dimension args (height, slices, stacks) must be positive values";
             if((args[5] != 0 && args[5] != 1) || (args[6] != 0 && args[6] != 1)) return "cylinder cover args must be booleans (0 or 1)";
             return null;
         case 'triangle':
