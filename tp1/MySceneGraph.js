@@ -846,8 +846,11 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         argsFloat[m] = parseFloat(args[m]);
 
                     var argsError = null;
-                    if((argsError = this.checkLeafArgs(type, argsFloat)) != null)
-                        return argsError;
+                    if((argsError = this.checkLeafArgs(type, argsFloat)) != null){
+                        console.log(argsError);
+                        console.log("skipping primitive...");
+                        continue;
+                    }
                     leafInfo.args = argsFloat;
 
                     let controlPoints = [];
@@ -895,28 +898,36 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
 MySceneGraph.prototype.checkLeafArgs = function(type, args) {
     switch(type){
-        case 'rectangle':
-            if(args.length != 4) return "wrong number of arguments for primitive rectangle";
-            //topLeft=(x0,y0) bottomRight=(x1,y1) if x0>=x1 or y0<=y1 points given can't be top left followed by bottom right
-            if(args[0] >= args[2] || args[1] <= args[3]) return "invalid vertices for primitive rectangle, expecting top left followed by bottom right";
+        case 'rectangle':{
+            if(args.length < 4) return "insufficient number of arguments for primitive rectangle";
+            if(args.length > 4) this.onXMLMinorError("too many arguments for primitive rectangle");
+            if(args[0] >= args[2] || args[1] <= args[3]) this.onXMLMinorError("unexpected vertices for primitive rectangle, expecting top left followed by bottom right");
             return null;
-        case 'cylinder':
-            if(args.length != 7) return "wrong number of arguments for primitive cylinder";
-            if(args[0] <= 0) return "cylinder dimension args (height, slices, stacks) must be positive values";
+        }
+        case 'cylinder':{
+            if(args.length < 5) return "insufficient number of arguments for primitive cylinder";
+            if(args.length > 7) this.onXMLMinorError("too many arguments for primitive cylinder");
+            if(args.length == 6){ this.onXMLMinorError("missing top cover boolean arg: defaulting to 1"); args.push(1);}
+            if(args.length == 5){ this.onXMLMinorError("missing cover boolean args: defaulting to 1 1"); args.push(1, 1);}
+            if(args[0] <= 0) return "cylinder dimension args height must be a positive value";
             if(args.slice(1, 3).filter(function(a){return a>=0;}).length != 2) return "cylinder radius values must be non-negative";
-            if(args.slice(3, 5).filter(function(a){return a > 0;}).length != 2) return "cylinder dimension args (height, slices, stacks) must be positive values";
-            if((args[5] != 0 && args[5] != 1) || (args[6] != 0 && args[6] != 1)) return "cylinder cover args must be booleans (0 or 1)";
+            if(args.slice(3, 5).filter(function(a){return a > 0;}).length != 2) return "cylinder slices and stacks must be positive values";
+            if(args.length > 5 && (args[5] < 0 || args[6] < 0)) return "cylinder cover args must be booleans (0 for false, positive for true)";
             return null;
+        }
         case 'triangle':
-            if(args.length != 9) return "wrong number of arguments for primitive triangle";
+            if(args.length < 9) return "insufficient number of arguments for primitive triangle";
+            if(args.length > 9) this.onXMLMinorError("too many arguments for primitive triangle");
             return null;
         case 'patch':
-            if(args.length != 2) return "wrong number of arguments for primitive patch";
-            if(args.filter(function(a){return a > 0;}).length != 2) return "patch's number of divisions on each axis must be a positive value";
+            if(args.length < 2) return "insufficient number of arguments for primitive patch";
+            if(args.length > 2) this.onXMLMinorError("too many arguments for primitive patch");
+            if(args.filter(function(a){return a > 0;}).length < 2) return "patch's number of divisions on each axis must be a positive value";
             return null;
         case 'sphere':
-            if(args.length != 3) return "wrong number of arguments for primitive sphere";
-            if(args.filter(function(a){return a > 0;}).length != 3) return "sphere args must be positive values";
+            if(args.length < 3) return "insufficient number of arguments for primitive sphere";
+            if(args.length > 3) this.onXMLMinorError("too many arguments for primitive sphere");
+            if(args.filter(function(a){return a > 0;}).length < 3) return "sphere args must be positive values";
             return null;
     }
 }
