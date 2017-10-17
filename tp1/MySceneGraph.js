@@ -6,7 +6,7 @@ var ILLUMINATION_INDEX = 1;
 var LIGHTS_INDEX = 2;
 var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
-var NODES_INDEX = 6;
+var NODES_INDEX = 5;
 
 var STOP = false;
 
@@ -91,11 +91,13 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
         if ((index = nodeNames.indexOf(tags[i])) == -1)
             return "tag <" + tags[i] + "> missing";
         else {
-            if (index != indexes[i])
+            var indexArg = index;
+            if (index != indexes[i]){
                 this.onXMLMinorError("tag <" + tags[i] + "> out of order");
-
-            if ((error = this.parseElement(index, nodes[index])) != null)
-                return error;
+                indexArg = indexes[i];
+            }
+            if ((error = this.parseElement(indexArg, nodes[index])) != null)
+              return error;
         }
     }
 }
@@ -933,7 +935,7 @@ MySceneGraph.prototype.onXMLError = function(message) {
  * Callback to be executed on any minor error, showing a warning on the console.
  */
 MySceneGraph.prototype.onXMLMinorError = function(message) {
-    console.warn("Warning: " + message);
+    console.log("Warning: " + message);
 }
 
 /**
