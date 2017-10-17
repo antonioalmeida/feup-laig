@@ -875,6 +875,11 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                             controlPoints.push(currentCPLine);
                         }
 
+                        if((argsError = this.checkControlPoints(controlPoints)) != null){
+                            console.log(argsError);
+                            continue;
+                        }
+
                         console.log(" CP LINES BEFORE : " + controlPoints);
                         leafInfo.controlPoints = controlPoints;
                     }
@@ -933,7 +938,12 @@ MySceneGraph.prototype.checkLeafArgs = function(type, args) {
 }
 
 MySceneGraph.prototype.checkControlPoints = function(elem){
-
+    let length = null;
+    for(let i = 0; i < elem.length; ++i){
+        if(i == 0) length = elem[i].length;
+        else if(elem[i].length != length) return "all CPLINEs must have the same number of CPOINTs";
+    }
+    return null;
 }
 
 /*
