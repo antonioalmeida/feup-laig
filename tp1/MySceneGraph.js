@@ -347,11 +347,12 @@ MySceneGraph.prototype.parseRGBAvalue = function(element, arr, comp, rgba_comp, 
  * Parses the <ILLUMINATION> block.
  */
 MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
+    var vars = ['r', 'g', 'b', 'a'];
 
     // Reads the ambient and background values.
     var children = illuminationNode.children;
     var nodeNames = [];
-    for (var i = 0; i < children.length; i++)
+    for (let i = 0; i < children.length; i++)
         nodeNames.push(children[i].nodeName);
 
     // Retrieves the global ambient illumination.
@@ -359,18 +360,18 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
     var ambientIndex = nodeNames.indexOf("ambient");
     if (ambientIndex != -1) {
         var ambientError = null;
-        // R.
-        if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", 'r', "ILLUMINATION")) != null)
-            return ambientError;
-        // G.
-        if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", 'g', "ILLUMINATION")) != null)
-            return ambientError;
-        // B.
-        if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", 'b', "ILLUMINATION")) != null)
-            return ambientError;
-        // A.
-        if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", 'a', "ILLUMINATION")) != null)
-            return ambientError;
+        for(let i = 0; i < vars.length; ++i){
+            if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", vars[i], "ILLUMINATION")) != null){
+                if(i < 3){
+                    this.onXMLMinorError(ambientError+"; defaulting to " + vars[i] + " = 0 therefore result may be different than expected");
+                    this.ambientIllumination.push(0);
+                }
+                else{ //'A' component should default to 1 instead of 0
+                    this.onXMLMinorError(ambientError+"; defaulting to " + vars[i] + " = 1 therefore result may be different than expected");
+                    this.ambientIllumination.push(1);
+                }
+            }
+        }
     } else {
         this.ambientIllumination.push(0.1, 0.1, 0.1, 1);
         this.onXMLMinorError("global ambient illumination undefined; assuming Ia = (0.1, 0.1, 0., 1)");
@@ -381,18 +382,17 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
     var backgroundIndex = nodeNames.indexOf("background");
     if (backgroundIndex != -1) {
         var backgroundError = null;
-        // R.
-        if ((backgroundError = this.parseRGBAvalue(children[backgroundIndex], this.background, "background color", 'r', "ILLUMINATION")) != null)
-            return backgroundError;
-        // G.
-        if ((backgroundError = this.parseRGBAvalue(children[backgroundIndex], this.background, "background color", 'g', "ILLUMINATION")) != null)
-            return backgroundError;
-        // B.
-        if ((backgroundError = this.parseRGBAvalue(children[backgroundIndex], this.background, "background color", 'b', "ILLUMINATION")) != null)
-            return backgroundError;
-        // A.
-        if ((backgroundError = this.parseRGBAvalue(children[backgroundIndex], this.background, "background color", 'a', "ILLUMINATION")) != null)
-            return backgroundError;
+        for(let i = 0; i < vars.length; ++i){
+        if ((backgroundError = this.parseRGBAvalue(children[backgroundIndex], this.background, "background color", vars[i], "ILLUMINATION")) != null)
+            if(i < 3){
+                this.onXMLMinorError(backgroundError+"; defaulting to " + vars[i] + " = 0 therefore result may be different than expected");
+                this.background.push(0);
+            }
+            else{
+                this.onXMLMinorError(backgroundError+"; defaulting to " + vars[i] + " = 1 therefore result may be different than expected");
+                this.background.push(1);
+            }
+        }
     } else {
         this.background.push(0, 0, 0, 1);
         this.onXMLMinorError("background clear colour undefined; assuming (R, G, B, A) = (0, 0, 0, 1)");
