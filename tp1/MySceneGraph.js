@@ -452,71 +452,105 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
         // Light enable/disable
         var enableLight = true;
         if (enableIndex == -1) {
-            this.onXMLMinorError("enable value missing for ID = " + lightId + "; assuming 'value = 1'");
-        } else {
-            var aux = this.reader.getFloat(lightProperties[enableIndex], 'value');
-            if (aux == null) {
-                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
-            } else if (isNaN(aux))
-                return "'enable value' is a non numeric value on the LIGHTS block";
-            else if (aux != 0 && aux != 1)
-                return "'enable value' must be 0 or 1 on the LIGHTS block"
-            else
-                enableLight = aux == 0 ? false : true;
-        }
+           this.onXMLMinorError("enable value missing for ID = " + lightId + "; assuming 'value = 1'");
+       } else {
+           var aux = this.reader.getFloat(lightProperties[enableIndex], 'value');
+           if (aux == null) {
+               this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+           } else if (isNaN(aux))
+                this.onXMLMinorError("'enable value' is a non numeric value on the LIGHTS block; defaulting to true");
+           else if (aux != 0 && aux != 1)
+                this.onXMLMinorError("'enable value' must be 0 or 1 on the LIGHTS block; defaulting to true");
+           else
+               enableLight = aux == 0 ? false : true;
+       }
 
         // Retrieves the light position.
         var coords = ['x', 'y', 'z', 'w'];
         var positionLight = [];
-        if (positionIndex == -1)
-            return "light position undefined for ID = " + lightId;
+        if (positionIndex == -1){
+            this.onXMLMinorError("light position undefined for ID = " + lightId+"; skipping light");
+            continue;
+        }
         var coordinateError = null;
         for (let i = 0; i < coords.length; ++i) {
             let currentCoord = this.reader.getFloat(lightProperties[positionIndex], coords[i]);
-            if ((coordinateError = this.checkNullAndNaN(currentCoord, "unable to parse " + coords[i] + "-coordinate of position for light with ID " + lightId, coords[i] + "-coordinate of position for light with ID " + lightId + " is non-numeric")) != null)
-                return coordinateError;
+            if ((coordinateError = this.checkNullAndNaN(currentCoord, "unable to parse " + coords[i] + "-coordinate of position for light with ID " + lightId, coords[i] + "-coordinate of position for light with ID " + lightId + " is non-numeric")) != null){
+                this.onXMLMinorError(coordinateError+"; skipping light");
+                break;
+            }
 
             if (i == 3) { //Parsing 'w'
-                if (currentCoord != 0 && currentCoord != 1)
-                    return "w value of light position in light with ID " + lightId + " must be 0 or 1";
+                if (currentCoord != 0 && currentCoord != 1){
+                    coordinateError = "w value of light position in light with ID " + lightId + " must be 0 or 1; skipping light";
+                    this.onXMLMinorError(coordinateError);
+                    break;
+                }
             }
 
             positionLight.push(currentCoord);
         }
+
+        if(coordinateError != null)
+            continue;
 
         //Retrieve illumination aspects
         var vars = ['r', 'g', 'b', 'a'];
 
         // Retrieves the ambient component.
         var ambientIllumination = [];
-        if (ambientIndex == -1)
-            return "ambient component undefined for light with ID " + lightId;
         var ambientError = null;
-        for (let i = 0; i < vars.length; ++i) {
-            if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", vars[i], "LIGHTS")) != null)
-                return ambientError;
+        if (ambientIndex == -1){
+            this.onXMLMinorError("ambient component undefined for light with ID " + lightId+"; defaulting to Ia = (0.1, 0.1, 0.1, 1)");
+            ambientIllumination.push(0, 0, 0, 1);
+        }else{
+            for (let i = 0; i < vars.length; ++i) {
+                if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", vars[i], "LIGHTS")) != null){
+                    this.onXMLMinorError(ambientError+"; skipping light");
+                    break;
+                }
+            }
         }
+
+        if(ambientError != null)
+            continue;
 
         // Retrieves the diffuse component
         var diffuseIllumination = [];
-        if (diffuseIndex == -1)
-            return "diffuse component undefined for light with ID " + lightId;
         var diffuseError = null;
-        for (let i = 0; i < vars.length; ++i) {
-            if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", vars[i], "LIGHTS")) != null)
-                return diffuseError;
+        if (diffuseIndex == -1) {
+            this.onXMLMinorError("diffuse component undefined for light with ID " + lightId + "; defaulting to Id = (1, 1, 1, 1)");
+            diffuseIllumination.push(1, 1, 1, 1);
+        } else {
+            for (let i = 0; i < vars.length; ++i) {
+                if ((diffuseError = this.parseRGBAvalue(lightProperties[diffuseIndex], diffuseIllumination, "diffuse", vars[i], "LIGHTS")) != null) {
+                    this.onXMLMinorError(diffuseError + "; skipping current light");
+                    break;
+                }
+            }
         }
+
+        if (diffuseError != null)
+            continue;
 
         // Retrieves the specular component
-        if (specularIndex == -1)
-            return "specular component undefined for light with ID " + lightID;
-
         var specularIllumination = [];
         var specularError = null;
-        for (let i = 0; i < vars.length; ++i) {
-            if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", vars[i], "LIGHTS")) != null)
-                return specularError;
+        if (specularIndex == -1){
+            this.onXMLMinorError("specular component undefined for light with ID " + lightID+"; defaulting to Is = (1, 1, 1, 1)");
+            specularIllumination.push(1, 1, 1, 1);
         }
+        else{
+            for (let i = 0; i < vars.length; ++i) {
+                if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", vars[i], "LIGHTS")) != null){
+                    this.onXMLMinorError(specularError+"; skipping current light");
+                    break;
+                }
+            }
+        }
+
+        if(specularError != null)
+            continue;
 
         // Light global information.
         this.lights[lightId] = [enableLight, positionLight, ambientIllumination, diffuseIllumination, specularIllumination];
