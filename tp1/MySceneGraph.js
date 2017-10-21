@@ -662,7 +662,7 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
         if (this.materials[materialID] != null)
             return "ID must be unique for each material (conflict: ID = " + materialID + ")";
         if (materialID === "null")
-            return "Material ID cannot be keyword null";
+            return "material ID cannot be keyword null";
 
         var materialSpecs = materialArr[i].children;
 
@@ -675,14 +675,22 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
         var vars = ['r', 'g', 'b', 'a'];
         // Shininess.
         var shininessIndex = nodeNames.indexOf("shininess");
-        if (shininessIndex == -1)
-            return "no shininess value defined for material with ID = " + materialID;
-        var shininess = this.reader.getFloat(materialSpecs[shininessIndex], 'value');
-        var shininessError = null;
-        if ((shininessError = this.checkNullAndNaN(shininess, "unable to parse shininess value for material with ID " + materialID, "shininess is a non numeric value")) != null)
-            return shininessError;
-        if (shininess <= 0)
-            return "'shininess' must be positive for material with ID " + materialID;
+        var shininess;
+        if (shininessIndex == -1){
+            this.onXMLMinorError("no shininess value defined for material with ID = " + materialID + "; defaulting to n = 1");
+            shininess = 1;
+        }else{
+            shininess = this.reader.getFloat(materialSpecs[shininessIndex], 'value');
+            var shininessError = null;
+            if ((shininessError = this.checkNullAndNaN(shininess, "unable to parse shininess value for material with ID " + materialID, "shininess is a non numeric value")) != null){
+                this.onXMLMinorError(shininessError + "; defaulting to n = 1");
+                shininess = 1;
+            }
+            if (shininess <= 0){
+                this.onXMLMinorError("'shininess' must be positive for material with ID " + materialID + "; defaulting to n = 1");
+                shininess = 1;
+            }
+        }
 
         // Specular component.
         var specularIndex = nodeNames.indexOf("specular");
@@ -716,11 +724,11 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
             if ((specularError = this.parseRGBAvalue(materialSpecs[specularIndex], specularComponent, "specular", vars[i], "MATERIALS")) != null)
                 return specularError;
             if ((diffuseError = this.parseRGBAvalue(materialSpecs[diffuseIndex], diffuseComponent, "diffuse", vars[i], "MATERIALS")) != null)
-                return specularError;
+                return diffuseError;
             if ((ambientError = this.parseRGBAvalue(materialSpecs[ambientIndex], ambientComponent, "ambient", vars[i], "MATERIALS")) != null)
-                return specularError;
+                return ambientError;
             if ((emissionError = this.parseRGBAvalue(materialSpecs[emissionIndex], emissionComponent, "emission", vars[i], "MATERIALS")) != null)
-                return specularError;
+                return emissionError;
         }
 
         // Creates material with the specified characteristics.
