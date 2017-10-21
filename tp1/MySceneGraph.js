@@ -611,14 +611,24 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
                 amplifFactorS = this.reader.getFloat(texSpecs[j], 's');
                 amplifFactorT = this.reader.getFloat(texSpecs[j], 't');
 
-                if (amplifFactorS == null || amplifFactorT == null)
-                    return "unable to parse texture amplification factors for ID " + textureID;
-                else if (isNaN(amplifFactorS))
-                    return "'amplifFactorS' is a non numeric value for texture with ID " + textureID;
-                else if (isNaN(amplifFactorT))
-                    return "'amplifFactorT' is a non numeric value for texture with ID " + textureID;
-                else if (amplifFactorS <= 0 || amplifFactorT <= 0)
-                    return "value for amplifFactors must be positive for texture with ID " + textureID;
+                if (amplifFactorS == null || amplifFactorT == null){
+                    this.onXMLMinorError("unable to parse texture amplification factors for ID " + textureID + "; defaulting to as=at=1, results may be different than expected");
+                    amplifFactorS = 1;
+                    amplifFactorT = 1;
+                }
+                else if (isNaN(amplifFactorS)){
+                    this.onXMLMinorError("'amplifFactorS' is a non numeric value for texture with ID " + textureID + "; defaulting to as=1, unexpected results may happen");
+                    amplifFactorS = 1;
+                }
+                else if (isNaN(amplifFactorT)){
+                    this.onXMLMinorError("'amplifFactorT' is a non numeric value for texture with ID " + textureID + "; defaulting to at=1, unexpected results may happen");
+                    amplifFactorT = 1;
+                }
+                else if (amplifFactorS <= 0 || amplifFactorT <= 0){
+                    this.onXMLMinorError("value for amplifFactors must be positive for texture with ID " + textureID + "; defaulting to as=at=1, results may be different than expected");
+                    amplifFactorS = 1;
+                    amplifFactorT = 1;
+                }
             } else
                 this.onXMLMinorError("unknown tag name <" + name + ">");
         }
