@@ -5,13 +5,14 @@
 function MyCylinder(scene, args) {
     CGFobject.call(this,scene);
 
-    this.height = args[0];
-    this.bottom = args[1];
-    this.top = args[2];
-    this.stacks = args[3];
-    this.slices = args[4];
-    this.drawTop = (args[5] == 0 ? false: true);
-    this.drawBottom = (args[6] == 0 ? false : true);
+    this.height = parseFloat(args[0]);
+    this.bottom = parseFloat(args[1]);
+    this.top = parseFloat(args[2]);
+    this.stacks = parseFloat(args[3]);
+    this.slices = parseFloat(args[4]);
+    this.drawTop = (parseFloat(args[5]) == 0 ? false: true);
+    this.drawBottom = (parseFloat(args[6]) == 0 ? false : true);
+
 
     this.angle = 2 * Math.PI / this.slices;
 
