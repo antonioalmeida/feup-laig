@@ -3,22 +3,21 @@
 * @constructor
 */
 function MyPatch(scene, args,  controlPoints) {
-    this.orderU = controlPoints.length - 1;
-    this.orderV = controlPoints[0].length - 1;
+    this.degreeU = controlPoints.length - 1;
+    this.degreeV = controlPoints[0].length - 1;
 
-    console.log("order U : " + this.orderU + " order V : " + this.orderV);
+    //console.log("order U : " + this.degreeU + " order V : " + this.degreeV);
 
-    // Default values for now
     this.uDivs = args[0];
     this.vDivs = args[1];
 
-    console.log("U : " + this.uDivs + " V : " + this.vDivs);
+    //console.log("U : " + this.uDivs + " V : " + this.vDivs);
     this.controlPoints = controlPoints;
 
-    var knots1 = this.getKnotsVector(this.orderU);
-    var knots2 = this.getKnotsVector(this.orderV);
+    var knots1 = this.getKnotsVector(this.degreeU);
+    var knots2 = this.getKnotsVector(this.degreeV);
 
-    var nurbsSurface = new CGFnurbsSurface(this.orderU, this.orderV, knots1, knots2, controlPoints);
+    var nurbsSurface = new CGFnurbsSurface(this.degreeU, this.degreeV, knots1, knots2, controlPoints);
     getSurfacePoint = function(u, v) {
         return nurbsSurface.getPoint(u, v);
     };
@@ -44,4 +43,6 @@ MyPatch.prototype.display = function () {
     this.patch.display();
 };
 
-MyPatch.prototype.updateTexCoords = function(afS, afT) { }
+MyPatch.prototype.updateTexCoords = function(afS, afT) {
+    /* Amplification factors do not apply to patches */
+}

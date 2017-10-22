@@ -5,7 +5,6 @@
 function MyCylinder(scene, args) {
     CGFobject.call(this,scene);
 
-
     this.height = parseFloat(args[0]);
     this.bottom = parseFloat(args[1]);
     this.top = parseFloat(args[2]);
@@ -14,10 +13,13 @@ function MyCylinder(scene, args) {
     this.drawTop = (parseFloat(args[5]) == 0 ? false: true);
     this.drawBottom = (parseFloat(args[6]) == 0 ? false : true);
 
+
     this.angle = 2 * Math.PI / this.slices;
 
-    this.bottomCircle = new MyCircle(scene, this.bottom, this.slices);
-    this.topCircle = new MyCircle(scene, this.top, this.slices);
+    if(this.bottom)
+        this.bottomCircle = new MyCircle(scene, this.bottom, this.slices);
+    if(this.top)
+        this.topCircle = new MyCircle(scene, this.top, this.slices);
 
     this.initBuffers();
 };
@@ -40,7 +42,7 @@ MyCylinder.prototype.initBuffers = function() {
             this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
 
             //Push current vertex's tex coordinates
-            this.texCoords.push(i/this.slices, j/this.stacks);
+            this.texCoords.push(i/this.slices, 1-j/this.stacks);
 
             //Push current vertex's normal vector
             this.normals.push(Math.cos(i*this.angle), Math.sin(i*this.angle),0);
@@ -61,31 +63,33 @@ MyCylinder.prototype.initBuffers = function() {
         }
     }
 
-    //Interior part
-    for(j = 0; j <= this.stacks; j++){
-        for(i = 0; i <= this.slices; i++){
-            //Push current vertex
-            this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
+    //Interior part (only need to draw if at least one of the cover circles isn't present)
+    if (!this.top || !this.bottom) {
+        for (j = 0; j <= this.stacks; j++) {
+            for (i = 0; i <= this.slices; i++) {
+                //Push current vertex
+                this.vertices.push((this.bottom + j * radiusIncrement) * Math.cos(i * this.angle), (this.bottom + j * radiusIncrement) * Math.sin(i * this.angle), j * this.height / this.stacks);
 
-            //Push current vertex's tex coordinates
-            this.texCoords.push(i/this.slices, j/this.stacks);
+                //Push current vertex's tex coordinates
+                this.texCoords.push(i/this.slices, 1-j/this.stacks);
 
-            //Push current vertex's normal vector
-            this.normals.push(-Math.cos(i*this.angle), -Math.sin(i*this.angle),0);
+                //Push current vertex's normal vector
+                this.normals.push(-Math.cos(i * this.angle), -Math.sin(i * this.angle), 0);
+            }
         }
-    }
 
-    //Push indexes
-    for(j = 0; j < this.stacks; j++){
-        for(i = 0; i <= this.slices; i++){
-            //First triangle
-            this.indices.push((this.stacks+1)*(this.slices+1)+(this.slices+1)*(j+1)+i+1-(i < this.slices ? 0 : this.slices+1)); //To ensure second-to-last vertex connects with the last vertex in the current face and not the first in the next one
-            this.indices.push((this.stacks+1)*(this.slices+1)+(this.slices+1)*j+i+1-(i < this.slices ? 0 : this.slices+1)); //Same as above
-            this.indices.push((this.stacks+1)*(this.slices+1)+(this.slices+1)*j+i);
-            //Second triangle
-            this.indices.push((this.stacks+1)*(this.slices+1)+(this.slices+1)*j+i);
-            this.indices.push((this.stacks+1)*(this.slices+1)+(this.slices+1)*(j+1)+i);
-            this.indices.push((this.stacks+1)*(this.slices+1)+(this.slices+1)*(j+1)+i+1-(i < this.slices ? 0 : this.slices+1)); //Same as above
+        //Push indexes
+        for (j = 0; j < this.stacks; j++) {
+            for (i = 0; i <= this.slices; i++) {
+                //First triangle
+                this.indices.push((this.stacks + 1) * (this.slices + 1) + (this.slices + 1) * (j + 1) + i + 1 - (i < this.slices ? 0 : this.slices + 1)); //To ensure second-to-last vertex connects with the last vertex in the current face and not the first in the next one
+                this.indices.push((this.stacks + 1) * (this.slices + 1) + (this.slices + 1) * j + i + 1 - (i < this.slices ? 0 : this.slices + 1)); //Same as above
+                this.indices.push((this.stacks + 1) * (this.slices + 1) + (this.slices + 1) * j + i);
+                //Second triangle
+                this.indices.push((this.stacks + 1) * (this.slices + 1) + (this.slices + 1) * j + i);
+                this.indices.push((this.stacks + 1) * (this.slices + 1) + (this.slices + 1) * (j + 1) + i);
+                this.indices.push((this.stacks + 1) * (this.slices + 1) + (this.slices + 1) * (j + 1) + i + 1 - (i < this.slices ? 0 : this.slices + 1)); //Same as above
+            }
         }
     }
 
@@ -97,9 +101,8 @@ MyCylinder.prototype.display = function () {
     CGFobject.prototype.display.call(this);
     this.scene.pushMatrix();
     this.scene.rotate(Math.PI, 1, 0, 0)
-    if(this.drawBottom){
+    if(this.drawBottom)
       this.bottomCircle.display();
-    }
     if(this.drawTop){
       this.scene.translate(0, 0, -this.height);
       this.scene.rotate(Math.PI, 1, 0, 0)
