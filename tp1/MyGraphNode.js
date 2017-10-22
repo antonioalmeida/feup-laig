@@ -18,6 +18,9 @@ function MyGraphNode(graph, nodeID) {
     // The material ID.
     this.materialID = null ;
 
+    // The node numeric ID
+    this.numericID = null;
+
     // The texture ID.
     this.textureID = null ;
 

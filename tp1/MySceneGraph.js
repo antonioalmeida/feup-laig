@@ -27,6 +27,8 @@ function MySceneGraph(filename, scene) {
     this.textureStack = [];
     this.materialStack = [];
 
+    this.currentNumericID = 0;
+
     this.axisCoords = [];
     this.axisCoords['x'] = [1, 0, 0];
     this.axisCoords['y'] = [0, 1, 0];
@@ -820,10 +822,6 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
             this.nodes[nodeID].textureID = textureID;
 
-            /*var nodeTransformations = nodeSpecs.filter(function(elem){
-                return elem.nodeName == "TRANSLATION" || elem.nodeName == "SCALE" || elem.nodeName == "ROTATION";
-            });
-            */
             var nodeTransformations = nodeSpecs;
 
             // Retrieves possible transformations.
@@ -974,6 +972,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     }
 
                     this.nodes[nodeID].addLeaf(new MyGraphLeaf(this, leafInfo));
+                    this.nodes[nodeID].numericID = this.currentNumericID++;
                     sizeChildren++;
                 } else
                     this.onXMLMinorError("unknown tag <" + descendants[j].nodeName + ">");
