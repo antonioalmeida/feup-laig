@@ -985,7 +985,24 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             this.onXMLMinorError("unknown tag name <" + nodeName);
     }
 
+    if(this.nodes[this.idRoot] == null)
+        return "node identified as root not defined (id = " + this.idRoot + ")";
+    
+    var descendantsError = null;
+    if((descendantsError = this.checkNodesDescendants()) != null)
+        return descendantsError;
+
     console.log("Parsed nodes");
+    return null;
+}
+
+MySceneGraph.prototype.checkNodesDescendants = function() {
+    for(let i = 0; i < this.nodes.length; ++i){
+        for(let j = 0; j < this.nodes[i].children.length; ++j){
+            if(this.nodes[this.nodes[i].children[j]] == null)
+                return "node " + this.nodes[i].nodeID + " references descendant node " + this.nodes[i].children[j] + " which is not defined";
+        }
+    }
     return null;
 }
 
