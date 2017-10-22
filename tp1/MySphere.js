@@ -1,6 +1,8 @@
 /**
  * MySphere
  * @constructor
+ * @param scene - the scene where the sphere will be drawn on
+ * @param {array} args - array containing the arguments of the sphere - [ radius , stacks, slices ]
  */
  function MySphere(scene, args) {
  	CGFobject.call(this,scene);
@@ -59,6 +61,6 @@ MySphere.prototype.initBuffers = function() {
  	this.initGLBuffers();
  };
 
- MySphere.prototype.updateTexCoords = function(afS, afT){
+ MySphere.prototype.updateTexCoords = function(afS, afT) {
      /* Amplification factors do not apply to spheres */
  }

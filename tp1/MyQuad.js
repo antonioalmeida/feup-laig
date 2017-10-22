@@ -1,12 +1,8 @@
 /**
  * MyQuad
  * @constructor
- * @param scene
- * @param args - array containing the coordinates of each vertex
- * @param minS
- * @param maxS
- * @param minT
- * @param maxT
+ * @param scene - the scene where the quad will be drawn on
+ * @param {array} args - array containing the arguments of the quad - [ topLeftCornerX, topLeftCornerY, bottomRightCornerX, bottomRightCornerY ]
  */
 function MyQuad(scene, args) {
     CGFobject.call(this,scene);
@@ -57,7 +53,7 @@ MyQuad.prototype.initBuffers = function () {
     this.initGLBuffers();
 };
 
-MyQuad.prototype.updateTexCoords = function(afS, afT){
+MyQuad.prototype.updateTexCoords = function(afS, afT) {
   this.texCoords = [
     0, this.dy/afT,
     this.dx/afS, this.dy/afT,

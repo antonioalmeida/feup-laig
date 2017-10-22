@@ -1,6 +1,8 @@
 /**
  * MyGraphLeaf class, representing a leaf in the scene graph.
  * @constructor
+ * @param graph - graph the leaf belongs to
+ * @param leafInfo - object containg the leaf's attributes - type, arguments, control points
 **/
 function MyGraphLeaf(graph, leafInfo) {
     this.graph = graph;

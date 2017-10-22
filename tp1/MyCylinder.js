@@ -1,6 +1,8 @@
 /**
 * MyCylinder
 * @constructor
+* @param scene - the scene where the cylinder will be drawn on
+* @param {array} args - array containing the arguments of the cylinder - [ height, bottomRadius, topRapidus, stacks, slices , drawTop, drawBottom ]
 */
 function MyCylinder(scene, args) {
     CGFobject.call(this,scene);
@@ -36,8 +38,8 @@ MyCylinder.prototype.initBuffers = function() {
     var radiusIncrement = (this.top-this.bottom)/this.stacks;
     //Exterior part
     var i, j;
-    for(j = 0; j <= this.stacks; j++){
-        for(i = 0; i <= this.slices; i++){
+    for(j = 0; j <= this.stacks; j++) {
+        for(i = 0; i <= this.slices; i++) {
             //Push current vertex
             this.vertices.push((this.bottom+j*radiusIncrement)*Math.cos(i*this.angle),(this.bottom+j*radiusIncrement)*Math.sin(i*this.angle),j*this.height/this.stacks);
 
@@ -50,8 +52,8 @@ MyCylinder.prototype.initBuffers = function() {
     }
 
     //Push indexes
-    for(j = 0; j < this.stacks; j++){
-        for(i = 0; i <= this.slices; i++){
+    for(j = 0; j < this.stacks; j++) {
+        for(i = 0; i <= this.slices; i++) {
             //First triangle
             this.indices.push((this.slices+1)*j+i);
             this.indices.push((this.slices+1)*j+i+1-(i < this.slices ? 0 : this.slices+1)); //To ensure second-to-last vertex connects with the last vertex in the current face and not the first in the next one
@@ -100,18 +102,21 @@ MyCylinder.prototype.initBuffers = function() {
 MyCylinder.prototype.display = function () {
     CGFobject.prototype.display.call(this);
     this.scene.pushMatrix();
-    this.scene.rotate(Math.PI, 1, 0, 0)
-    if(this.drawBottom)
-      this.bottomCircle.display();
-    if(this.drawTop){
-      this.scene.translate(0, 0, -this.height);
-      this.scene.rotate(Math.PI, 1, 0, 0)
-      this.scene.rotate(Math.PI, 0, 0, 1)
-      this.topCircle.display();
-    }
+        this.scene.rotate(Math.PI, 1, 0, 0);
+
+        if(this.drawBottom)
+            this.bottomCircle.display();
+
+        if(this.drawTop) {
+            this.scene.translate(0, 0, -this.height);
+            this.scene.rotate(Math.PI, 1, 0, 0)
+            this.scene.rotate(Math.PI, 0, 0, 1)
+            this.topCircle.display();
+        }
+
     this.scene.popMatrix();
 }
 
-MyCylinder.prototype.updateTexCoords = function(afS, afT){
+MyCylinder.prototype.updateTexCoords = function(afS, afT) {
     /* Amplification factors do not apply to cylinders */
 }

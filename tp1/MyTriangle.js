@@ -1,12 +1,8 @@
 /**
  * MyTriangle
  * @constructor
- * @param scene
- * @param args - array containing the coordinates of each vertex
- * @param minS
- * @param maxS
- * @param minT
- * @param maxT
+ * @param scene - the scene where the triangle will be drawn on
+ * @param {array} args - array containing the coordinates of each vertex
  */
 function MyTriangle(scene, args) {
     CGFobject.call(this,scene);
@@ -77,7 +73,7 @@ MyTriangle.prototype.initBuffers = function () {
     this.initGLBuffers();
 };
 
-MyTriangle.prototype.updateTexCoords = function(afS, afT){
+MyTriangle.prototype.updateTexCoords = function(afS, afT) {
     this.texCoords = [
         0, 0,
         this.d_p0p1/afS, 0,

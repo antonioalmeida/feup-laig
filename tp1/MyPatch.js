@@ -1,6 +1,9 @@
 /**
 * MyPatch
 * @constructor
+* @param scene - the scene where the patch will be drawn on
+* @param {array} args - array containing the arguments of the patch - [ uDivs, vDivs ]
+* @param {array} controlPoints - array containing the patch's control points
 */
 function MyPatch(scene, args,  controlPoints) {
     this.degreeU = controlPoints.length - 1;
@@ -29,13 +32,14 @@ MyPatch.prototype = Object.create(CGFobject.prototype);
 MyPatch.prototype.constructor = MyPatch;
 
 MyPatch.prototype.getKnotsVector = function (degree) {
-    var v = new Array();
-    for (var i=0; i<=degree; i++) {
+    let v = [];
+
+    for (var i=0; i<=degree; i++)
         v.push(0);
-    }
-    for (var i=0; i<=degree; i++) {
+
+    for (var i=0; i<=degree; i++)
         v.push(1);
-    }
+
     return v;
 };
 

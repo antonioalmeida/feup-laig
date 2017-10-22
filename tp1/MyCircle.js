@@ -1,6 +1,9 @@
 /**
  * MyCircle
  * @constructor
+ * @param scene - the scene where the circle will be drawn on
+ * @param {float} radius - the circle's radius
+ * @param {int} slices - the circle's ammount of slices
  */
  function MyCircle(scene, radius, slices) {
  	CGFobject.call(this,scene);
@@ -23,7 +26,7 @@ MyCircle.prototype.constructor = MyCircle;
 	var ang = Math.PI*2/this.slices;
  	var x, y;
 
-	for(var i = 0; i <= this.slices; i++){
+	for(var i = 0; i <= this.slices; i++) {
 		x = Math.cos(i * ang);
 		y = Math.sin(i * ang);
 
@@ -32,7 +35,7 @@ MyCircle.prototype.constructor = MyCircle;
 		this.texCoords.push(0.5*(1+x), 0.5*(1+y));
 	}
 
-	for(var i = 1; i <= this.slices; i++){
+	for(var i = 1; i <= this.slices; i++) {
 	    if(i == this.slices)
             this.indices.push(i, 1, 0);
  		else
@@ -43,6 +46,6 @@ MyCircle.prototype.constructor = MyCircle;
  	this.initGLBuffers();
  };
 
- MyCircle.prototype.updateTexCoords = function(afS, afT){
+ MyCircle.prototype.updateTexCoords = function(afS, afT) {
      /* Amplification factors do not apply to circles */
  }

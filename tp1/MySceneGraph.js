@@ -94,7 +94,7 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
             return "tag <" + tags[i] + "> missing";
         else {
             var indexArg = index;
-            if (index != indexes[i]){
+            if (index != indexes[i]) {
                 this.onXMLMinorError("tag <" + tags[i] + "> out of order");
                 indexArg = indexes[i]; //Readjust index so we don't parse the right element with the wrong function
             }
@@ -144,12 +144,12 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         this.far = this.reader.getFloat(children[indexFrustum], 'far');
         var frustumError = null;
 
-        if ((frustumError = this.checkNullAndNaN(this.near, "unable to parse value for near plane", "non-numeric value found for near plane")) != null){
+        if ((frustumError = this.checkNullAndNaN(this.near, "unable to parse value for near plane", "non-numeric value found for near plane")) != null) {
             this.onXMLMinorError(frustumError+"; defaulting to 0.1");
             this.near = 0.1;
         }
 
-        if ((frustumError = this.checkNullAndNaN(this.far, "unable to parse value for far plane", "non-numeric value found for far plane")) != null){
+        if ((frustumError = this.checkNullAndNaN(this.far, "unable to parse value for far plane", "non-numeric value found for far plane")) != null) {
             this.onXMLMinorError(frustumError+"; defaulting to 500");
             this.far = 500;
         }
@@ -159,7 +159,7 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
             this.onXMLMinorError("'near' plane must be positive; clamping to 0.1");
         }
 
-        if (this.near >= this.far){
+        if (this.near >= this.far) {
             this.onXMLMinorError("'near' must be smaller than 'far', maybe you accidentally switched them. Swapping values");
             let temp = this.near;
             this.near = this.far;
@@ -205,17 +205,17 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     var tz = this.reader.getFloat(children[translationIndex], 'z');
     var translationError = null;
 
-    if ((translationError = this.checkNullAndNaN(tx, 'unable to parse x-value of initial translation', 'x-value of initial translation is non-numeric')) != null){
+    if ((translationError = this.checkNullAndNaN(tx, 'unable to parse x-value of initial translation', 'x-value of initial translation is non-numeric')) != null) {
         this.onXMLMinorError(translationError+"; defaulting to x = 0, therefore result may be different than expected");
         tx = 0;
     }
 
-    if ((translationError = this.checkNullAndNaN(ty, 'unable to parse y-value of initial translation', 'y-value of initial translation is non-numeric')) != null){
+    if ((translationError = this.checkNullAndNaN(ty, 'unable to parse y-value of initial translation', 'y-value of initial translation is non-numeric')) != null) {
         this.onXMLMinorError(translationError+"; defaulting to y = 0, therefore result may be different than expected");
         ty = 0;
     }
 
-    if ((translationError = this.checkNullAndNaN(tz, 'unable to parse z-value of initial translation', 'z-value of initial translation is non-numeric')) != null){
+    if ((translationError = this.checkNullAndNaN(tz, 'unable to parse z-value of initial translation', 'z-value of initial translation is non-numeric')) != null) {
         this.onXMLMinorError(translationError+"; defaulting to z = 0, therefore result may be different than expected");
         tz = 0;
     }
@@ -267,17 +267,17 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
     var sz = this.reader.getFloat(children[scalingIndex], 'sz');
     var scalingError = null;
 
-    if ((scalingError = this.checkNullAndNaN(sx, 'unable to parse x-value of initial scale', 'x-value of initial scale is non-numeric')) != null){
+    if ((scalingError = this.checkNullAndNaN(sx, 'unable to parse x-value of initial scale', 'x-value of initial scale is non-numeric')) != null) {
         this.onXMLMinorError(scalingError+"; defaulting to sx = 1, therefore result may be different than expected");
         sx = 1;
     }
 
-    if ((scalingError = this.checkNullAndNaN(sy, 'unable to parse y-value of initial scale', 'y-value of initial scale is non-numeric')) != null){
+    if ((scalingError = this.checkNullAndNaN(sy, 'unable to parse y-value of initial scale', 'y-value of initial scale is non-numeric')) != null) {
         this.onXMLMinorError(scalingError+"; defaulting to sy = 1, therefore result may be different than expected");
         sy = 1;
     }
 
-    if ((scalingError = this.checkNullAndNaN(sz, 'unable to parse z-value of initial scale', 'z-value of initial scale is non-numeric')) != null){
+    if ((scalingError = this.checkNullAndNaN(sz, 'unable to parse z-value of initial scale', 'z-value of initial scale is non-numeric')) != null) {
         this.onXMLMinorError(scalingError+"; defaulting to sz = 1, therefore result may be different than expected");
         sz = 1;
     }
@@ -296,7 +296,7 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         this.referenceLength = this.reader.getFloat(children[indexReference], 'length');
         var lengthError = null;
 
-        if ((lengthError = this.checkNullAndNaN(this.referenceLength, "unable to parse reference length value", "reference length value is non-numeric")) != null){
+        if ((lengthError = this.checkNullAndNaN(this.referenceLength, "unable to parse reference length value", "reference length value is non-numeric")) != null) {
             this.onXMLMinorError(lengthError+"; defaulting to 1");
             this.referenceLength = 1;
         }
@@ -362,13 +362,13 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
     var ambientIndex = nodeNames.indexOf("ambient");
     if (ambientIndex != -1) {
         var ambientError = null;
-        for(let i = 0; i < vars.length; ++i){
-            if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", vars[i], "ILLUMINATION")) != null){
-                if(i < 3){
+        for(let i = 0; i < vars.length; ++i) {
+            if ((ambientError = this.parseRGBAvalue(children[ambientIndex], this.ambientIllumination, "ambient", vars[i], "ILLUMINATION")) != null) {
+                if(i < 3) {
                     this.onXMLMinorError(ambientError+"; defaulting to " + vars[i] + " = 0 therefore result may be different than expected");
                     this.ambientIllumination.push(0);
                 }
-                else{ //'A' component should default to 1 instead of 0
+                else { //'A' component should default to 1 instead of 0
                     this.onXMLMinorError(ambientError+"; defaulting to " + vars[i] + " = 1 therefore result may be different than expected");
                     this.ambientIllumination.push(1);
                 }
@@ -376,7 +376,7 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
         }
     } else {
         this.ambientIllumination.push(0.1, 0.1, 0.1, 1);
-        this.onXMLMinorError("global ambient illumination undefined; assuming Ia = (0.1, 0.1, 0., 1)");
+        this.onXMLMinorError("global ambient illumination undefined; assuming Ia = (0.1, 0.1, 0.1, 1)");
     }
 
     // Retrieves the background clear color.
@@ -384,13 +384,13 @@ MySceneGraph.prototype.parseIllumination = function(illuminationNode) {
     var backgroundIndex = nodeNames.indexOf("background");
     if (backgroundIndex != -1) {
         var backgroundError = null;
-        for(let i = 0; i < vars.length; ++i){
+        for(let i = 0; i < vars.length; ++i) {
         if ((backgroundError = this.parseRGBAvalue(children[backgroundIndex], this.background, "background color", vars[i], "ILLUMINATION")) != null)
-            if(i < 3){
+            if(i < 3) {
                 this.onXMLMinorError(backgroundError+"; defaulting to " + vars[i] + " = 0 therefore result may be different than expected");
                 this.background.push(0);
             }
-            else{
+            else {
                 this.onXMLMinorError(backgroundError+"; defaulting to " + vars[i] + " = 1 therefore result may be different than expected");
                 this.background.push(1);
             }
@@ -470,20 +470,20 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
         // Retrieves the light position.
         var coords = ['x', 'y', 'z', 'w'];
         var positionLight = [];
-        if (positionIndex == -1){
+        if (positionIndex == -1) {
             this.onXMLMinorError("light position undefined for ID = " + lightId+"; skipping light");
             continue;
         }
         var coordinateError = null;
         for (let i = 0; i < coords.length; ++i) {
             let currentCoord = this.reader.getFloat(lightProperties[positionIndex], coords[i]);
-            if ((coordinateError = this.checkNullAndNaN(currentCoord, "unable to parse " + coords[i] + "-coordinate of position for light with ID " + lightId, coords[i] + "-coordinate of position for light with ID " + lightId + " is non-numeric")) != null){
+            if ((coordinateError = this.checkNullAndNaN(currentCoord, "unable to parse " + coords[i] + "-coordinate of position for light with ID " + lightId, coords[i] + "-coordinate of position for light with ID " + lightId + " is non-numeric")) != null) {
                 this.onXMLMinorError(coordinateError+"; skipping light");
                 break;
             }
 
             if (i == 3) { //Parsing 'w'
-                if (currentCoord != 0 && currentCoord != 1){
+                if (currentCoord != 0 && currentCoord != 1) {
                     coordinateError = "w value of light position in light with ID " + lightId + " must be 0 or 1; skipping light";
                     this.onXMLMinorError(coordinateError);
                     break;
@@ -502,12 +502,12 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
         // Retrieves the ambient component.
         var ambientIllumination = [];
         var ambientError = null;
-        if (ambientIndex == -1){
+        if (ambientIndex == -1) {
             this.onXMLMinorError("ambient component undefined for light with ID " + lightId+"; defaulting to Ia = (0.1, 0.1, 0.1, 1)");
             ambientIllumination.push(0, 0, 0, 1);
         }else{
             for (let i = 0; i < vars.length; ++i) {
-                if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", vars[i], "LIGHTS")) != null){
+                if ((ambientError = this.parseRGBAvalue(lightProperties[ambientIndex], ambientIllumination, "ambient", vars[i], "LIGHTS")) != null) {
                     this.onXMLMinorError(ambientError+"; skipping light");
                     break;
                 }
@@ -538,13 +538,13 @@ MySceneGraph.prototype.parseLights = function(lightsNode) {
         // Retrieves the specular component
         var specularIllumination = [];
         var specularError = null;
-        if (specularIndex == -1){
+        if (specularIndex == -1) {
             this.onXMLMinorError("specular component undefined for light with ID " + lightID+"; defaulting to Is = (1, 1, 1, 1)");
             specularIllumination.push(1, 1, 1, 1);
         }
         else{
             for (let i = 0; i < vars.length; ++i) {
-                if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", vars[i], "LIGHTS")) != null){
+                if ((specularError = this.parseRGBAvalue(lightProperties[specularIndex], specularIllumination, "specular", vars[i], "LIGHTS")) != null) {
                     this.onXMLMinorError(specularError+"; skipping current light");
                     break;
                 }
@@ -613,20 +613,20 @@ MySceneGraph.prototype.parseTextures = function(texturesNode) {
                 amplifFactorS = this.reader.getFloat(texSpecs[j], 's');
                 amplifFactorT = this.reader.getFloat(texSpecs[j], 't');
 
-                if (amplifFactorS == null || amplifFactorT == null){
+                if (amplifFactorS == null || amplifFactorT == null) {
                     this.onXMLMinorError("unable to parse texture amplification factors for ID " + textureID + "; defaulting to as=at=1, results may be different than expected");
                     amplifFactorS = 1;
                     amplifFactorT = 1;
                 }
-                else if (isNaN(amplifFactorS)){
+                else if (isNaN(amplifFactorS)) {
                     this.onXMLMinorError("'amplifFactorS' is a non numeric value for texture with ID " + textureID + "; defaulting to as=1, unexpected results may happen");
                     amplifFactorS = 1;
                 }
-                else if (isNaN(amplifFactorT)){
+                else if (isNaN(amplifFactorT)) {
                     this.onXMLMinorError("'amplifFactorT' is a non numeric value for texture with ID " + textureID + "; defaulting to at=1, unexpected results may happen");
                     amplifFactorT = 1;
                 }
-                else if (amplifFactorS <= 0 || amplifFactorT <= 0){
+                else if (amplifFactorS <= 0 || amplifFactorT <= 0) {
                     this.onXMLMinorError("value for amplifFactors must be positive for texture with ID " + textureID + "; defaulting to as=at=1, results may be different than expected");
                     amplifFactorS = 1;
                     amplifFactorT = 1;
@@ -678,17 +678,17 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
         // Shininess.
         var shininessIndex = nodeNames.indexOf("shininess");
         var shininess;
-        if (shininessIndex == -1){
+        if (shininessIndex == -1) {
             this.onXMLMinorError("no shininess value defined for material with ID = " + materialID + "; defaulting to n = 1");
             shininess = 1;
         }else{
             shininess = this.reader.getFloat(materialSpecs[shininessIndex], 'value');
             var shininessError = null;
-            if ((shininessError = this.checkNullAndNaN(shininess, "unable to parse shininess value for material with ID " + materialID, "shininess is a non numeric value")) != null){
+            if ((shininessError = this.checkNullAndNaN(shininess, "unable to parse shininess value for material with ID " + materialID, "shininess is a non numeric value")) != null) {
                 this.onXMLMinorError(shininessError + "; defaulting to n = 1");
                 shininess = 1;
             }
-            if (shininess <= 0){
+            if (shininess <= 0) {
                 this.onXMLMinorError("'shininess' must be positive for material with ID " + materialID + "; defaulting to n = 1");
                 shininess = 1;
             }
@@ -831,19 +831,19 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     case "TRANSLATION":
                         // Retrieves translation parameters.
                         var x = this.reader.getFloat(nodeTransformations[j], 'x');
-                        if((dataError = this.checkNullAndNaN(x, "unable to parse x-coordinate for translation in node with ID " + nodeID, "non-numeric value for x-coordinate of translation in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(x, "unable to parse x-coordinate for translation in node with ID " + nodeID, "non-numeric value for x-coordinate of translation in node with ID " + nodeID)) != null) {
                              this.onXMLMinorError(dataError+"; skipping translation so unexpected results may happen");
                              continue;
                         }
 
                         var y = this.reader.getFloat(nodeTransformations[j], 'y');
-                        if((dataError = this.checkNullAndNaN(y, "unable to parse y-coordinate for translation in node with ID " + nodeID, "non-numeric value for y-coordinate of translation in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(y, "unable to parse y-coordinate for translation in node with ID " + nodeID, "non-numeric value for y-coordinate of translation in node with ID " + nodeID)) != null) {
                             this.onXMLMinorError(dataError+"; skipping translation so unexpected results may happen");
                             continue;
                         }
 
                         var z = this.reader.getFloat(nodeTransformations[j], 'z');
-                        if((dataError = this.checkNullAndNaN(z, "unable to parse z-coordinate for translation in node with ID " + nodeID, "non-numeric value for z-coordinate of translation in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(z, "unable to parse z-coordinate for translation in node with ID " + nodeID, "non-numeric value for z-coordinate of translation in node with ID " + nodeID)) != null) {
                             this.onXMLMinorError(dataError+"; skipping translation so unexpected results may happen");
                             continue;
                         }
@@ -853,12 +853,12 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     case "ROTATION":
                         // Retrieves rotation parameters.
                         var axis = this.reader.getItem(nodeTransformations[j], 'axis', ['x', 'y', 'z']);
-                        if (axis == null){
+                        if (axis == null) {
                             this.onXMLMinorError("unable to parse rotation axis in node with ID " + nodeID + "; skipping rotation so unexpected results may happen");
                             continue;
                         }
                         var angle = this.reader.getFloat(nodeTransformations[j], 'angle');
-                        if((dataError = this.checkNullAndNaN(angle, "unable to parse angle for rotation in node with ID " + nodeID, "non-numeric value for angle of rotation in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(angle, "unable to parse angle for rotation in node with ID " + nodeID, "non-numeric value for angle of rotation in node with ID " + nodeID)) != null) {
                            this.onXMLMinorError(dataError + "; skipping rotation so unexpected results may happen");
                            continue;
                        }
@@ -868,19 +868,19 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     case "SCALE":
                         // Retrieves scale parameters.
                         var sx = this.reader.getFloat(nodeTransformations[j], 'sx');
-                        if((dataError = this.checkNullAndNaN(sx, "unable to parse x-coordinate for scale in node with ID " + nodeID, "non-numeric value for x-coordinate of scale in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(sx, "unable to parse x-coordinate for scale in node with ID " + nodeID, "non-numeric value for x-coordinate of scale in node with ID " + nodeID)) != null) {
                             this.onXMLMinorError(dataError + "; skipping scale so unexpected results may happen");
                             continue;
                         }
 
                         var sy = this.reader.getFloat(nodeTransformations[j], 'sy');
-                        if((dataError = this.checkNullAndNaN(sy, "unable to parse x-coordinate for scale in node with ID " + nodeID, "non-numeric value for y-coordinate of scale in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(sy, "unable to parse x-coordinate for scale in node with ID " + nodeID, "non-numeric value for y-coordinate of scale in node with ID " + nodeID)) != null) {
                            this.onXMLMinorError(dataError + "; skipping scale so unexpected results may happen");
                            continue;
                        }
 
                         var sz = this.reader.getFloat(nodeTransformations[j], 'sz');
-                        if((dataError = this.checkNullAndNaN(sz, "unable to parse x-coordinate for scale in node with ID " + nodeID, "non-numeric value for z-coordinate of scale in node with ID " + nodeID)) != null){
+                        if((dataError = this.checkNullAndNaN(sz, "unable to parse x-coordinate for scale in node with ID " + nodeID, "non-numeric value for z-coordinate of scale in node with ID " + nodeID)) != null) {
                             this.onXMLMinorError(dataError + "; skipping scale so unexpected results may happen");
                             continue;
                         }
@@ -919,7 +919,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     var leafInfo = {};
 
                     var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch']);
-                    if (type == null){
+                    if (type == null) {
                         this.onXMLMinorError("leaf type for node " + nodeID + " descendant unrecognised or couldn't be parsed; skipping");
                         continue;
                     }
@@ -934,7 +934,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         argsFloat[m] = parseFloat(args[m]);
 
                     var argsError = null;
-                    if((argsError = this.checkLeafArgs(type, argsFloat)) != null){
+                    if((argsError = this.checkLeafArgs(type, argsFloat)) != null) {
                         console.log(argsError + "; skipping");
                         continue;
                     }
@@ -962,12 +962,11 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                             controlPoints.push(currentCPLine);
                         }
 
-                        if((argsError = this.checkControlPoints(controlPoints)) != null){
+                        if((argsError = this.checkControlPoints(controlPoints)) != null) {
                             console.log(argsError + "; skipping");
                             continue;
                         }
 
-                        //console.log(" CP LINES BEFORE : " + controlPoints);
                         leafInfo.controlPoints = controlPoints;
                     }
 
@@ -997,8 +996,8 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 }
 
 MySceneGraph.prototype.checkNodesDescendants = function() {
-    for(let i = 0; i < this.nodes.length; ++i){
-        for(let j = 0; j < this.nodes[i].children.length; ++j){
+    for(let i = 0; i < this.nodes.length; ++i) {
+        for(let j = 0; j < this.nodes[i].children.length; ++j) {
             if(this.nodes[this.nodes[i].children[j]] == null)
                 return "node " + this.nodes[i].nodeID + " references descendant node " + this.nodes[i].children[j] + " which is not defined";
         }
@@ -1007,7 +1006,7 @@ MySceneGraph.prototype.checkNodesDescendants = function() {
 }
 
 MySceneGraph.prototype.checkLeafArgs = function(type, args) {
-    switch(type){
+    switch(type) {
         case 'rectangle':{
             if(args.length < 4) return "insufficient number of arguments for primitive rectangle";
             if(args.length > 4) this.onXMLMinorError("too many arguments for primitive rectangle");
@@ -1017,11 +1016,11 @@ MySceneGraph.prototype.checkLeafArgs = function(type, args) {
         case 'cylinder':{
             if(args.length < 5) return "insufficient number of arguments for primitive cylinder";
             if(args.length > 7) this.onXMLMinorError("too many arguments for primitive cylinder");
-            if(args.length == 6){ this.onXMLMinorError("missing top cover boolean arg: defaulting to 1"); args.push(1);}
-            if(args.length == 5){ this.onXMLMinorError("missing cover boolean args: defaulting to 1 1"); args.push(1, 1);}
+            if(args.length == 6) { this.onXMLMinorError("missing top cover boolean arg: defaulting to 1"); args.push(1);}
+            if(args.length == 5) { this.onXMLMinorError("missing cover boolean args: defaulting to 1 1"); args.push(1, 1);}
             if(args[0] <= 0) return "cylinder dimension args height must be a positive value";
-            if(args.slice(1, 3).filter(function(a){return a>=0;}).length != 2) return "cylinder radius values must be non-negative";
-            if(args.slice(3, 5).filter(function(a){return a > 0;}).length != 2) return "cylinder slices and stacks must be positive values";
+            if(args.slice(1, 3).filter(function(a) {return a>=0;}).length != 2) return "cylinder radius values must be non-negative";
+            if(args.slice(3, 5).filter(function(a) {return a > 0;}).length != 2) return "cylinder slices and stacks must be positive values";
             if(args.length > 5 && (args[5] < 0 || args[6] < 0)) return "cylinder cover args must be booleans (0 for false, positive for true)";
             return null;
         }
@@ -1032,19 +1031,19 @@ MySceneGraph.prototype.checkLeafArgs = function(type, args) {
         case 'patch':
             if(args.length < 2) return "insufficient number of arguments for primitive patch";
             if(args.length > 2) this.onXMLMinorError("too many arguments for primitive patch");
-            if(args.filter(function(a){return a > 0;}).length < 2) return "patch's number of divisions on each axis must be a positive value";
+            if(args.filter(function(a) {return a > 0;}).length < 2) return "patch's number of divisions on each axis must be a positive value";
             return null;
         case 'sphere':
             if(args.length < 3) return "insufficient number of arguments for primitive sphere";
             if(args.length > 3) this.onXMLMinorError("too many arguments for primitive sphere");
-            if(args.filter(function(a){return a > 0;}).length < 3) return "sphere args must be positive values";
+            if(args.filter(function(a) {return a > 0;}).length < 3) return "sphere args must be positive values";
             return null;
     }
 }
 
-MySceneGraph.prototype.checkControlPoints = function(elem){
+MySceneGraph.prototype.checkControlPoints = function(elem) {
     let length = null;
-    for(let i = 0; i < elem.length; ++i){
+    for(let i = 0; i < elem.length; ++i) {
         if(i == 0) length = elem[i].length;
         else if(elem[i].length != length) return "all CPLINEs must have the same number of CPOINTs";
     }
