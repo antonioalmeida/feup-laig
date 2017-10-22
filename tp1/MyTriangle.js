@@ -12,12 +12,13 @@ function MyTriangle(scene, args) {
     CGFobject.call(this,scene);
 
     let chars = ['x','y','z'];
-    /* i%3 ensures chars array is looped x,y,z,x,y,z,... and i/3 ensures the sequence 0 0 0 1 1 1 2 2 2... so in the end we get all strings from x0 to z2 */
+    /* Prettier way in case of sudden desire to reduce number of code lines
+       i%3 ensures chars array is looped x,y,z,x,y,z,... and i/3 ensures the sequence 0 0 0 1 1 1 2 2 2... so in the end we get all strings from x0 to z2
+
     for(let i = 0; i < 9; i++)
         this[chars[i%3]+Math.trunc(i/3)] = args[i];
+    */
 
-    //Ugly way by antonioalmeida
-    /*
     this.x0 = args[0];
     this.y0 = args[1];
     this.z0 = args[2];
@@ -29,7 +30,6 @@ function MyTriangle(scene, args) {
     this.x2 = args[6];
     this.y2 = args[7];
     this.z2 = args[8];
-    */
 
     this.initBuffers();
 };
@@ -57,9 +57,10 @@ MyTriangle.prototype.initBuffers = function () {
         cross[0], cross[1], cross[2]
     ];
 
-    /*Similar mechanism to the one described in the auxiliar slides, but with two changes:
+    /*Similar mechanism to the one described in the auxiliar slides, but with three changes:
         1 - No use of sin: After discovering the length of one side, the other can be discovered through the Pythagorean Theorem
         2 - Usage of a translation of value (0, -v) so the coordinates are easier to calculate
+        3 - Usage of a different angle
     */
     this.d_p0p1 = Math.sqrt(Math.pow(this.x0-this.x1, 2)+Math.pow(this.y0-this.y1, 2)+Math.pow(this.z0-this.z1, 2));
     this.d_p0p2 = Math.sqrt(Math.pow(this.x0-this.x2, 2)+Math.pow(this.y0-this.y2, 2)+Math.pow(this.z0-this.z2, 2));

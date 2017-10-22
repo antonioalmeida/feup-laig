@@ -20,6 +20,7 @@ MySphere.prototype.initBuffers = function() {
     this.normals = [];
     this.texCoords = [];
     this.indices = [];
+    // Spherical coordinates, using theta as polar angle and phi as azimutal
     for (let lat = 0; lat <= this.stacks; lat++) {
       var theta = lat * Math.PI / this.stacks;
       var sinTheta = Math.sin(theta);

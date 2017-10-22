@@ -27,6 +27,7 @@ function MySceneGraph(filename, scene) {
     this.textureStack = [];
     this.materialStack = [];
 
+    // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;
 
     this.axisCoords = [];
@@ -84,7 +85,6 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     var error;
 
     // Processes each node, verifying errors.
-
     var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "NODES"];
     var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, NODES_INDEX];
     var index;
@@ -96,7 +96,7 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
             var indexArg = index;
             if (index != indexes[i]){
                 this.onXMLMinorError("tag <" + tags[i] + "> out of order");
-                indexArg = indexes[i];
+                indexArg = indexes[i]; //Readjust index so we don't parse the right element with the wrong function
             }
             if ((error = this.parseElement(indexArg, nodes[index])) != null)
               return error;
@@ -167,7 +167,7 @@ MySceneGraph.prototype.parseInitials = function(initialsNode) {
         }
     }
 
-    // Checks if at most one translation, three rotations, and one scaling are defined.
+    // Checks if at exactly one translation, three rotations, and one scaling are defined.
     if (initialsNode.getElementsByTagName('translation').length != 1)
         return "exactly one initial translation must be defined";
 
@@ -987,7 +987,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
 
     if(this.nodes[this.idRoot] == null)
         return "node identified as root not defined (id = " + this.idRoot + ")";
-    
+
     var descendantsError = null;
     if((descendantsError = this.checkNodesDescendants()) != null)
         return descendantsError;

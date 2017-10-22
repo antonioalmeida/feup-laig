@@ -5,7 +5,6 @@
 
 function MyGraphNode(graph, nodeID) {
     this.graph = graph;
-    this.visited = false;
 
     this.nodeID = nodeID;
 
