@@ -832,7 +832,7 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
 
             controlPoints.push([x, y, z]);
           }
-          
+
           if(controlPoints.length != 4){
             this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
             continue;
@@ -841,10 +841,34 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
           break;
         }
         case 'combo': {
+          let animationRefs = [];
+          let refsElement = children[i].children;
+          for(let refsIndex = 0; refsIndex < refsElement.length; ++refsIndex) {
+            if(refsElement[refsIndex].nodeName != "SPANREF") {
+              this.onXMLMinorError('unrecognised node name <'+refsElement[refsIndex].nodeName+'>, expected <SPANREF>; skipping');
+              continue;
+            }
+            let currRef = this.reader.getString(refsElements[refsIndex], 'id');
+            if(currRef == null) {
+              this.onXMLMinorError('could not parse animation reference for combo animation '+animationID);
+              continue;
+            }
+            animationRefs.push(currRef);
+          }
 
+          if(!animationRefs.length) {
+            this.onXMLMinorError('combo animation '+animationID+' must have at least one valid animation reference; skipping');
+            continue;
+          }
+          this.animations[animationID] = new MyComboAnimation(animationID, animationRefs);
+          break;
         }
       }
     }
+
+    //this.checkAnimations(); //Check valid animation refs and avoid combo having a combo ref
+    console.log("Parsed animations");
+    return null;
 }
 
 /**
