@@ -34,7 +34,5 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
 }
 
 MyBezierAnimation.prototype.update = function(currTime) {
-}
-
-MyBezierAnimation.prototype.apply = function() {
+    super.update(currTime);
 }

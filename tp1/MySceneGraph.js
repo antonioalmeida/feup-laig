@@ -25,7 +25,7 @@ function MySceneGraph(filename, scene) {
     this.nodes = [];
     this.idRoot = null; // The id of the root element.
 
-    this.animations = [];
+    this.animations = [/*new MyLinearAnimation('id', 10, [[1,2,3]])*/];
 
     // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;

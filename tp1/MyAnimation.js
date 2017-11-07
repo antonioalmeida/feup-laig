@@ -3,13 +3,16 @@ function MyAnimation(id) {
         throw new Error("Can't instantiate abstract class!");
 
     this.id = id;
+    this.startTime = -1;
+    this.delta = 0;
     this.currentMatrix = mat4.create();
 }
 
 MyAnimation.prototype.constructor = MyAnimation;
 
 MyAnimation.prototype.update = function(currTime) {
-}
-
-MyAnimation.prototype.apply = function() {
+    if(this.startTime == -1)
+        this.startTime = currTime;
+    else
+        this.delta = currTime - this.startTime;
 }

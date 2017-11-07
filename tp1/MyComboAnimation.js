@@ -8,7 +8,5 @@ MyComboAnimation.prototype = Object.create(MyAnimation.prototype);
 MyComboAnimation.prototype.constructor = MyComboAnimation;
 
 MyComboAnimation.prototype.update = function(currTime) {
-}
-
-MyComboAnimation.prototype.apply = function() {
+    super.update(currTime);
 }
