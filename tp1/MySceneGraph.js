@@ -25,7 +25,7 @@ function MySceneGraph(filename, scene) {
     this.nodes = [];
     this.idRoot = null; // The id of the root element.
 
-    this.animations = [/*new MyLinearAnimation('id', 10, [[1,2,3]])*/];
+    this.animations = [];
 
     // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;
@@ -784,7 +784,7 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
 
       var argsError = null;
       switch(animationType){
-        case 'circular': {
+        case 'circular':
           let remainingInfo = {};
           let attrs = ['speed', 'centerx', 'centery', 'centerz', 'radius', 'startang', 'rotang'];
           for(let index = 0; index < attrs.length; ++i){
@@ -797,14 +797,15 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
           }
           this.animations[animationID] = new MyCircularAnimation(id, remainingInfo);
           break;
-        }
         case 'linear':
-        case 'bezier': {
-          let speed = this.reader.getFloat(children[i], 'speed');
-          if((argsError = this.checkNullAndNaN(currVar, 'unable to parse speed value for animation '+animationID, 'speed for animation '+animationID+' is non numeric')) != null){
+        case 'bezier':
+          console.log("Oi "+animationType);
+          let speed = this.reader.getFloat(children[i], 'speed', true);
+          if((argsError = this.checkNullAndNaN(speed, 'unable to parse speed value for animation '+animationID, 'speed for animation '+animationID+' is non numeric')) != null){
             this.onXMLMinorError(argsError+'; skipping');
             continue;
           }
+          console.log("Got speed");
           let cpElement = children[i].children;
           let controlPoints = [];
           for(let cpIndex = 0; cpIndex < cpElement.length; ++cpIndex) {
@@ -827,27 +828,29 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
               this.onXMLMinorError(argsError+'; skipping');
               continue;
             }
-
+            console.log("Got a CP");
             controlPoints.push([x, y, z]);
           }
 
           if(animationType == 'bezier'){
               if(controlPoints.length != 4){
-                this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
+                this.onXMLMinorError('Not the exact amount of control points for animation '+animationID+'; skipping');
                 continue;
               }
               this.animations[animationID] = new MyBezierAnimation(animationID, speed, controlPoints);
           }
           else if(animationType == 'linear'){
+            console.log("If linear");
             if(controlPoints.length < 2){
               this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
               continue;
             }
+            console.log("Pre construtor");
             this.animations[animationID] = new MyLinearAnimation(animationID, speed, controlPoints);
+            console.log("Pos construtor");
           }
           break;
-        }
-        case 'combo': {
+        case 'combo':
           let animationRefs = [];
           let refsElement = children[i].children;
           for(let refsIndex = 0; refsIndex < refsElement.length; ++refsIndex) {
@@ -869,9 +872,10 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
           }
           this.animations[animationID] = new MyComboAnimation(animationID, animationRefs);
           break;
-        }
       }
     }
+
+    console.log("Ended up with "+this.animations.length+" animations");
 
     var animationRefError = null;
     if((animationRefError = this.checkAnimations()) != null)
@@ -930,7 +934,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
             var specsNames = [];
-            var possibleValues = ["MATERIAL", "TEXTURE", "TRANSLATION", "ROTATION", "SCALE", "DESCENDANTS"];
+            var possibleValues = ["MATERIAL", "TEXTURE", "TRANSLATION", "ROTATION", "SCALE", "ANIMATIONREFS", "DESCENDANTS"];
             for (let j = 0; j < nodeSpecs.length; ++j) {
                 var name = nodeSpecs[j].nodeName;
                 specsNames.push(name);
@@ -1031,6 +1035,26 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         break;
                     default:
                         break;
+                }
+            }
+
+            // Retrieves information about possible animations
+            var animationsIndex = specsNames.indexOf("ANIMATIONREFS");
+            if(animationsIndex != -1) {
+                let refs = nodeSpecs[animationsIndex].children;
+                for(let animIndex = 0; animIndex < refs.length; ++animIndex) {
+                    if(refs[animIndex].nodeName != "ANIMATIONREF")
+                        continue;
+                    let animID = this.reader.getString(refs[animIndex], 'id');
+                    if(animID == null) {
+                        this.onXMLMinorError("Could not parse animation reference for node "+nodeID+"; skipping animation");
+                        continue;
+                    }
+                    if(this.animations[animID] == null) {
+                        this.onXMLMinorError("Animation reference by node "+nodeID+" is not defined; skipping animation");
+                        continue;
+                    }
+                    this.nodes[nodeID].animations.push(animID);
                 }
             }
 

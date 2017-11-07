@@ -150,6 +150,10 @@
 
 <!-- The animations -->
 <ANIMATIONS>
+    <ANIMATION id="anim1" type="linear" speed="2.5">
+        <controlpoint xx="-1" yy="0" zz="0"/>
+        <controlpoint xx="10" yy="11" zz="0"/>
+    </ANIMATION>
 </ANIMATIONS>
 
 
@@ -241,6 +245,10 @@
      <NODE id="luz1">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
+
+        <ANIMATIONREFS>
+            <ANIMATIONREF id="anim1"/>
+        </ANIMATIONREFS>
 
         <DESCENDANTS>
             <NODEREF id="luz_candeeiro" />

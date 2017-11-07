@@ -1,6 +1,7 @@
 function MyAnimation(id) {
-    if (this.constructor === MyAnimation)
+    if (this.constructor === MyAnimation){
         throw new Error("Can't instantiate abstract class!");
+    }
 
     this.id = id;
     this.startTime = -1;
@@ -14,5 +15,5 @@ MyAnimation.prototype.update = function(currTime) {
     if(this.startTime == -1)
         this.startTime = currTime;
     else
-        this.delta = currTime - this.startTime;
+        this.delta = (currTime - this.startTime)/1000;
 }

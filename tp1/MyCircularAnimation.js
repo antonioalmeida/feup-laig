@@ -15,5 +15,5 @@ MyCircularAnimation.prototype = Object.create(MyAnimation.prototype);
 MyCircularAnimation.prototype.constructor = MyCircularAnimation;
 
 MyCircularAnimation.prototype.update = function(currTime) {
-    super.update(currTime);
+    MyAnimation.prototype.update.call(this, currTime);
 }

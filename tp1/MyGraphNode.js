@@ -24,6 +24,9 @@ function MyGraphNode(graph, nodeID) {
     // The texture ID.
     this.textureID = null ;
 
+    // The node's animations
+    this.animations = [];
+
     this.transformMatrix = mat4.create();
     mat4.identity(this.transformMatrix);
 }
@@ -48,6 +51,8 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
 MyGraphNode.prototype.display = function(textureID, materialID) {
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
+        if(this.animations.length > 0)
+            this.graph.scene.multMatrix(this.graph.animations[this.animations[0]].currentMatrix);
 
         var materialToPassOn = materialID;
         var textureToPassOn = textureID;

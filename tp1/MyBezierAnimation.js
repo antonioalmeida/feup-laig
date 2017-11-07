@@ -1,11 +1,10 @@
 function MyBezierAnimation(id, velocity, controlPoints) {
     MyAnimation.call(this, id);
-
     this.velocity = velocity;
-    this.P1 = vec3.fromValues(controlPoints[0]);
-    this.P2 = vec3.fromValues(controlPoints[1]);
-    this.P3 = vec3.fromValues(controlPoints[2]);
-    this.P4 = vec3.fromValues(controlPoints[3]);
+    this.P1 = vec3.fromValues(controlPoints[0][0], controlPoints[0][1], controlPoints[0][2]);
+    this.P2 = vec3.fromValues(controlPoints[1][0], controlPoints[1][1], controlPoints[1][2]);
+    this.P3 = vec3.fromValues(controlPoints[2][0], controlPoints[2][1], controlPoints[2][2]);
+    this.P4 = vec3.fromValues(controlPoints[3][0], controlPoints[3][1], controlPoints[3][2]);
 
     //Calculate initial constant values
     this.curveLength = this.approximateCurveLength();
@@ -34,5 +33,5 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
 }
 
 MyBezierAnimation.prototype.update = function(currTime) {
-    super.update(currTime);
+    MyAnimation.prototype.update.call(this, currTime);
 }
