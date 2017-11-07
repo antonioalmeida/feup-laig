@@ -9,9 +9,7 @@ function MyAnimation(id) {
 MyAnimation.prototype.constructor = MyAnimation;
 
 MyAnimation.prototype.update = function(currTime) {
-  throw new Error("Can't instantiate abstract method"); //If fucks up, comment
 }
 
 MyAnimation.prototype.apply = function() {
-  throw new Error("Can't instantiate abstract method"); //If fucks up, comment
 }
