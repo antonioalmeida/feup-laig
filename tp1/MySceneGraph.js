@@ -873,9 +873,26 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
       }
     }
 
-    //this.checkAnimations(); //Check valid animation refs and avoid combo having a combo ref
+    var animationRefError = null;
+    if((animationRefError = this.checkAnimations()) != null)
+      return animationRefError;
+
     console.log("Parsed animations");
     return null;
+}
+
+MySceneGraph.prototype.checkAnimations = function() {
+  for(let i = 0; i < this.animations.length; ++i) {
+    if(this.animations[i] instanceof MyComboAnimation) {
+      for(let j = 0; j < this.animations[i].animations.length; ++j) {
+        if(this.animations[this.animations[i].animations[j]] == null)
+          return "Referenced animation "+this.animations[i].animations[j]+" is not defined";
+        if(this.animations[this.animations[i].animations[j]] instanceof MyComboAnimation)
+          return "Combo Animation cannot reference another Combo Animation";
+      }
+    }
+  }
+  return null;
 }
 
 /**
