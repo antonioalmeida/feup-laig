@@ -6,7 +6,8 @@ var ILLUMINATION_INDEX = 1;
 var LIGHTS_INDEX = 2;
 var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
-var NODES_INDEX = 5;
+var ANIMATIONS_INDEX = 5;
+var NODES_INDEX = 6;
 
 var STOP = false;
 
@@ -24,8 +25,7 @@ function MySceneGraph(filename, scene) {
     this.nodes = [];
     this.idRoot = null; // The id of the root element.
 
-    this.textureStack = [];
-    this.materialStack = [];
+    this.animations = [];
 
     // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;
@@ -85,8 +85,8 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     var error;
 
     // Processes each node, verifying errors.
-    var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "NODES"];
-    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, NODES_INDEX];
+    var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "ANIMATIONS", "NODES"];
+    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, ANIMATIONS_INDEX, NODES_INDEX];
     var index;
 
     for (let i = 0; i < tags.length; ++i) {
@@ -116,6 +116,8 @@ MySceneGraph.prototype.parseElement = function(index, element) {
             return this.parseTextures(element);
         case MATERIALS_INDEX:
             return this.parseMaterials(element);
+        case ANIMATIONS_INDEX:
+            return this.parseAnimations(element);
         case NODES_INDEX:
             return this.parseNodes(element);
     }
@@ -752,6 +754,98 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
     console.log("Parsed materials");
 }
 
+/**
+  * Parses the <ANIMATIONS> block.
+  */
+MySceneGraph.prototype.parseAnimations = function(animationsNode) {
+    var children = animationsNode.children;
+
+    for(let i = 0; i < children.length; ++i) {
+      if(children[i].nodeName != "ANIMATION"){
+        this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+        continue;
+      }
+
+      //Get Animation ID
+      var animationID = this.reader.getString(children[i], 'id');
+      if (animationID == null)
+          return "failed to retrieve animation ID";
+      // Checks if ID is valid.
+      if (this.animations[animationID] != null)
+          return "animation ID must be unique (conflict: ID = " + animationID + ")";
+
+      console.log("Processing animation " + animationID);
+
+      var animationType = this.reader.getItem(children[i], 'type', ['linear', 'circular', 'bezier', 'combo']);
+      if (animationType == null) {
+          this.onXMLMinorError("animation type for " + animationID + " unrecognised or couldn't be parsed; skipping");
+          continue;
+      }
+
+      var argsError = null;
+      switch(animationType){
+        case 'linear': {
+
+        }
+        case 'circular': {
+          let remainingInfo = {};
+          let attrs = ['speed', 'centerx', 'centery', 'centerz', 'radius', 'startang', 'rotang'];
+          for(let index = 0; index < attrs.length; ++i){
+            let currVar = this.reader.getFloat(children[i], attrs[index]);
+            if((argsError = this.checkNullAndNaN(currVar, 'unable to parse '+attrs[index]+' value for animation '+animationID, attrs[index]+' for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            remainingInfo[attrs[index]] = parseFloat(currVar);
+          }
+          this.animations[animationID] = new MyCircularAnimation(id, remainingInfo);
+          break;
+        }
+        case 'bezier': {
+          let speed = this.reader.getFloat(children[i], 'speed');
+          if((argsError = this.checkNullAndNaN(currVar, 'unable to parse speed value for animation '+animationID, 'speed for animation '+animationID+' is non numeric')) != null){
+            this.onXMLMinorError(argsError+'; skipping');
+            continue;
+          }
+          let cpElement = children[i].children;
+          let controlPoints = [];
+          for(let cpIndex = 0; cpIndex < cpElement.length; ++cpIndex) {
+            if(cpElement[cpIndex].nodeName != "controlpoint"){
+              this.onXMLMinorError('Unknown tag <'+cpElement[cpIndex].nodeName+'>; expected <controlpoint>; skipping');
+              continue;
+            }
+            let x = this.reader.getFloat(cpElement[cpIndex], 'xx');
+            if((argsError = this.checkNullAndNaN(x, 'unable to parse x value for P'+(cpIndex+1)+' for '+animationID,  'P'+(cpIndex+1)+' x for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            let y = this.reader.getFloat(cpElement[cpIndex], 'yy');
+            if((argsError = this.checkNullAndNaN(y, 'unable to parse y value for P'+(cpIndex+1)+' for '+animationID,  'P'+(cpIndex+1)+' y for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            let z = this.reader.getFloat(cpElement[cpIndex], 'zz');
+            if((argsError = this.checkNullAndNaN(z, 'unable to parse z value for P'+(cpIndex+1)+' for '+animationID,  'P'+(cpIndex+1)+' z for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+
+            controlPoints.push([x, y, z]);
+          }
+          
+          if(controlPoints.length != 4){
+            this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
+            continue;
+          }
+          this.animations[animationID] = new MyBezierAnimation(animationID, speed, controlPoints);
+          break;
+        }
+        case 'combo': {
+
+        }
+      }
+    }
+}
 
 /**
  * Parses the <NODES> block.
