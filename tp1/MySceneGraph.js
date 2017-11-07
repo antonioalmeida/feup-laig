@@ -784,9 +784,6 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
 
       var argsError = null;
       switch(animationType){
-        case 'linear': {
-
-        }
         case 'circular': {
           let remainingInfo = {};
           let attrs = ['speed', 'centerx', 'centery', 'centerz', 'radius', 'startang', 'rotang'];
@@ -801,6 +798,7 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
           this.animations[animationID] = new MyCircularAnimation(id, remainingInfo);
           break;
         }
+        case 'linear':
         case 'bezier': {
           let speed = this.reader.getFloat(children[i], 'speed');
           if((argsError = this.checkNullAndNaN(currVar, 'unable to parse speed value for animation '+animationID, 'speed for animation '+animationID+' is non numeric')) != null){
@@ -833,11 +831,20 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
             controlPoints.push([x, y, z]);
           }
 
-          if(controlPoints.length != 4){
-            this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
-            continue;
+          if(animationType == 'bezier'){
+              if(controlPoints.length != 4){
+                this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
+                continue;
+              }
+              this.animations[animationID] = new MyBezierAnimation(animationID, speed, controlPoints);
           }
-          this.animations[animationID] = new MyBezierAnimation(animationID, speed, controlPoints);
+          else if(animationType == 'linear'){
+            if(controlPoints.length < 2){
+              this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
+              continue;
+            }
+            this.animations[animationID] = new MyLinearAnimation(animationID, speed, controlPoints);
+          }
           break;
         }
         case 'combo': {
