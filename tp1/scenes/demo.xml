@@ -150,9 +150,12 @@
 
 <!-- The animations -->
 <ANIMATIONS>
-    <ANIMATION id="anim1" type="linear" speed="2.5">
-        <controlpoint xx="-1" yy="0" zz="0"/>
-        <controlpoint xx="10" yy="11" zz="0"/>
+    <ANIMATION id="anim1" type="linear" speed="5">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="30" yy="7.5" zz="0"/>
+        <controlpoint xx="30" yy="0" zz="20"/>
+        <controlpoint xx="0" yy="7.5" zz="20"/>
+        <controlpoint xx="0" yy="0" zz="0"/>
     </ANIMATION>
 </ANIMATIONS>
 
