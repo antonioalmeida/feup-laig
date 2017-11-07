@@ -32,3 +32,9 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
 
     return firstConvexHullLength + secondConvexHullLength;
 }
+
+MyBezierAnimation.prototype.update = function(currTime) {
+}
+
+MyBezierAnimation.prototype.apply = function() {
+}

@@ -21,3 +21,9 @@ function MyLinearAnimation(id, velocity, controlPoints) {
 
 MyLinearAnimation.prototype = Object.create(MyAnimation.prototype);
 MyLinearAnimation.prototype.constructor = MyLinearAnimation;
+
+MyComboAnimation.prototype.update = function(currTime) {
+}
+
+MyComboAnimation.prototype.apply = function() {
+}
