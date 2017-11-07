@@ -1,6 +1,7 @@
 function MyBezierAnimation(id, velocity, controlPoints) {
-    MyAnimation.call(this, id, velocity);
+    MyAnimation.call(this, id);
 
+    this.velocity = velocity;
     this.P1 = vec3.fromValues(controlPoints[0]);
     this.P2 = vec3.fromValues(controlPoints[1]);
     this.P3 = vec3.fromValues(controlPoints[2]);

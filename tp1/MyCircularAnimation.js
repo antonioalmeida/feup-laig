@@ -1,9 +1,10 @@
 function MyCircularAnimation(id, velocity, remainingInfo) {
-    MyAnimation.call(this, id, velocity);
+    MyAnimation.call(this, id);
 
-    this.center_x = remainingInfo.center[0];
-    this.center_y = remainingInfo.center[1];
-    this.center_z = remainingInfo.center[2];
+    this.velocity = velocity;
+    this.center_x = remainingInfo.center_x;
+    this.center_y = remainingInfo.center_y;
+    this.center_z = remainingInfo.center_z;
     this.radius = remainingInfo.radius;
     this.angularVelocity = velocity/this.radius;
     this.initialAngle = remainingInfo.initialAngle;

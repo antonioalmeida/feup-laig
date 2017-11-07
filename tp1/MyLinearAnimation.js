@@ -1,6 +1,7 @@
 function MyLinearAnimation(id, velocity, controlPoints) {
-    MyAnimation.call(this, id, velocity);
+    MyAnimation.call(this, id);
 
+    this.velocity = velocity;
     this.controlPoints = [];
 
     //For each segment
