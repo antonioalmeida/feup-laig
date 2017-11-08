@@ -787,7 +787,7 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
         case 'circular':
           let remainingInfo = {};
           let attrs = ['speed', 'centerx', 'centery', 'centerz', 'radius', 'startang', 'rotang'];
-          for(let index = 0; index < attrs.length; ++i){
+          for(let index = 0; index < attrs.length; ++index){
             let currVar = this.reader.getFloat(children[i], attrs[index]);
             if((argsError = this.checkNullAndNaN(currVar, 'unable to parse '+attrs[index]+' value for animation '+animationID, attrs[index]+' for animation '+animationID+' is non numeric')) != null){
               this.onXMLMinorError(argsError+'; skipping');
@@ -795,17 +795,15 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
             }
             remainingInfo[attrs[index]] = parseFloat(currVar);
           }
-          this.animations[animationID] = new MyCircularAnimation(id, remainingInfo);
+          this.animations[animationID] = new MyCircularAnimation(animationID, remainingInfo);
           break;
         case 'linear':
         case 'bezier':
-          console.log("Oi "+animationType);
           let speed = this.reader.getFloat(children[i], 'speed', true);
           if((argsError = this.checkNullAndNaN(speed, 'unable to parse speed value for animation '+animationID, 'speed for animation '+animationID+' is non numeric')) != null){
             this.onXMLMinorError(argsError+'; skipping');
             continue;
           }
-          console.log("Got speed");
           let cpElement = children[i].children;
           let controlPoints = [];
           for(let cpIndex = 0; cpIndex < cpElement.length; ++cpIndex) {
@@ -828,7 +826,6 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
               this.onXMLMinorError(argsError+'; skipping');
               continue;
             }
-            console.log("Got a CP");
             controlPoints.push([x, y, z]);
           }
 
@@ -840,14 +837,11 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
               this.animations[animationID] = new MyBezierAnimation(animationID, speed, controlPoints);
           }
           else if(animationType == 'linear'){
-            console.log("If linear");
             if(controlPoints.length < 2){
               this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
               continue;
             }
-            console.log("Pre construtor");
             this.animations[animationID] = new MyLinearAnimation(animationID, speed, controlPoints);
-            console.log("Pos construtor");
           }
           break;
         case 'combo':

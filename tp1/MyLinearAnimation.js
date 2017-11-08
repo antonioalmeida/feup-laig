@@ -7,7 +7,6 @@ function MyLinearAnimation(id, velocity, controlPoints) {
     this.times = []; //Time for each segment
     this.numLines = 0; //Number of segments
     this.currentSegment = 0; //Index of current segment
-    //this.velocities = [];
 
     let totalLength = 0;
     for(let i = 0; i < controlPoints.length; ++i){
@@ -15,7 +14,6 @@ function MyLinearAnimation(id, velocity, controlPoints) {
         if(i > 0){
             let currAngle = -Math.atan2(this.controlPoints[i][2]- this.controlPoints[i-1][2], this.controlPoints[i][0] - this.controlPoints[i-1][0]); //Not sure if works
             this.rotationAngles.push(currAngle);
-            //this.velocities.push([velocity*Math.cos(currAngle), velocity*Math.sin(currAngle)]);
             let currentLength = vec3.dist(this.controlPoints[i], this.controlPoints[i-1]);
             this.times.push(currentLength / this.velocity);
             totalLength += currentLength;
@@ -36,7 +34,7 @@ MyLinearAnimation.prototype.update = function(currTime) {
         this.currentSegment = (this.currentSegment + 1) % this.numLines; //To ensure animation loop (at least for now)
         this.startTime = currTime;
     }
-    
+
     mat4.identity(this.currentMatrix);
     let currentPoint = vec3.create();
     vec3.lerp(currentPoint, this.controlPoints[this.currentSegment], this.controlPoints[this.currentSegment+1], this.delta / this.times[this.currentSegment]);

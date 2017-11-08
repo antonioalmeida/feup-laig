@@ -157,6 +157,7 @@
         <controlpoint xx="0" yy="7.5" zz="20"/>
         <controlpoint xx="0" yy="0" zz="0"/>
     </ANIMATION>
+    <ANIMATION id="anim2" type="circular" speed="5" centerx="0" centery="10" centerz="0" radius="10" startang="0" rotang="360" />
 </ANIMATIONS>
 
 
@@ -171,7 +172,7 @@
         <TEXTURE id="null" />
 
         <DESCENDANTS>
-
+            <NODEREF id="triangulo" />
             <NODEREF id="luzes" />
             <NODEREF id="piramide" />
             <NODEREF id="arvores" />
@@ -215,6 +216,20 @@
     </NODE>
 
 
+    <NODE id="triangulo">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ANIMATIONREFS>
+          <ANIMATIONREF id="anim2"/>
+      </ANIMATIONREFS>
+
+      <DESCENDANTS>
+        <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
+      </DESCENDANTS>
+
+    </NODE>
+
     <!-- The floor -->
     <NODE id="chao">
         <MATERIAL id="null" />
@@ -248,10 +263,6 @@
      <NODE id="luz1">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
-
-        <ANIMATIONREFS>
-            <ANIMATIONREF id="anim1"/>
-        </ANIMATIONREFS>
 
         <DESCENDANTS>
             <NODEREF id="luz_candeeiro" />
