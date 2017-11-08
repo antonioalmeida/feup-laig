@@ -7,6 +7,7 @@ function MyAnimation(id) {
     this.startTime = -1;
     this.delta = 0;
     this.currentMatrix = mat4.create();
+    this.animationTime = 0;
 }
 
 MyAnimation.prototype.constructor = MyAnimation;

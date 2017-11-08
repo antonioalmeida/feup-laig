@@ -852,7 +852,7 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
               this.onXMLMinorError('unrecognised node name <'+refsElement[refsIndex].nodeName+'>, expected <SPANREF>; skipping');
               continue;
             }
-            let currRef = this.reader.getString(refsElements[refsIndex], 'id');
+            let currRef = this.reader.getString(refsElement[refsIndex], 'id');
             if(currRef == null) {
               this.onXMLMinorError('could not parse animation reference for combo animation '+animationID);
               continue;
@@ -869,8 +869,6 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
       }
     }
 
-    console.log("Ended up with "+this.animations.length+" animations");
-
     var animationRefError = null;
     if((animationRefError = this.checkAnimations()) != null)
       return animationRefError;
@@ -880,13 +878,14 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
 }
 
 MySceneGraph.prototype.checkAnimations = function() {
-  for(let i = 0; i < this.animations.length; ++i) {
-    if(this.animations[i] instanceof MyComboAnimation) {
-      for(let j = 0; j < this.animations[i].animations.length; ++j) {
-        if(this.animations[this.animations[i].animations[j]] == null)
-          return "Referenced animation "+this.animations[i].animations[j]+" is not defined";
-        if(this.animations[this.animations[i].animations[j]] instanceof MyComboAnimation)
+  for(let animID in this.animations) {
+    if(this.animations[animID] instanceof MyComboAnimation) {
+      for(let j = 0; j < this.animations[animID].animations.length; ++j) {
+        if(this.animations[this.animations[animID].animations[j]] == null)
+          return "Referenced animation "+this.animations[animID].animations[j]+" is not defined";
+        if(this.animations[this.animations[animID].animations[j]] instanceof MyComboAnimation)
           return "Combo Animation cannot reference another Combo Animation";
+        this.animations[animID].animations[j] = this.animations[this.animations[animID].animations[j]];
       }
     }
   }

@@ -21,7 +21,7 @@ function MyLinearAnimation(id, velocity, controlPoints) {
         }
     }
 
-    this.animationTime = length / this.velocity; //Total animation time
+    this.animationTime = totalLength / this.velocity; //Total animation time
 };
 
 MyLinearAnimation.prototype = Object.create(MyAnimation.prototype);
@@ -31,8 +31,12 @@ MyLinearAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
     if(this.delta > this.times[this.currentSegment]) {
         this.delta = 0;
-        this.currentSegment = (this.currentSegment + 1) % this.numLines; //To ensure animation loop (at least for now)
+        ++this.currentSegment;
         this.startTime = currTime;
+        if(this.currentSegment == this.numLines) {
+            this.currentSegment = 0;
+            return;
+        }
     }
 
     mat4.identity(this.currentMatrix);

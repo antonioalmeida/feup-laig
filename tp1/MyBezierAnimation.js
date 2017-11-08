@@ -36,7 +36,8 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
 MyBezierAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
 
-    this.delta %= this.animationTime; //To ensure animation loop (for now, at least)
+    //this.delta %= this.animationTime; //To ensure animation loop (for now, at least)
+    if(this.delta >= this.animationTime) return;
     let s = this.delta/this.animationTime;
     let currentQ = this.Q(s);
     let currentDerivativeQ = this.derivativeQ(s);
