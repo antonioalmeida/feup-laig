@@ -24,5 +24,5 @@ MyCircularAnimation.prototype.update = function(currTime) {
     mat4.translate(this.currentMatrix, this.currentMatrix, this.center);
     mat4.rotateY(this.currentMatrix, this.currentMatrix, angleDelta);
     mat4.translate(this.currentMatrix, this.currentMatrix, vec3.fromValues(this.radius, 0, 0));
-    mat4.rotateY(this.currentMatrix, this.currentMatrix, Math.PI/2); //TODO: Ask teacher about this (how to check if indeed it needs to be done?)
+    mat4.rotateY(this.currentMatrix, this.currentMatrix, Math.PI/2); //Necessary as we assume the object's front is inicially faced towards +ZZ
 }

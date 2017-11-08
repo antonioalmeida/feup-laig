@@ -158,7 +158,7 @@
         <controlpoint xx="0" yy="10" zz="0"/>
     </ANIMATION>
     <ANIMATION id="anim2" type="circular" speed="7.5" centerx="0" centery="10" centerz="0" radius="10" startang="0" rotang="360" />
-    <ANIMATION id="anim3" type="bezier" speed="10">
+    <ANIMATION id="anim3" type="bezier" speed="20">
         <controlpoint xx="0" yy="0" zz="0"/>
         <controlpoint xx="30" yy="10" zz="0"/>
         <controlpoint xx="30" yy="10" zz="20"/>

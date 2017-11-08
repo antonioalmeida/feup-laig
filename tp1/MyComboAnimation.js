@@ -11,9 +11,6 @@ MyComboAnimation.prototype.constructor = MyComboAnimation;
 
 MyComboAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
-    if(this.animations[this.currAnimation].constructor == MyLinearAnimation) console.log("Currently linear");
-    else if(this.animations[this.currAnimation].constructor == MyCircularAnimation) console.log("Currently circular");
-    else if(this.animations[this.currAnimation].constructor == MyBezierAnimation) console.log("Currently bezier");
     if(this.delta > this.animations[this.currAnimation].animationTime) {
         this.delta = 0;
         this.startTime = currTime;
@@ -21,7 +18,9 @@ MyComboAnimation.prototype.update = function(currTime) {
         this.currAnimation = (this.currAnimation + 1) % this.numAnimations;
         this.animations[this.currAnimation].startTime = -1;
         this.animations[this.currAnimation].delta = 0;
-        mat4.identity(this.animations[this.currAnimation].currentMatrix);
+        //TODO: Find more elegant solution
+        if(this.animations[this.currAnimation].constructor == MyLinearAnimation)
+            this.animations[this.currAnimation].currentSegment = 0;
     }
 
     this.animations[this.currAnimation].update(currTime);

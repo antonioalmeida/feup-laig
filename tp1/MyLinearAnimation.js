@@ -32,6 +32,7 @@ MyLinearAnimation.prototype.update = function(currTime) {
     if(this.delta > this.times[this.currentSegment]) {
         this.delta = 0;
         this.currentSegment = (this.currentSegment + 1) % this.numLines;
+        console.log("Changing segment, new one is index "+this.currentSegment);
         this.startTime = currTime;
         /*if(this.currentSegment == this.numLines) {
             this.currentSegment = 0;
