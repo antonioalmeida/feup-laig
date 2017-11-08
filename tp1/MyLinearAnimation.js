@@ -31,12 +31,12 @@ MyLinearAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
     if(this.delta > this.times[this.currentSegment]) {
         this.delta = 0;
-        ++this.currentSegment;
+        this.currentSegment = (this.currentSegment + 1) % this.numLines;
         this.startTime = currTime;
-        if(this.currentSegment == this.numLines) {
+        /*if(this.currentSegment == this.numLines) {
             this.currentSegment = 0;
             return;
-        }
+        }*/
     }
 
     mat4.identity(this.currentMatrix);
