@@ -9,6 +9,7 @@ function MyBezierAnimation(id, velocity, controlPoints) {
     //Calculate initial constant values
     this.curveLength = this.approximateCurveLength();
     this.animationTime = this.curveLength/velocity;
+
 }
 
 MyBezierAnimation.prototype = Object.create(MyAnimation.prototype);
@@ -27,7 +28,7 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
     let m = this.getMeanPoint(p123, p234);
 
     let firstConvexHullLength = vec3.dist(this.P1, p12) + vec3.dist(p12, p123) + vec3.dist(p123, m);
-    let secondConvexHullLength = vec3.dist(m, p234) + vec3.dist(p234, p34) + vec.dist(p34, this.P4);
+    let secondConvexHullLength = vec3.dist(m, p234) + vec3.dist(p234, p34) + vec3.dist(p34, this.P4);
 
     return firstConvexHullLength + secondConvexHullLength;
 }
@@ -39,14 +40,16 @@ MyBezierAnimation.prototype.update = function(currTime) {
     let s = this.delta/this.animationTime;
     let currentQ = this.Q(s);
     let currentDerivativeQ = this.derivativeQ(s);
-    let currentDerivativeNorm = vec3.length(currentDerivativeQ);
-    let cos = currentQ[0] / currentDerivativeNorm;
-    let sin = currentQ[2] / currentDerivativeNorm;
-    let rotationMat = mat4.fromValues(cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, 0, 0, 0, 1);
+    //let currentDerivativeNorm = vec3.length(currentDerivativeQ);
+    let angle = -Math.atan2(currentDerivativeQ[2], currentDerivativeQ[0]);
+    //let cos = currentQ[0] / currentDerivativeNorm;
+    //let sin = currentQ[2] / currentDerivativeNorm; //May be wrong
+    //let rotationMat = [cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, 0, 0, 0, 1];
 
     mat4.identity(this.currentMatrix);
     mat4.translate(this.currentMatrix, this.currentMatrix, vec3.fromValues(this.P1[0]+currentQ[0], this.P1[1]+currentQ[1], this.P1[2]+currentQ[2]));
-    mat4.multiply(this.currentMatrix, this.currentMatrix, rotationMat);
+    //mat4.multiply(this.currentMatrix, this.currentMatrix, rotationMat);
+    mat4.rotateY(this.currentMatrix, this.currentMatrix, angle);
 }
 
 MyBezierAnimation.prototype.Q = function(s) {
