@@ -8,6 +8,7 @@ function MyAnimation(id) {
     this.delta = 0;
     this.currentMatrix = mat4.create();
     this.animationTime = 0;
+    this.active = false;
 }
 
 MyAnimation.prototype.constructor = MyAnimation;

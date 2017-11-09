@@ -101,8 +101,10 @@ XMLscene.prototype.onGraphLoaded = function()
  * Update scene (which is basically update animations)
  */
 XMLscene.prototype.update = function(currTime) {
-    for(let animationID in this.graph.animations)
-        this.graph.animations[animationID].update(currTime);
+    for(let animationID in this.graph.animations) {
+        if(this.graph.animations[animationID].active)
+            this.graph.animations[animationID].update(currTime);
+    }
 }
 
 /**

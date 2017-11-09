@@ -1047,6 +1047,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         this.onXMLMinorError("Animation reference by node "+nodeID+" is not defined; skipping animation");
                         continue;
                     }
+                    this.animations[animID].active = true; //Reference animation, so needs to be updated throughout time
                     this.nodes[nodeID].animations.push(animID);
                 }
             }

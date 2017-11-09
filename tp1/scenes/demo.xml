@@ -150,7 +150,12 @@
 
 <!-- The animations -->
 <ANIMATIONS>
-    <ANIMATION id="anim1" type="linear" speed="5">
+    <ANIMATION id="anim4" type="combo">
+        <SPANREF id="anim1" />
+        <SPANREF id="anim2" />
+        <SPANREF id="anim3" />
+    </ANIMATION>
+    <ANIMATION id="anim1" type="linear" speed="10">
         <controlpoint xx="0" yy="0" zz="0"/>
         <controlpoint xx="30" yy="7.5" zz="0"/>
         <controlpoint xx="30" yy="0" zz="20"/>
@@ -163,11 +168,6 @@
         <controlpoint xx="30" yy="10" zz="0"/>
         <controlpoint xx="30" yy="10" zz="20"/>
         <controlpoint xx="0" yy="0" zz="20"/>
-    </ANIMATION>
-    <ANIMATION id="anim4" type="combo">
-        <SPANREF id="anim1" />
-        <SPANREF id="anim2" />
-        <SPANREF id="anim3" />
     </ANIMATION>
 </ANIMATIONS>
 
@@ -183,7 +183,8 @@
         <TEXTURE id="null" />
 
         <DESCENDANTS>
-            <NODEREF id="triangulo" />
+            <NODEREF id="triangulo1" />
+            <NODEREF id="triangulo2" />
             <!--<NODEREF id="luzes" />
             <NODEREF id="piramide" />
             <NODEREF id="arvores" />
@@ -228,9 +229,25 @@
     </NODE>
 
 
-    <NODE id="triangulo">
+    <NODE id="triangulo1">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
+
+      <ANIMATIONREFS>
+          <ANIMATIONREF id="anim4"/>
+      </ANIMATIONREFS>
+
+      <DESCENDANTS>
+        <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
+      </DESCENDANTS>
+
+    </NODE>
+
+    <NODE id="triangulo2">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="20" />
 
       <ANIMATIONREFS>
           <ANIMATIONREF id="anim4"/>

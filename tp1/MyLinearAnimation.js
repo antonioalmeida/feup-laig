@@ -29,10 +29,10 @@ MyLinearAnimation.prototype.constructor = MyLinearAnimation;
 
 MyLinearAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
+    console.log("Updating linear");
     if(this.delta > this.times[this.currentSegment]) {
         this.delta = 0;
         this.currentSegment = (this.currentSegment + 1) % this.numLines;
-        console.log("Changing segment, new one is index "+this.currentSegment);
         this.startTime = currTime;
         /*if(this.currentSegment == this.numLines) {
             this.currentSegment = 0;
