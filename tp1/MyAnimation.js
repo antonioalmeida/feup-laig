@@ -19,3 +19,13 @@ MyAnimation.prototype.update = function(currTime) {
     else
         this.delta = (currTime - this.startTime)/1000;
 }
+
+MyAnimation.prototype.reset = function() {
+    this.active = true;
+    this.delta = 0;
+    this.startTime = -1;
+}
+
+MyAnimation.prototype.markActive = function() {
+    this.active = true;
+}

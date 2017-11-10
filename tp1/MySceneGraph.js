@@ -27,6 +27,8 @@ function MySceneGraph(filename, scene) {
 
     this.animations = [];
 
+    this.selectableNodes = [];
+
     // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;
 
@@ -924,6 +926,15 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             // Creates node.
             this.nodes[nodeID] = new MyGraphNode(this, nodeID);
 
+            // Retrieve selectable attribute, if it exists
+            var selectable = this.reader.getString(children[i], 'selectable', false);
+            if (selectable == "true") {
+                console.log("\tnode is selectable");
+                this.selectableNodes.push(nodeID);
+            }
+            else
+                console.log("\tcould not parse selectable value or not present; node isn't selectable");
+
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
             var specsNames = [];
@@ -1047,8 +1058,10 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         this.onXMLMinorError("Animation reference by node "+nodeID+" is not defined; skipping animation");
                         continue;
                     }
-                    this.animations[animID].active = true; //Reference animation, so needs to be updated throughout time
+                    this.animations[animID].markActive(); //Reference animation, so needs to be updated throughout time
                     this.nodes[nodeID].animations.push(animID);
+                    if(this.nodes[nodeID].currentAnimation == -1)
+                        ++(this.nodes[nodeID].currentAnimation);
                 }
             }
 

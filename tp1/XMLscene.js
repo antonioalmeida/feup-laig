@@ -10,6 +10,8 @@ function XMLscene(interface) {
     this.interface = interface;
 
     this.lightValues = {};
+
+    this.selectableValues = {};
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -93,6 +95,9 @@ XMLscene.prototype.onGraphLoaded = function()
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
 
+    // Adds selectable nodes group
+    this.interface.addSelectableGroup(this.graph.selectableNodes);
+
     //Set update period to 50ms
     this.setUpdatePeriod(50);
 }
@@ -105,6 +110,9 @@ XMLscene.prototype.update = function(currTime) {
         if(this.graph.animations[animationID].active)
             this.graph.animations[animationID].update(currTime);
     }
+
+    let factor = Math.sin(currTime);
+    //Update shaders' timeFactor uniform accordingly
 }
 
 /**
@@ -128,6 +136,12 @@ XMLscene.prototype.display = function() {
 
     if (this.graph.loadedOk)
     {
+        /*
+        //Update this.selected of selectable nodes here so when their display() is called the shader is updated there?
+        for(let key in this.selectableValues)
+            console.log((this.selectableValues[key] ? "Selected" : "Not-selected"));
+        */
+
         // Applies initial transformations.
         this.multMatrix(this.graph.initialTransforms);
 

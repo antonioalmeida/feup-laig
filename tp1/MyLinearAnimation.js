@@ -29,15 +29,14 @@ MyLinearAnimation.prototype.constructor = MyLinearAnimation;
 
 MyLinearAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
-    console.log("Updating linear");
     if(this.delta > this.times[this.currentSegment]) {
-        this.delta = 0;
-        this.currentSegment = (this.currentSegment + 1) % this.numLines;
-        this.startTime = currTime;
-        /*if(this.currentSegment == this.numLines) {
-            this.currentSegment = 0;
+        //this.currentSegment = (this.currentSegment + 1) % this.numLines;
+        if(++this.currentSegment == this.numLines) {
+            this.active = false;
             return;
-        }*/
+        }
+        this.delta = 0;
+        this.startTime = currTime;
     }
 
     mat4.identity(this.currentMatrix);
@@ -45,4 +44,9 @@ MyLinearAnimation.prototype.update = function(currTime) {
     vec3.lerp(currentPoint, this.controlPoints[this.currentSegment], this.controlPoints[this.currentSegment+1], this.delta / this.times[this.currentSegment]);
     mat4.translate(this.currentMatrix, this.currentMatrix, currentPoint);
     mat4.rotateY(this.currentMatrix, this.currentMatrix, this.rotationAngles[this.currentSegment]);
+}
+
+MyLinearAnimation.prototype.reset = function() {
+    MyAnimation.prototype.reset.call(this);
+    this.currentSegment = 0;
 }

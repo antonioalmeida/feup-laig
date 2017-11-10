@@ -234,7 +234,10 @@
       <TEXTURE id="null" />
 
       <ANIMATIONREFS>
-          <ANIMATIONREF id="anim4"/>
+          <ANIMATIONREF id="anim1" />
+          <ANIMATIONREF id="anim2" />
+          <ANIMATIONREF id="anim3" />
+          <ANIMATIONREF id="anim4" />
       </ANIMATIONREFS>
 
       <DESCENDANTS>
@@ -249,10 +252,6 @@
 
       <TRANSLATION x="0" y="0" z="20" />
 
-      <ANIMATIONREFS>
-          <ANIMATIONREF id="anim4"/>
-      </ANIMATIONREFS>
-
       <DESCENDANTS>
         <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
       </DESCENDANTS>
@@ -260,7 +259,7 @@
     </NODE>
 
     <!-- The floor -->
-    <NODE id="chao">
+    <NODE id="chao" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="rocks" />
 
@@ -573,7 +572,7 @@
     </NODE>
 
     <!-- Another cube face -->
-    <NODE id="faceCubo5">
+    <NODE id="faceCubo5" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -588,7 +587,7 @@
     </NODE>
 
     <!-- Another cube face -->
-    <NODE id="faceCubo6">
+    <NODE id="faceCubo6" selectable="false">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 

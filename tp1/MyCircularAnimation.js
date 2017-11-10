@@ -16,9 +16,11 @@ MyCircularAnimation.prototype.constructor = MyCircularAnimation;
 
 MyCircularAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
-    console.log("Updating circular");
-    this.delta %= this.animationTime; //To ensure animation loop, at least for now
-    //if(this.delta >= this.animationTime) return;
+    //this.delta %= this.animationTime; //To ensure animation loop, at least for now
+    if(this.delta > this.animationTime) {
+        this.active = false;
+        return;
+    }
 
     let angleDelta = this.initialAngle + this.angularVelocity*this.delta;
     mat4.identity(this.currentMatrix);

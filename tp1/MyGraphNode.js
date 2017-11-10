@@ -27,6 +27,12 @@ function MyGraphNode(graph, nodeID) {
     // The node's animations
     this.animations = [];
 
+    // The active animation
+    this.currentAnimation = -1;
+
+    // Is this node selected? (updated in scene.display according to GUI input)
+    this.selected = false;
+
     this.transformMatrix = mat4.create();
     mat4.identity(this.transformMatrix);
 }
@@ -49,10 +55,21 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
  * Displays this node and its leaves and children recursively
  */
 MyGraphNode.prototype.display = function(textureID, materialID) {
+        //Change shader here according to this.selected?
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
-        if(this.animations.length > 0)
-            this.graph.scene.multMatrix(this.graph.animations[this.animations[0]].currentMatrix);
+        if(this.currentAnimation != -1) {
+            if(!this.graph.animations[this.animations[this.currentAnimation]].active) {
+                //Change this to another if to test if length has been reached in case animation loop is not desired
+                if(++this.currentAnimation == this.animations.length)
+                    this.currentAnimation = -1;
+                else
+                    //this.currentAnimation = (this.currentAnimation + 1) % this.animations.length;
+                    this.graph.animations[this.animations[this.currentAnimation]].reset();
+            }
+        }
+        if(this.currentAnimation != -1) //Cannot join with previous if because value can be updated to -1 inside it but this wouldn't detect it
+            this.graph.scene.multMatrix(this.graph.animations[this.animations[this.currentAnimation]].currentMatrix);
 
         var materialToPassOn = materialID;
         var textureToPassOn = textureID;
