@@ -185,13 +185,12 @@
         <DESCENDANTS>
             <NODEREF id="triangulo1" />
             <NODEREF id="triangulo2" />
-            <!--<NODEREF id="luzes" />
+            <NODEREF id="luzes" />
             <NODEREF id="piramide" />
             <NODEREF id="arvores" />
             <NODEREF id="chao" />
             <NODEREF id="bancos" />
             <NODEREF id="patchDemo" />
-        -->
         </DESCENDANTS>
 
     </NODE>
@@ -246,7 +245,7 @@
 
     </NODE>
 
-    <NODE id="triangulo2">
+    <NODE id="triangulo2" selectable="true">
       <MATERIAL id="null" />
       <TEXTURE id="null" />
 
@@ -350,7 +349,7 @@
     </NODE>
 
     <!-- Light bulb -->
-    <NODE id="luz_esfera">
+    <NODE id="luz_esfera" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 

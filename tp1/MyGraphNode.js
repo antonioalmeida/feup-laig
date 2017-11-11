@@ -55,7 +55,10 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
  * Displays this node and its leaves and children recursively
  */
 MyGraphNode.prototype.display = function(textureID, materialID) {
-        //Change shader here according to this.selected?
+        if(this.selected)
+            this.graph.scene.setSelectableShader();
+        else
+            this.graph.scene.setDefaultShader();
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
         if(this.currentAnimation != -1) {

@@ -33,6 +33,8 @@ XMLscene.prototype.init = function(application) {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     this.axis = new CGFaxis(this);
+
+    this.selectedShader = new CGFshader(this.gl, "shaders/myVertexShader.glsl", "shaders/myFragmentShader.glsl");
 }
 
 /**
@@ -99,7 +101,7 @@ XMLscene.prototype.onGraphLoaded = function()
     this.interface.addSelectableGroup(this.graph.selectableNodes);
 
     //Set update period to 50ms
-    this.setUpdatePeriod(50);
+    this.setUpdatePeriod(20);
 }
 
 /**
@@ -112,7 +114,21 @@ XMLscene.prototype.update = function(currTime) {
     }
 
     let factor = Math.sin(currTime);
-    //Update shaders' timeFactor uniform accordingly
+    this.selectedShader.setUniformsValues({timeFactor: factor});
+}
+
+/**
+ * Sets the selectable shader as the active shader
+ */
+XMLscene.prototype.setSelectableShader = function() {
+    this.setActiveShader(this.selectedShader);
+}
+
+/**
+ * Sets the default shader as the active shader
+ */
+XMLscene.prototype.setDefaultShader = function() {
+    this.setActiveShader(this.defaultShader);
 }
 
 /**
@@ -136,11 +152,9 @@ XMLscene.prototype.display = function() {
 
     if (this.graph.loadedOk)
     {
-        /*
         //Update this.selected of selectable nodes here so when their display() is called the shader is updated there?
         for(let key in this.selectableValues)
-            console.log((this.selectableValues[key] ? "Selected" : "Not-selected"));
-        */
+            this.graph.nodes[key].selected = this.selectableValues[key];
 
         // Applies initial transformations.
         this.multMatrix(this.graph.initialTransforms);
