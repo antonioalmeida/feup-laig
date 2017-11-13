@@ -287,7 +287,7 @@
     </NODE>
 
     <!-- The first light -->
-     <NODE id="luz1">
+     <NODE id="luz1" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 

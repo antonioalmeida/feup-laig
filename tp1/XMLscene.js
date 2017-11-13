@@ -152,7 +152,6 @@ XMLscene.prototype.display = function() {
 
     if (this.graph.loadedOk)
     {
-        console.log("Current value: "+this.selectedNode);
         //Reset selected status
         for(let i = 0; i < this.graph.selectableNodes.length; ++i)
             this.graph.nodes[this.graph.selectableNodes[i]].selected = false;

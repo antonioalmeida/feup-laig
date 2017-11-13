@@ -123,6 +123,9 @@ MyGraphNode.prototype.displayLeaves = function(texture) {
  */
 MyGraphNode.prototype.displayChildren = function(texture, material) {
     for(let childrenID in this.children) {
+        let previous = this.graph.nodes[this.children[childrenID]].selected;
+        if(this.selected) this.graph.nodes[this.children[childrenID]].selected = true;
         this.graph.nodes[this.children[childrenID]].display(texture, material);
+        this.graph.nodes[this.children[childrenID]].selected = previous;
     }
 }
