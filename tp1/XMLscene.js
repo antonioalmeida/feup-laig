@@ -113,7 +113,7 @@ XMLscene.prototype.update = function(currTime) {
             this.graph.animations[animationID].update(currTime);
     }
 
-    let factor = Math.sin(currTime);
+    let factor = Math.abs(Math.sin(0.005*currTime));
     this.selectedShader.setUniformsValues({timeFactor: factor});
 }
 
