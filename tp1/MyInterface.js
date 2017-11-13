@@ -58,3 +58,16 @@ MyInterface.prototype.addSelectableListBox = function(nodes) {
 
     this.gui.add(this.scene, 'selectedNode', nodesObj).name('Selected Node');
 }
+
+/**
+ * Adds selection color parametrization sliders
+ */
+MyInterface.prototype.addSelectionColorParametrization = function() {
+    var group = this.gui.addFolder("Selection Color");
+    group.open();
+
+    var obj = this;
+    group.add(this.scene, 'selectionColorR', 0, 1).name('R').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorG', 0, 1).name('G').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorB', 0, 1).name('B').onChange(function(v){obj.scene.updateSelectionColor();});
+}

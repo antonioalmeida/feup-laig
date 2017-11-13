@@ -12,6 +12,10 @@ function XMLscene(interface) {
     this.lightValues = {};
 
     this.selectedNode = null;
+
+    this.selectionColorR = 1.0;
+    this.selectionColorG = 0.0;
+    this.selectionColorB = 0.0;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -35,6 +39,7 @@ XMLscene.prototype.init = function(application) {
     this.axis = new CGFaxis(this);
 
     this.selectedShader = new CGFshader(this.gl, "shaders/myVertexShader.glsl", "shaders/myFragmentShader.glsl");
+    this.updateSelectionColor();
 }
 
 /**
@@ -100,6 +105,9 @@ XMLscene.prototype.onGraphLoaded = function()
     // Adds selectable nodes
     this.interface.addSelectableListBox(this.graph.selectableNodes);
 
+    // Adds selection color parametrization
+    this.interface.addSelectionColorParametrization();
+
     //Set update period to 50ms
     this.setUpdatePeriod(50);
 }
@@ -129,6 +137,13 @@ XMLscene.prototype.setSelectableShader = function() {
  */
 XMLscene.prototype.setDefaultShader = function() {
     this.setActiveShader(this.defaultShader);
+}
+
+/**
+ * Updates the selection color components in the selected shader
+ */
+XMLscene.prototype.updateSelectionColor = function() {
+    this.selectedShader.setUniformsValues({r:this.selectionColorR, g:this.selectionColorG, b:this.selectionColorB});
 }
 
 /**
