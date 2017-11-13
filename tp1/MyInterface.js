@@ -49,14 +49,12 @@ MyInterface.prototype.addLightsGroup = function(lights) {
 }
 
 /**
- * Adds a folder that will hold the IDs of the selectable nodes
+ * Adds a list that will hold the IDs of the selectable nodes
  */
-MyInterface.prototype.addSelectableGroup = function(nodes) {
-    var group = this.gui.addFolder("Selectable Nodes");
-    group.open();
+MyInterface.prototype.addSelectableListBox = function(nodes) {
+    let nodesObj = {'none': null};
+    for(let i = 0; i < nodes.length; ++i)
+        nodesObj[nodes[i]] = nodes[i];
 
-    for(let id in nodes){
-        this.scene.selectableValues[nodes[id]] = false;
-        group.add(this.scene.selectableValues, nodes[id]);
-    }
+    this.gui.add(this.scene, 'selectedNode', nodesObj).name('Selected Node');
 }
