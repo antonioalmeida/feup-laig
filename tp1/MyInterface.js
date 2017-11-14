@@ -60,14 +60,15 @@ MyInterface.prototype.addSelectableListBox = function(nodes) {
 }
 
 /**
- * Adds selection color parametrization sliders
+ * Adds selection color parametrization
  */
-MyInterface.prototype.addSelectionColorParametrization = function() {
-    var group = this.gui.addFolder("Selection Color");
+MyInterface.prototype.addSelectionParametrization = function() {
+    var group = this.gui.addFolder("Selection Properties");
     group.open();
 
     var obj = this;
-    group.add(this.scene, 'selectionColorR', 0, 1).name('R').onChange(function(v){obj.scene.updateSelectionColor();});
-    group.add(this.scene, 'selectionColorG', 0, 1).name('G').onChange(function(v){obj.scene.updateSelectionColor();});
-    group.add(this.scene, 'selectionColorB', 0, 1).name('B').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorR', 0, 1).name('Color R').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorG', 0, 1).name('Color G').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorB', 0, 1).name('Color B').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionSize', 0.1, 2).name('Size offset').onChange(function(v){obj.scene.updateSelectionSize();});
 }

@@ -16,6 +16,8 @@ function XMLscene(interface) {
     this.selectionColorR = 1.0;
     this.selectionColorG = 0.0;
     this.selectionColorB = 0.0;
+
+    this.selectionSize = 0.1;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -40,6 +42,7 @@ XMLscene.prototype.init = function(application) {
 
     this.selectedShader = new CGFshader(this.gl, "shaders/myVertexShader.glsl", "shaders/myFragmentShader.glsl");
     this.updateSelectionColor();
+    this.updateSelectionSize();
 }
 
 /**
@@ -105,8 +108,8 @@ XMLscene.prototype.onGraphLoaded = function()
     // Adds selectable nodes
     this.interface.addSelectableListBox(this.graph.selectableNodes);
 
-    // Adds selection color parametrization
-    this.interface.addSelectionColorParametrization();
+    // Adds selection parametrization
+    this.interface.addSelectionParametrization();
 
     //Set update period to 50ms
     this.setUpdatePeriod(50);
@@ -144,6 +147,14 @@ XMLscene.prototype.setDefaultShader = function() {
  */
 XMLscene.prototype.updateSelectionColor = function() {
     this.selectedShader.setUniformsValues({r:this.selectionColorR, g:this.selectionColorG, b:this.selectionColorB});
+}
+
+/**
+ * Updates the selection size offset component in the selected shader
+ */
+XMLscene.prototype.updateSelectionSize = function() {
+    console.log("entrei");
+    this.selectedShader.setUniformsValues({sizeFactor: this.selectionSize});
 }
 
 /**
