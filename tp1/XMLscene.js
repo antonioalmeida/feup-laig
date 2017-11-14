@@ -11,7 +11,7 @@ function XMLscene(interface) {
 
     this.lightValues = {};
 
-    this.selectedNode = null;
+    this.selectedNode = 'No selection';
 
     this.selectionColorR = 1.0;
     this.selectionColorG = 0.0;
@@ -153,7 +153,6 @@ XMLscene.prototype.updateSelectionColor = function() {
  * Updates the selection size offset component in the selected shader
  */
 XMLscene.prototype.updateSelectionSize = function() {
-    console.log("entrei");
     this.selectedShader.setUniformsValues({sizeFactor: this.selectionSize});
 }
 
@@ -183,7 +182,7 @@ XMLscene.prototype.display = function() {
             this.graph.nodes[this.graph.selectableNodes[i]].selected = false;
 
         //Active currently selected node
-        if(this.selectedNode != null && this.selectedNode != 'null')
+        if(this.selectedNode != 'No selection')
             this.graph.nodes[this.selectedNode].selected = true;
 
         // Applies initial transformations.

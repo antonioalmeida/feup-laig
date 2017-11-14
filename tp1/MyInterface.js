@@ -52,11 +52,11 @@ MyInterface.prototype.addLightsGroup = function(lights) {
  * Adds a list that will hold the IDs of the selectable nodes
  */
 MyInterface.prototype.addSelectableListBox = function(nodes) {
-    let nodesObj = {'none': null};
+    let nodesArr = ['No selection'];
     for(let i = 0; i < nodes.length; ++i)
-        nodesObj[nodes[i]] = nodes[i];
+        nodesArr.push(nodes[i]);
 
-    this.gui.add(this.scene, 'selectedNode', nodesObj).name('Selected Node');
+    this.gui.add(this.scene, 'selectedNode', nodesArr).name('Selected Node');
 }
 
 /**
