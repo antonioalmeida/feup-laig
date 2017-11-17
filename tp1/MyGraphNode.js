@@ -34,7 +34,8 @@ function MyGraphNode(graph, nodeID) {
     this.selected = false;
 
     this.transformMatrix = mat4.create();
-    mat4.identity(this.transformMatrix);
+
+    this.animationMatrix = mat4.create();
 }
 
 /**
@@ -59,20 +60,11 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
             this.graph.scene.setSelectableShader();
         else
             this.graph.scene.setDefaultShader();
+
+        this.updateAnimationMatrix();
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
-        if(this.currentAnimation != -1) {
-            if(!this.graph.animations[this.animations[this.currentAnimation]].active) {
-                //Change this to another if to test if length has been reached in case animation loop is not desired
-                if(++this.currentAnimation == this.animations.length)
-                    this.currentAnimation = -1;
-                else
-                    //this.currentAnimation = (this.currentAnimation + 1) % this.animations.length;
-                    this.graph.animations[this.animations[this.currentAnimation]].reset();
-            }
-        }
-        if(this.currentAnimation != -1) //Cannot join with previous if because value can be updated to -1 inside it but this wouldn't detect it
-            this.graph.scene.multMatrix(this.graph.animations[this.animations[this.currentAnimation]].currentMatrix);
+        this.graph.scene.multMatrix(this.animationMatrix);
 
         var materialToPassOn = materialID;
         var textureToPassOn = textureID;
@@ -102,6 +94,25 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
         this.displayChildren(textureToPassOn, materialToPassOn);
 
     this.graph.scene.popMatrix();
+}
+
+/**
+ * Updates the animationMatrix to be applied to the node (and descendants)
+ */
+MyGraphNode.prototype.updateAnimationMatrix = function() {
+    if(this.currentAnimation != -1) {
+        if(!this.graph.animations[this.animations[this.currentAnimation]].active) {
+            //Change this to another if to test if length has been reached in case animation loop is not desired
+            if(++this.currentAnimation == this.animations.length) {
+                this.currentAnimation = -1;
+                mat4.identity(this.animationMatrix);
+            }
+            else
+                //this.currentAnimation = (this.currentAnimation + 1) % this.animations.length;
+                this.graph.animations[this.animations[this.currentAnimation]].reset();
+        }
+        this.animationMatrix = this.graph.animations[this.animations[this.currentAnimation]].currentMatrix;
+    }
 }
 
 /**
