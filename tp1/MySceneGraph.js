@@ -889,6 +889,7 @@ MySceneGraph.prototype.checkAnimations = function() {
           return "Combo Animation cannot reference another Combo Animation";
         this.animations[animID].animations[j] = this.animations[this.animations[animID].animations[j]];
       }
+      this.animations[animID].updateAnimationTime();
     }
   }
   return null;

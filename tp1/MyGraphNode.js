@@ -103,7 +103,6 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
 MyGraphNode.prototype.updateAnimationMatrix = function() {
     this.updateAnimationIndex();
     if(this.currentAnimation != -1) {
-        console.log("Current animation is "+this.graph.animations[this.animations[this.currentAnimation]].id);
         this.animationMatrix = this.graph.animations[this.animations[this.currentAnimation]].matrixAfter(this.currentAnimationDelta);
     }
 }
@@ -118,7 +117,7 @@ MyGraphNode.prototype.updateAnimationIndex = function() {
         let elapsed = this.graph.scene.delta;
         for(let i = 0; i < this.animations.length; ++i){
             end += this.graph.animations[this.animations[i]].animationTime;
-            if(elapsed >= start && elapsed < end){
+            if(elapsed >= start && elapsed < end){ //TODO: Check if only elapsed < end + delta subtraction mechanism works
                 this.currentAnimation = i;
                 break;
             }

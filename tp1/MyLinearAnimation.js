@@ -42,11 +42,9 @@ MyLinearAnimation.prototype.getSegment = function(delta) {
 }
 
 MyLinearAnimation.prototype.matrixAfter = function(delta) {
-    console.log("delta: "+delta);
     let data = this.getSegment(delta);
     let segment = data[0];
     let segmDelta = data[1];
-    console.log("Current segment | delta: "+segment+" | "+segmDelta);
     let currentPoint = vec3.create();
     let result = mat4.create();
     if(segment != -1) {

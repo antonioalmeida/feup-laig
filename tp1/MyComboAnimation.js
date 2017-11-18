@@ -4,33 +4,38 @@ function MyComboAnimation(id, animations) {
     this.animations = animations;
     this.numAnimations = this.animations.length;
     this.currAnimation = 0;
-    for(let i = 0; i < this.animations.length; ++i)
-        this.animationTime += this.animations[i].animationTime;
 }
 
 MyComboAnimation.prototype = Object.create(MyAnimation.prototype);
 MyComboAnimation.prototype.constructor = MyComboAnimation;
 
-MyComboAnimation.prototype.update = function(currTime) {
-    MyAnimation.prototype.update.call(this, currTime);
-    if(!this.animations[this.currAnimation].active) {
-        if(++this.currAnimation == this.numAnimations) {
-            this.active = false;
-            return;
+MyComboAnimation.prototype.updateAnimationTime = function() {
+    for(let i = 0; i < this.animations.length; ++i)
+        this.animationTime += this.animations[i].animationTime;
+    console.log("Combo: animation time is "+this.animationTime);
+}
+
+/**
+ * Updates this.currAnimation and returns time elapsed since start of animation referenced by it
+ */
+MyComboAnimation.prototype.updateAnimationIndex = function(delta) {
+    let start = 0;
+    let end = 0;
+    for(let i = 0; i < this.animations.length; ++i){
+        end += this.animations[i].animationTime;
+        if(delta >= start && delta < end){
+            this.currAnimation = i;
+            break;
         }
-        this.animations[this.currAnimation].reset();
+        start = end;
     }
 
-    this.currentMatrix = this.animations[this.currAnimation].currentMatrix;
+    return delta - start;
 }
 
-MyComboAnimation.prototype.reset = function() {
-    MyAnimation.prototype.reset.call(this);
-    this.currAnimation = 0;
-    this.animations[this.currAnimation].reset();
-}
-
-MyComboAnimation.prototype.markActive = function() {
-    MyAnimation.prototype.markActive.call(this);
-    this.animations[this.currAnimation].reset();
+MyComboAnimation.prototype.matrixAfter = function(delta) {
+    //console.log("Combo: delta is "+delta);
+    let animationDelta = this.updateAnimationIndex(delta);
+    //console.log("Combo: animation delta is "+animationDelta+", index is "+this.currAnimation);
+    return this.animations[this.currAnimation].matrixAfter(animationDelta);
 }
