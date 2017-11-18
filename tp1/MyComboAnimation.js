@@ -4,6 +4,8 @@ function MyComboAnimation(id, animations) {
     this.animations = animations;
     this.numAnimations = this.animations.length;
     this.currAnimation = 0;
+    for(let i = 0; i < this.animations.length; ++i)
+        this.animationTime += this.animations[i].animationTime;
 }
 
 MyComboAnimation.prototype = Object.create(MyAnimation.prototype);
@@ -11,15 +13,7 @@ MyComboAnimation.prototype.constructor = MyComboAnimation;
 
 MyComboAnimation.prototype.update = function(currTime) {
     MyAnimation.prototype.update.call(this, currTime);
-    //this.animations[this.currAnimation].active = true; //Just to make sure
-    //if(this.delta > this.animations[this.currAnimation].animationTime) {
     if(!this.animations[this.currAnimation].active) {
-        //this.animations[this.currAnimation].active = false;
-        //this.delta = 0;
-        //this.startTime = currTime;
-
-        //To ensure animation loop (at least for now)
-        //this.currAnimation = (this.currAnimation + 1) % this.numAnimations;
         if(++this.currAnimation == this.numAnimations) {
             this.active = false;
             return;

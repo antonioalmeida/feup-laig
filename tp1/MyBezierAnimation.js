@@ -1,14 +1,12 @@
 function MyBezierAnimation(id, velocity, controlPoints) {
     MyAnimation.call(this, id);
-    this.velocity = velocity;
     this.P1 = vec3.fromValues(controlPoints[0][0], controlPoints[0][1], controlPoints[0][2]);
     this.P2 = vec3.fromValues(controlPoints[1][0], controlPoints[1][1], controlPoints[1][2]);
     this.P3 = vec3.fromValues(controlPoints[2][0], controlPoints[2][1], controlPoints[2][2]);
     this.P4 = vec3.fromValues(controlPoints[3][0], controlPoints[3][1], controlPoints[3][2]);
 
-    //Calculate initial constant values
-    this.curveLength = this.approximateCurveLength();
-    this.animationTime = this.curveLength/velocity;
+    let curveLength = this.approximateCurveLength();
+    this.animationTime = curveLength/velocity;
 
 }
 
@@ -33,14 +31,8 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
     return firstConvexHullLength + secondConvexHullLength;
 }
 
-MyBezierAnimation.prototype.update = function(currTime) {
-    MyAnimation.prototype.update.call(this, currTime);
-    //this.delta %= this.animationTime; //To ensure animation loop (for now, at least)
-    if(this.delta > this.animationTime) {
-        this.active = false;
-        return;
-    }
-    let s = this.delta/this.animationTime;
+MyBezierAnimation.prototype.matrixAfter = function(delta) {
+    let s = delta/this.animationTime;
     let currentQ = this.Q(s);
     let currentDerivativeQ = this.derivativeQ(s);
     //let currentDerivativeNorm = vec3.length(currentDerivativeQ);
@@ -49,10 +41,12 @@ MyBezierAnimation.prototype.update = function(currTime) {
     //let sin = currentQ[2] / currentDerivativeNorm; //May be wrong
     //let rotationMat = [cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, 0, 0, 0, 1];
 
-    mat4.identity(this.currentMatrix);
-    mat4.translate(this.currentMatrix, this.currentMatrix, vec3.fromValues(this.P1[0]+currentQ[0], this.P1[1]+currentQ[1], this.P1[2]+currentQ[2]));
-    //mat4.multiply(this.currentMatrix, this.currentMatrix, rotationMat);
-    mat4.rotateY(this.currentMatrix, this.currentMatrix, angle);
+    let result = mat4.create();
+    mat4.translate(result, result, vec3.fromValues(this.P1[0]+currentQ[0], this.P1[1]+currentQ[1], this.P1[2]+currentQ[2]));
+    //mat4.multiply(result, result, rotationMat);
+    mat4.rotateY(result, result, angle);
+
+    return result;
 }
 
 MyBezierAnimation.prototype.Q = function(s) {

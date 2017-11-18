@@ -11,6 +11,9 @@ function XMLscene(interface) {
 
     this.lightValues = {};
 
+    this.startTime = -1;
+    this.delta = 0;
+
     this.selectedNode = 'No selection';
 
     this.selectionColorR = 1.0;
@@ -119,10 +122,17 @@ XMLscene.prototype.onGraphLoaded = function()
  * Update scene (which is basically update animations)
  */
 XMLscene.prototype.update = function(currTime) {
+    /*
     for(let animationID in this.graph.animations) {
         if(this.graph.animations[animationID].active)
             this.graph.animations[animationID].update(currTime);
     }
+    */
+
+    if(this.startTime == -1)
+        this.startTime = currTime;
+    else
+        this.delta = (currTime - this.startTime) / 1000;
 
     let factor = Math.abs(Math.sin(0.005*currTime));
     this.selectedShader.setUniformsValues({timeFactor: factor});

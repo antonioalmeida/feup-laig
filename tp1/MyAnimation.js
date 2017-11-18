@@ -4,28 +4,7 @@ function MyAnimation(id) {
     }
 
     this.id = id;
-    this.startTime = -1;
-    this.delta = 0;
-    this.currentMatrix = mat4.create();
     this.animationTime = 0;
-    this.active = false;
 }
 
 MyAnimation.prototype.constructor = MyAnimation;
-
-MyAnimation.prototype.update = function(currTime) {
-    if(this.startTime == -1)
-        this.startTime = currTime;
-    else
-        this.delta = (currTime - this.startTime)/1000;
-}
-
-MyAnimation.prototype.reset = function() {
-    this.active = true;
-    this.delta = 0;
-    this.startTime = -1;
-}
-
-MyAnimation.prototype.markActive = function() {
-    this.active = true;
-}

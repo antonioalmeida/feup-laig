@@ -1,12 +1,10 @@
 function MyLinearAnimation(id, velocity, controlPoints) {
     MyAnimation.call(this, id);
-    this.velocity = velocity;
-    this.controlPoints = [];
 
+    this.controlPoints = [];
     this.rotationAngles = []; //Orientation for each segment
     this.times = []; //Time for each segment
     this.numLines = 0; //Number of segments
-    this.currentSegment = 0; //Index of current segment
 
     let totalLength = 0;
     for(let i = 0; i < controlPoints.length; ++i){
@@ -15,38 +13,47 @@ function MyLinearAnimation(id, velocity, controlPoints) {
             let currAngle = -Math.atan2(this.controlPoints[i][2]- this.controlPoints[i-1][2], this.controlPoints[i][0] - this.controlPoints[i-1][0]); //Not sure if works
             this.rotationAngles.push(currAngle);
             let currentLength = vec3.dist(this.controlPoints[i], this.controlPoints[i-1]);
-            this.times.push(currentLength / this.velocity);
+            this.times.push(currentLength / velocity);
             totalLength += currentLength;
             ++this.numLines;
         }
     }
 
-    this.animationTime = totalLength / this.velocity; //Total animation time
+    this.animationTime = totalLength / velocity;
 };
 
 MyLinearAnimation.prototype = Object.create(MyAnimation.prototype);
 MyLinearAnimation.prototype.constructor = MyLinearAnimation;
 
-MyLinearAnimation.prototype.update = function(currTime) {
-    MyAnimation.prototype.update.call(this, currTime);
-    if(this.delta > this.times[this.currentSegment]) {
-        //this.currentSegment = (this.currentSegment + 1) % this.numLines;
-        if(++this.currentSegment == this.numLines) {
-            this.active = false;
-            return;
+MyLinearAnimation.prototype.getSegment = function(delta) {
+    let segment = -1;
+    let deltaCurrSegm = 0;
+    for(let i = 0; i < this.numLines; ++i) {
+        if(delta < this.times[i]) {
+            segment = i;
+            deltaCurrSegm = delta;
+            break;
         }
-        this.delta = 0;
-        this.startTime = currTime;
+
+        delta -= this.times[i];
     }
 
-    mat4.identity(this.currentMatrix);
-    let currentPoint = vec3.create();
-    vec3.lerp(currentPoint, this.controlPoints[this.currentSegment], this.controlPoints[this.currentSegment+1], this.delta / this.times[this.currentSegment]);
-    mat4.translate(this.currentMatrix, this.currentMatrix, currentPoint);
-    mat4.rotateY(this.currentMatrix, this.currentMatrix, this.rotationAngles[this.currentSegment]);
+    return [segment, deltaCurrSegm];
 }
 
-MyLinearAnimation.prototype.reset = function() {
-    MyAnimation.prototype.reset.call(this);
-    this.currentSegment = 0;
+MyLinearAnimation.prototype.matrixAfter = function(delta) {
+    console.log("delta: "+delta);
+    let data = this.getSegment(delta);
+    let segment = data[0];
+    let segmDelta = data[1];
+    console.log("Current segment | delta: "+segment+" | "+segmDelta);
+    let currentPoint = vec3.create();
+    let result = mat4.create();
+    if(segment != -1) {
+        vec3.lerp(currentPoint, this.controlPoints[segment], this.controlPoints[segment+1], segmDelta / this.times[segment]);
+        mat4.translate(result, result, currentPoint);
+        mat4.rotateY(result, result, this.rotationAngles[segment]);
+    }
+
+    return result;
 }

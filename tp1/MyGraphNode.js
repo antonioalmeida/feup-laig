@@ -27,15 +27,16 @@ function MyGraphNode(graph, nodeID) {
     // The node's animations
     this.animations = [];
 
-    // The active animation
+    // Animation stuff
     this.currentAnimation = -1;
+    this.currentAnimationDelta = 0;
+    this.animationMatrix = mat4.create();
 
     // Is this node selected? (updated in scene.display according to GUI input)
     this.selected = false;
 
     this.transformMatrix = mat4.create();
 
-    this.animationMatrix = mat4.create();
 }
 
 /**
@@ -100,18 +101,37 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
  * Updates the animationMatrix to be applied to the node (and descendants)
  */
 MyGraphNode.prototype.updateAnimationMatrix = function() {
+    this.updateAnimationIndex();
     if(this.currentAnimation != -1) {
-        if(!this.graph.animations[this.animations[this.currentAnimation]].active) {
-            //Change this to another if to test if length has been reached in case animation loop is not desired
-            if(++this.currentAnimation == this.animations.length) {
-                this.currentAnimation = -1;
-                mat4.identity(this.animationMatrix);
+        console.log("Current animation is "+this.graph.animations[this.animations[this.currentAnimation]].id);
+        this.animationMatrix = this.graph.animations[this.animations[this.currentAnimation]].matrixAfter(this.currentAnimationDelta);
+    }
+}
+
+/**
+ * Updates the current animation index according to total elapsed time since scene startup
+ */
+MyGraphNode.prototype.updateAnimationIndex = function() {
+    if(this.currentAnimation != -1) {
+        let start = 0;
+        let end = 0;
+        let elapsed = this.graph.scene.delta;
+        for(let i = 0; i < this.animations.length; ++i){
+            end += this.graph.animations[this.animations[i]].animationTime;
+            if(elapsed >= start && elapsed < end){
+                this.currentAnimation = i;
+                break;
             }
-            else
-                //this.currentAnimation = (this.currentAnimation + 1) % this.animations.length;
-                this.graph.animations[this.animations[this.currentAnimation]].reset();
+            start = end;
         }
-        this.animationMatrix = this.graph.animations[this.animations[this.currentAnimation]].currentMatrix;
+
+        if(elapsed > end) {
+            this.currentAnimation = -1;
+            this.currentAnimationDelta = 0;
+            mat4.identity(this.animationMatrix);
+        }
+        else
+            this.currentAnimationDelta = elapsed - start;
     }
 }
 

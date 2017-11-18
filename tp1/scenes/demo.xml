@@ -162,7 +162,7 @@
         <controlpoint xx="0" yy="7.5" zz="20"/>
         <controlpoint xx="0" yy="10" zz="0"/>
     </ANIMATION>
-    <ANIMATION id="anim2" type="circular" speed="7.5" centerx="0" centery="10" centerz="0" radius="10" startang="0" rotang="360" />
+    <ANIMATION id="anim2" type="circular" speed="10" centerx="0" centery="10" centerz="0" radius="10" startang="0" rotang="360" />
     <ANIMATION id="anim3" type="bezier" speed="20">
         <controlpoint xx="0" yy="0" zz="0"/>
         <controlpoint xx="30" yy="10" zz="0"/>
@@ -233,10 +233,8 @@
       <TEXTURE id="null" />
 
       <ANIMATIONREFS>
-          <ANIMATIONREF id="anim1" />
-          <ANIMATIONREF id="anim2" />
           <ANIMATIONREF id="anim3" />
-          <ANIMATIONREF id="anim4" />
+          <ANIMATIONREF id="anim1" />
       </ANIMATIONREFS>
 
       <DESCENDANTS>
@@ -250,6 +248,12 @@
       <TEXTURE id="null" />
 
       <TRANSLATION x="0" y="0" z="20" />
+
+
+      <ANIMATIONREFS>
+          <ANIMATIONREF id="anim2" />
+          <ANIMATIONREF id="anim1" />
+      </ANIMATIONREFS>
 
       <DESCENDANTS>
         <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
