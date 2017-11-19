@@ -169,6 +169,15 @@
         <controlpoint xx="30" yy="10" zz="20"/>
         <controlpoint xx="0" yy="0" zz="20"/>
     </ANIMATION>
+    <ANIMATION id="anim5" type="linear" speed="10">
+        <controlpoint xx="0" yy="7.5" zz="20"/>
+        <controlpoint xx="30" yy="7.5" zz="20"/>
+    </ANIMATION>
+    <ANIMATION id="anim6" type="circular" speed="10" centerx="30" centery="7.5" centerz="10" radius="10" startang="-90" rotang="180" />
+    <ANIMATION id="anim7" type="linear" speed="10">
+        <controlpoint xx="30" yy="7.5" zz="0"/>
+        <controlpoint xx="0" yy="7.5" zz="0"/>
+    </ANIMATION>
 </ANIMATIONS>
 
 
@@ -233,7 +242,9 @@
       <TEXTURE id="null" />
 
       <ANIMATIONREFS>
-          <ANIMATIONREF id="anim4" />
+          <ANIMATIONREF id="anim5" />
+          <ANIMATIONREF id="anim6" />
+          <ANIMATIONREF id="anim7" />
       </ANIMATIONREFS>
 
       <DESCENDANTS>
@@ -247,12 +258,6 @@
       <TEXTURE id="null" />
 
       <TRANSLATION x="0" y="0" z="20" />
-
-
-     <ANIMATIONREFS>
-          <ANIMATIONREF id="anim2" />
-          <ANIMATIONREF id="anim1" />
-      </ANIMATIONREFS>
 
       <DESCENDANTS>
         <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
@@ -381,7 +386,7 @@
     </NODE>
 
     <!-- Street bench -->
-    <NODE id="bancos">
+    <NODE id="bancos" selectable="true">
         <MATERIAL id="lightMaterial" />
         <TEXTURE id="banco" />
 
@@ -393,7 +398,7 @@
     </NODE>
 
     <!-- One bench -->
-    <NODE id="banco2">
+    <NODE id="banco2" selectable="false">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 

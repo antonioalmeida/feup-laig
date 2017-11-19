@@ -933,8 +933,12 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                 console.log("\tnode is selectable");
                 this.selectableNodes.push(nodeID);
             }
+            else if(selectable == "false") {
+                console.log("\tnode is not selectable");
+                this.nodes[nodeID].selected = false;
+            }
             else
-                console.log("\tcould not parse value, value read is \"false\" or attribute not present; node isn't selectable");
+                console.log("\tcould not parse value, or attribute not present; node isn't selectable");
 
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
@@ -1276,5 +1280,5 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
     // entry point for graph rendering
-    this.nodes[this.idRoot].display('null', this.defaultMaterialID);
+    this.nodes[this.idRoot].display('null', this.defaultMaterialID, false);
 }

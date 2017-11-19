@@ -32,8 +32,8 @@ function MyGraphNode(graph, nodeID) {
     this.currentAnimationDelta = 0;
     this.animationMatrix = mat4.create();
 
-    // Is this node selected? (updated in scene.display according to GUI input)
-    this.selected = false;
+    // Is this node selected? (initially null, if node marked as selectable attribute is updated in scene.display according to GUI input)
+    this.selected = null;
 
     this.transformMatrix = mat4.create();
 
@@ -56,11 +56,22 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
 /**
  * Displays this node and its leaves and children recursively
  */
-MyGraphNode.prototype.display = function(textureID, materialID) {
-        if(this.selected)
+MyGraphNode.prototype.display = function(textureID, materialID, selectable) {
+        var selectableToPassOn = selectable;
+        if(this.selected === true) {
             this.graph.scene.setSelectableShader();
-        else
+            selectableToPassOn = true;
+        }
+        else if(this.selected === false) {
             this.graph.scene.setDefaultShader();
+            selectableToPassOn = false;
+        }
+        else { // null
+            if(selectable)
+                this.graph.scene.setSelectableShader();
+            else
+                this.graph.scene.setDefaultShader();
+        }
 
         this.updateAnimationMatrix();
         this.graph.scene.pushMatrix();
@@ -92,7 +103,7 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
 
         this.displayLeaves(textureToPassOn);
 
-        this.displayChildren(textureToPassOn, materialToPassOn);
+        this.displayChildren(textureToPassOn, materialToPassOn, selectableToPassOn);
 
     this.graph.scene.popMatrix();
 }
@@ -151,11 +162,7 @@ MyGraphNode.prototype.displayLeaves = function(texture) {
 /**
  * Displays this nodes's children
  */
-MyGraphNode.prototype.displayChildren = function(texture, material) {
-    for(let childrenID in this.children) {
-        let previous = this.graph.nodes[this.children[childrenID]].selected;
-        if(this.selected) this.graph.nodes[this.children[childrenID]].selected = true;
-        this.graph.nodes[this.children[childrenID]].display(texture, material);
-        this.graph.nodes[this.children[childrenID]].selected = previous;
-    }
+MyGraphNode.prototype.displayChildren = function(texture, material, selectable) {
+    for(let childrenID in this.children)
+        this.graph.nodes[this.children[childrenID]].display(texture, material, selectable);
 }

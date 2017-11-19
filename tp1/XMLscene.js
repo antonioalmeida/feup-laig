@@ -114,21 +114,14 @@ XMLscene.prototype.onGraphLoaded = function()
     // Adds selection parametrization
     this.interface.addSelectionParametrization();
 
-    //Set update period to 50ms
-    this.setUpdatePeriod(50);
+    //Set update period to 20ms
+    this.setUpdatePeriod(20);
 }
 
 /**
  * Update scene (which is basically update animations)
  */
 XMLscene.prototype.update = function(currTime) {
-    /*
-    for(let animationID in this.graph.animations) {
-        if(this.graph.animations[animationID].active)
-            this.graph.animations[animationID].update(currTime);
-    }
-    */
-
     if(this.startTime == -1)
         this.startTime = currTime;
     else
@@ -189,7 +182,7 @@ XMLscene.prototype.display = function() {
     {
         //Reset selected status
         for(let i = 0; i < this.graph.selectableNodes.length; ++i)
-            this.graph.nodes[this.graph.selectableNodes[i]].selected = false;
+            this.graph.nodes[this.graph.selectableNodes[i]].selected = null;
 
         //Active currently selected node
         if(this.selectedNode != 'No selection')
