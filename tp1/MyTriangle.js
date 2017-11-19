@@ -46,7 +46,8 @@ MyTriangle.prototype.initBuffers = function () {
 
     let p0p1 = [this.x1-this.x0, this.y1-this.y0, this.z1-this.z0];
     let p0p2 = [this.x2-this.x0, this.y2-this.y0, this.z2-this.z0];
-    let cross = [p0p1[1]*p0p2[2]-p0p1[2]*p0p1[2], p0p1[2]*p0p2[0]-p0p1[0]*p0p2[2], p0p1[0]*p0p2[1]-p0p1[1]*p0p2[0]];
+    let cross = vec3.fromValues(p0p1[1]*p0p2[2]-p0p1[2]*p0p1[2], p0p1[2]*p0p2[0]-p0p1[0]*p0p2[2], p0p1[0]*p0p2[1]-p0p1[1]*p0p2[0]);
+    vec3.normalize(cross, cross);
     this.normals = [
         cross[0], cross[1], cross[2],
         cross[0], cross[1], cross[2],
