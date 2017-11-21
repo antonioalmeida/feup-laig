@@ -63,7 +63,7 @@ MyBezierAnimation.prototype.Q = function(s) {
 
 MyBezierAnimation.prototype.derivativeQ = function(s) {
   let blend_1 = -3*(1-s)*(1-s);
-	let blend_2 = 3*(s-1)*(s-1.0/3.0);
+	let blend_2 = 9*(s-1)*(s-1.0/3.0);
 	let blend_3 = 3*s*(2-3*s);
 	let blend_4 = 3*s*s;
 
