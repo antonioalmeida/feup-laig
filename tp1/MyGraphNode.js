@@ -32,8 +32,8 @@ function MyGraphNode(graph, nodeID) {
     this.currentAnimationDelta = 0;
     this.animationMatrix = mat4.create();
 
-    // Is this node selected? (initially null, if node marked as selectable attribute is updated in scene.display according to GUI input)
-    this.selected = null;
+    // Is this node selected? (initially false, if node marked as selectable attribute is updated in scene.display according to GUI input)
+    this.selected = false;
 
     this.transformMatrix = mat4.create();
 
@@ -62,16 +62,8 @@ MyGraphNode.prototype.display = function(textureID, materialID, selectable) {
             this.graph.scene.setSelectableShader();
             selectableToPassOn = true;
         }
-        else if(this.selected === false) {
+        else if(!selectable)
             this.graph.scene.setDefaultShader();
-            selectableToPassOn = false;
-        }
-        else { // null
-            if(selectable)
-                this.graph.scene.setSelectableShader();
-            else
-                this.graph.scene.setDefaultShader();
-        }
 
         this.updateAnimationMatrix();
         this.graph.scene.pushMatrix();

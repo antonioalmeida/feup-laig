@@ -182,7 +182,7 @@ XMLscene.prototype.display = function() {
     {
         //Reset selected status
         for(let i = 0; i < this.graph.selectableNodes.length; ++i)
-            this.graph.nodes[this.graph.selectableNodes[i]].selected = null;
+            this.graph.nodes[this.graph.selectableNodes[i]].selected = false;
 
         //Active currently selected node
         if(this.selectedNode != 'No selection')
