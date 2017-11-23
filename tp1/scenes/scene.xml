@@ -204,7 +204,42 @@
 
 
 <!-- The animations -->
+<!-- The animations -->
 <ANIMATIONS>
+    <ANIMATION id="anim4" type="combo">
+        <SPANREF id="anim1" />
+        <SPANREF id="anim2" />
+        <SPANREF id="anim3" />
+    </ANIMATION>
+    <ANIMATION id="anim1" type="linear" speed="10">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="30" yy="7.5" zz="0"/>
+        <controlpoint xx="30" yy="0" zz="20"/>
+        <controlpoint xx="0" yy="7.5" zz="20"/>
+        <controlpoint xx="0" yy="10" zz="0"/>
+    </ANIMATION>
+    <ANIMATION id="anim2" type="circular" speed="10" centerx="0" centery="10" centerz="0" radius="10" startang="0" rotang="360" />
+    <ANIMATION id="anim3" type="bezier" speed="20">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="30" yy="10" zz="0"/>
+        <controlpoint xx="30" yy="10" zz="20"/>
+        <controlpoint xx="0" yy="0" zz="20"/>
+    </ANIMATION>
+    <ANIMATION id="anim5" type="linear" speed="10">
+        <controlpoint xx="0" yy="7.5" zz="20"/>
+        <controlpoint xx="30" yy="7.5" zz="20"/>
+    </ANIMATION>
+    <ANIMATION id="anim6" type="circular" speed="10" centerx="30" centery="7.5" centerz="10" radius="10" startang="-90" rotang="180" />
+    <ANIMATION id="anim7" type="linear" speed="10">
+        <controlpoint xx="30" yy="7.5" zz="0"/>
+        <controlpoint xx="0" yy="7.5" zz="0"/>
+    </ANIMATION>
+    <ANIMATION id="anim11" type="bezier" speed="5">
+      <controlpoint xx="0" yy="0" zz="-5"/>
+      <controlpoint xx="-20" yy="5" zz="-5"/>
+      <controlpoint xx="-30" yy="-5" zz="10"/>
+      <controlpoint xx="0" yy="0" zz="0"/>
+    </ANIMATION>
 </ANIMATIONS>
 
 
@@ -660,7 +695,7 @@
   </NODE>
 
   <!-- Ringside walls -->
-  <NODE id="paredesExteriores">
+  <NODE id="paredesExteriores" selectable="true">
     <MATERIAL id="posteMaterial" />
     <TEXTURE id="wallMetal" />
 
@@ -827,7 +862,7 @@
   </NODE>
 
   <!-- Entrance big screen -->
-  <NODE id="bigScreen">
+  <NODE id="bigScreen" selectable="true">
     <MATERIAL id="screenMaterial" />
     <TEXTURE id="raw-big" />
 
@@ -879,7 +914,7 @@
   </NODE>
 
   <!-- Ring steps -->
-  <NODE id="escadas">
+  <NODE id="escadas" selectable="true">
     <MATERIAL id="null" />
     <TEXTURE id="steel" />
 
@@ -1292,7 +1327,7 @@
   </NODE>
 
   <!-- Trash can laying around -->
-  <NODE id="caixote">
+  <NODE id="caixote" selectable="true">
     <MATERIAL id="null" />
     <TEXTURE id="trashCan" />
 
