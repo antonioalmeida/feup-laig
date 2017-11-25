@@ -56,15 +56,7 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
 /**
  * Displays this node and its leaves and children recursively
  */
-MyGraphNode.prototype.display = function(textureID, materialID, selectable) {
-        var selectableToPassOn = selectable;
-        if(this.selected === true) {
-            this.graph.scene.setSelectableShader();
-            selectableToPassOn = true;
-        }
-        else if(!selectable)
-            this.graph.scene.setDefaultShader();
-
+MyGraphNode.prototype.display = function(textureID, materialID) {
         this.updateAnimationMatrix();
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
@@ -93,9 +85,15 @@ MyGraphNode.prototype.display = function(textureID, materialID, selectable) {
             this.graph.textures[textureID][0].bind();
         }
 
+        if(this.selected === true)
+            this.graph.scene.setSelectableShader();
+
         this.displayLeaves(textureToPassOn);
 
-        this.displayChildren(textureToPassOn, materialToPassOn, selectableToPassOn);
+        this.displayChildren(textureToPassOn, materialToPassOn);
+
+        if(this.selected === true)
+            this.graph.scene.setDefaultShader();
 
     this.graph.scene.popMatrix();
 }
@@ -120,7 +118,7 @@ MyGraphNode.prototype.updateAnimationIndex = function() {
         let elapsed = this.graph.scene.delta;
         for(let i = 0; i < this.animations.length; ++i){
             end += this.graph.animations[this.animations[i]].animationTime;
-            if(elapsed >= start && elapsed < end){ //TODO: Check if only elapsed < end + delta subtraction mechanism works
+            if(elapsed >= start && elapsed < end){
                 this.currentAnimation = i;
                 break;
             }
@@ -154,7 +152,7 @@ MyGraphNode.prototype.displayLeaves = function(texture) {
 /**
  * Displays this nodes's children
  */
-MyGraphNode.prototype.displayChildren = function(texture, material, selectable) {
+MyGraphNode.prototype.displayChildren = function(texture, material) {
     for(let childrenID in this.children)
-        this.graph.nodes[this.children[childrenID]].display(texture, material, selectable);
+        this.graph.nodes[this.children[childrenID]].display(texture, material);
 }

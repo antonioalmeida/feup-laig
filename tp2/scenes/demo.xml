@@ -178,6 +178,10 @@
         <controlpoint xx="30" yy="7.5" zz="0"/>
         <controlpoint xx="0" yy="7.5" zz="0"/>
     </ANIMATION>
+    <ANIMATION id="anim8" type="linear" speed="1">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="10" yy="0" zz="0"/>
+    </ANIMATION>
 </ANIMATIONS>
 
 
@@ -190,6 +194,10 @@
     <NODE id="root">
         <MATERIAL id="defaultMaterial" />
         <TEXTURE id="null" />
+
+        <ANIMATIONREFS>
+            <ANIMATIONREF id="anim8" />
+        </ANIMATIONREFS>
 
         <DESCENDANTS>
             <NODEREF id="triangulo1" />

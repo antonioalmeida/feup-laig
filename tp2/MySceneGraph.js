@@ -1276,5 +1276,5 @@ MySceneGraph.generateRandomString = function(length) {
  */
 MySceneGraph.prototype.displayScene = function() {
     // entry point for graph rendering
-    this.nodes[this.idRoot].display('null', this.defaultMaterialID, false);
+    this.nodes[this.idRoot].display('null', this.defaultMaterialID);
 }
