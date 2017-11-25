@@ -103,9 +103,8 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
  */
 MyGraphNode.prototype.updateAnimationMatrix = function() {
     this.updateAnimationIndex();
-    if(this.currentAnimation != -1) {
+    if(this.currentAnimation != -1)
         this.animationMatrix = this.graph.animations[this.animations[this.currentAnimation]].matrixAfter(this.currentAnimationDelta);
-    }
 }
 
 /**
@@ -128,7 +127,11 @@ MyGraphNode.prototype.updateAnimationIndex = function() {
         if(elapsed > end) {
             this.currentAnimation = -1;
             this.currentAnimationDelta = 0;
-            mat4.identity(this.animationMatrix);
+            //Set matrix as last instant of last animation so object doesn't jump back suddenly to starting point
+            //Also, avoids doing it every time (unecessarily) further on
+            let lastAnimationID = this.animations[this.animations.length-1];
+            let lastAnimationObj = this.graph.animations[lastAnimationID];
+            this.animationMatrix = lastAnimationObj.matrixAfter(lastAnimationObj.animationTime);
         }
         else
             this.currentAnimationDelta = elapsed - start;

@@ -28,7 +28,7 @@ MyLinearAnimation.prototype.getSegment = function(delta) {
     let segment = -1;
     let deltaCurrSegm = 0;
     for(let i = 0; i < this.numLines; ++i) {
-        if(delta < this.times[i]) {
+        if(delta <= this.times[i]) {
             segment = i;
             deltaCurrSegm = delta;
             break;

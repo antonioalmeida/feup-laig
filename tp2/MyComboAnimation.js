@@ -22,7 +22,7 @@ MyComboAnimation.prototype.updateAnimationIndex = function(delta) {
     let end = 0;
     for(let i = 0; i < this.animations.length; ++i){
         end += this.animations[i].animationTime;
-        if(delta >= start && delta < end){
+        if(delta >= start && delta <= end){
             this.currAnimation = i;
             break;
         }
