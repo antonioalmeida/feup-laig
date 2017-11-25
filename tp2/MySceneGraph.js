@@ -6,7 +6,8 @@ var ILLUMINATION_INDEX = 1;
 var LIGHTS_INDEX = 2;
 var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
-var NODES_INDEX = 5;
+var ANIMATIONS_INDEX = 5;
+var NODES_INDEX = 6;
 
 var STOP = false;
 
@@ -24,8 +25,9 @@ function MySceneGraph(filename, scene) {
     this.nodes = [];
     this.idRoot = null; // The id of the root element.
 
-    this.textureStack = [];
-    this.materialStack = [];
+    this.animations = [];
+
+    this.selectableNodes = [];
 
     // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;
@@ -85,8 +87,8 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     var error;
 
     // Processes each node, verifying errors.
-    var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "NODES"];
-    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, NODES_INDEX];
+    var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "ANIMATIONS", "NODES"];
+    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, ANIMATIONS_INDEX, NODES_INDEX];
     var index;
 
     for (let i = 0; i < tags.length; ++i) {
@@ -116,6 +118,8 @@ MySceneGraph.prototype.parseElement = function(index, element) {
             return this.parseTextures(element);
         case MATERIALS_INDEX:
             return this.parseMaterials(element);
+        case ANIMATIONS_INDEX:
+            return this.parseAnimations(element);
         case NODES_INDEX:
             return this.parseNodes(element);
     }
@@ -752,6 +756,144 @@ MySceneGraph.prototype.parseMaterials = function(materialsNode) {
     console.log("Parsed materials");
 }
 
+/**
+  * Parses the <ANIMATIONS> block.
+  */
+MySceneGraph.prototype.parseAnimations = function(animationsNode) {
+    var children = animationsNode.children;
+
+    for(let i = 0; i < children.length; ++i) {
+      if(children[i].nodeName != "ANIMATION"){
+        this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+        continue;
+      }
+
+      //Get Animation ID
+      var animationID = this.reader.getString(children[i], 'id');
+      if (animationID == null)
+          return "failed to retrieve animation ID";
+      // Checks if ID is valid.
+      if (this.animations[animationID] != null)
+          return "animation ID must be unique (conflict: ID = " + animationID + ")";
+
+      console.log("Processing animation " + animationID);
+
+      var animationType = this.reader.getItem(children[i], 'type', ['linear', 'circular', 'bezier', 'combo']);
+      if (animationType == null) {
+          this.onXMLMinorError("animation type for " + animationID + " unrecognised or couldn't be parsed; skipping");
+          continue;
+      }
+
+      var argsError = null;
+      switch(animationType){
+        case 'circular':
+          let remainingInfo = {};
+          let attrs = ['speed', 'centerx', 'centery', 'centerz', 'radius', 'startang', 'rotang'];
+          for(let index = 0; index < attrs.length; ++index){
+            let currVar = this.reader.getFloat(children[i], attrs[index]);
+            if((argsError = this.checkNullAndNaN(currVar, 'unable to parse '+attrs[index]+' value for animation '+animationID, attrs[index]+' for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            remainingInfo[attrs[index]] = parseFloat(currVar);
+          }
+          this.animations[animationID] = new MyCircularAnimation(animationID, remainingInfo);
+          break;
+        case 'linear':
+        case 'bezier':
+          let speed = this.reader.getFloat(children[i], 'speed', true);
+          if((argsError = this.checkNullAndNaN(speed, 'unable to parse speed value for animation '+animationID, 'speed for animation '+animationID+' is non numeric')) != null){
+            this.onXMLMinorError(argsError+'; skipping');
+            continue;
+          }
+          let cpElement = children[i].children;
+          let controlPoints = [];
+          for(let cpIndex = 0; cpIndex < cpElement.length; ++cpIndex) {
+            if(cpElement[cpIndex].nodeName != "controlpoint"){
+              this.onXMLMinorError('Unknown tag <'+cpElement[cpIndex].nodeName+'>; expected <controlpoint>; skipping');
+              continue;
+            }
+            let x = this.reader.getFloat(cpElement[cpIndex], 'xx');
+            if((argsError = this.checkNullAndNaN(x, 'unable to parse x value for P'+(cpIndex+1)+' for '+animationID,  'P'+(cpIndex+1)+' x for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            let y = this.reader.getFloat(cpElement[cpIndex], 'yy');
+            if((argsError = this.checkNullAndNaN(y, 'unable to parse y value for P'+(cpIndex+1)+' for '+animationID,  'P'+(cpIndex+1)+' y for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            let z = this.reader.getFloat(cpElement[cpIndex], 'zz');
+            if((argsError = this.checkNullAndNaN(z, 'unable to parse z value for P'+(cpIndex+1)+' for '+animationID,  'P'+(cpIndex+1)+' z for animation '+animationID+' is non numeric')) != null){
+              this.onXMLMinorError(argsError+'; skipping');
+              continue;
+            }
+            controlPoints.push([x, y, z]);
+          }
+
+          if(animationType == 'bezier'){
+              if(controlPoints.length != 4){
+                this.onXMLMinorError('Not the exact amount of control points for animation '+animationID+'; skipping');
+                continue;
+              }
+              this.animations[animationID] = new MyBezierAnimation(animationID, speed, controlPoints);
+          }
+          else if(animationType == 'linear'){
+            if(controlPoints.length < 2){
+              this.onXMLMinorError('Not enough control points for animation '+animationID+'; skipping');
+              continue;
+            }
+            this.animations[animationID] = new MyLinearAnimation(animationID, speed, controlPoints);
+          }
+          break;
+        case 'combo':
+          let animationRefs = [];
+          let refsElement = children[i].children;
+          for(let refsIndex = 0; refsIndex < refsElement.length; ++refsIndex) {
+            if(refsElement[refsIndex].nodeName != "SPANREF") {
+              this.onXMLMinorError('unrecognised node name <'+refsElement[refsIndex].nodeName+'>, expected <SPANREF>; skipping');
+              continue;
+            }
+            let currRef = this.reader.getString(refsElement[refsIndex], 'id');
+            if(currRef == null) {
+              this.onXMLMinorError('could not parse animation reference for combo animation '+animationID);
+              continue;
+            }
+            animationRefs.push(currRef);
+          }
+
+          if(!animationRefs.length) {
+            this.onXMLMinorError('combo animation '+animationID+' must have at least one valid animation reference; skipping');
+            continue;
+          }
+          this.animations[animationID] = new MyComboAnimation(animationID, animationRefs);
+          break;
+      }
+    }
+
+    var animationRefError = null;
+    if((animationRefError = this.checkAnimations()) != null)
+      return animationRefError;
+
+    console.log("Parsed animations");
+    return null;
+}
+
+MySceneGraph.prototype.checkAnimations = function() {
+  for(let animID in this.animations) {
+    if(this.animations[animID] instanceof MyComboAnimation) {
+      for(let j = 0; j < this.animations[animID].animations.length; ++j) {
+        if(this.animations[this.animations[animID].animations[j]] == null)
+          return "Referenced animation "+this.animations[animID].animations[j]+" is not defined";
+        if(this.animations[this.animations[animID].animations[j]] instanceof MyComboAnimation)
+          return "Combo Animation cannot reference another Combo Animation";
+        this.animations[animID].animations[j] = this.animations[this.animations[animID].animations[j]];
+      }
+      this.animations[animID].updateAnimationTime();
+    }
+  }
+  return null;
+}
 
 /**
  * Parses the <NODES> block.
@@ -785,10 +927,19 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             // Creates node.
             this.nodes[nodeID] = new MyGraphNode(this, nodeID);
 
+            // Retrieve selectable attribute, if it exists
+            var selectable = this.reader.getString(children[i], 'selectable', false);
+            if (selectable == "true") {
+                console.log("\tnode is selectable");
+                this.selectableNodes.push(nodeID);
+            }
+            else
+                console.log("\tcould not parse value, value is \"false\" or attribute not present; node isn't selectable");
+
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
             var specsNames = [];
-            var possibleValues = ["MATERIAL", "TEXTURE", "TRANSLATION", "ROTATION", "SCALE", "DESCENDANTS"];
+            var possibleValues = ["MATERIAL", "TEXTURE", "TRANSLATION", "ROTATION", "SCALE", "ANIMATIONREFS", "DESCENDANTS"];
             for (let j = 0; j < nodeSpecs.length; ++j) {
                 var name = nodeSpecs[j].nodeName;
                 specsNames.push(name);
@@ -889,6 +1040,28 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         break;
                     default:
                         break;
+                }
+            }
+
+            // Retrieves information about possible animations
+            var animationsIndex = specsNames.indexOf("ANIMATIONREFS");
+            if(animationsIndex != -1) {
+                let refs = nodeSpecs[animationsIndex].children;
+                for(let animIndex = 0; animIndex < refs.length; ++animIndex) {
+                    if(refs[animIndex].nodeName != "ANIMATIONREF")
+                        continue;
+                    let animID = this.reader.getString(refs[animIndex], 'id');
+                    if(animID == null) {
+                        this.onXMLMinorError("Could not parse animation reference for node "+nodeID+"; skipping animation");
+                        continue;
+                    }
+                    if(this.animations[animID] == null) {
+                        this.onXMLMinorError("Animation reference by node "+nodeID+" is not defined; skipping animation");
+                        continue;
+                    }
+                    this.nodes[nodeID].animations.push(animID);
+                    if(this.nodes[nodeID].currentAnimation == -1)
+                        ++(this.nodes[nodeID].currentAnimation);
                 }
             }
 

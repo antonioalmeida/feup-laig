@@ -3,7 +3,7 @@
  * @constructor
  */
 function MyInterface() {
-    //call CGFinterface constructor 
+    //call CGFinterface constructor
     CGFinterface.call(this);
 }
 ;
@@ -21,11 +21,11 @@ MyInterface.prototype.init = function(application) {
 
     // init GUI. For more information on the methods, check:
     //  http://workshop.chromeexperiments.com/examples/gui
-    
+
     this.gui = new dat.GUI();
 
     // add a group of controls (and open/expand by defult)
-    
+
     return true;
 };
 
@@ -48,3 +48,27 @@ MyInterface.prototype.addLightsGroup = function(lights) {
     }
 }
 
+/**
+ * Adds a list that will hold the IDs of the selectable nodes
+ */
+MyInterface.prototype.addSelectableListBox = function(nodes) {
+    let nodesArr = ['No selection'];
+    for(let i = 0; i < nodes.length; ++i)
+        nodesArr.push(nodes[i]);
+
+    this.gui.add(this.scene, 'selectedNode', nodesArr).name('Selected Node');
+}
+
+/**
+ * Adds selection color parametrization
+ */
+MyInterface.prototype.addSelectionParametrization = function() {
+    var group = this.gui.addFolder("Selection Properties");
+    group.open();
+
+    var obj = this;
+    group.add(this.scene, 'selectionColorR', 0, 1).name('Color R').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorG', 0, 1).name('Color G').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionColorB', 0, 1).name('Color B').onChange(function(v){obj.scene.updateSelectionColor();});
+    group.add(this.scene, 'selectionSize', 0.1, 2).name('Size offset').onChange(function(v){obj.scene.updateSelectionSize();});
+}

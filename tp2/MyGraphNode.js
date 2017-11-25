@@ -24,8 +24,19 @@ function MyGraphNode(graph, nodeID) {
     // The texture ID.
     this.textureID = null ;
 
+    // The node's animations
+    this.animations = [];
+
+    // Animation stuff
+    this.currentAnimation = -1;
+    this.currentAnimationDelta = 0;
+    this.animationMatrix = mat4.create();
+
+    // Is this node selected? (initially false, if node marked as selectable attribute is updated in scene.display according to GUI input)
+    this.selected = false;
+
     this.transformMatrix = mat4.create();
-    mat4.identity(this.transformMatrix);
+
 }
 
 /**
@@ -46,8 +57,10 @@ MyGraphNode.prototype.addLeaf = function(leaf) {
  * Displays this node and its leaves and children recursively
  */
 MyGraphNode.prototype.display = function(textureID, materialID) {
+        this.updateAnimationMatrix();
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformMatrix);
+        this.graph.scene.multMatrix(this.animationMatrix);
 
         var materialToPassOn = materialID;
         var textureToPassOn = textureID;
@@ -72,11 +85,54 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
             this.graph.textures[textureID][0].bind();
         }
 
+        if(this.selected === true)
+            this.graph.scene.setSelectableShader();
+
         this.displayLeaves(textureToPassOn);
 
         this.displayChildren(textureToPassOn, materialToPassOn);
 
+        if(this.selected === true)
+            this.graph.scene.setDefaultShader();
+
     this.graph.scene.popMatrix();
+}
+
+/**
+ * Updates the animationMatrix to be applied to the node (and descendants)
+ */
+MyGraphNode.prototype.updateAnimationMatrix = function() {
+    this.updateAnimationIndex();
+    if(this.currentAnimation != -1) {
+        this.animationMatrix = this.graph.animations[this.animations[this.currentAnimation]].matrixAfter(this.currentAnimationDelta);
+    }
+}
+
+/**
+ * Updates the current animation index according to total elapsed time since scene startup
+ */
+MyGraphNode.prototype.updateAnimationIndex = function() {
+    if(this.currentAnimation != -1) {
+        let start = 0;
+        let end = 0;
+        let elapsed = this.graph.scene.delta;
+        for(let i = 0; i < this.animations.length; ++i){
+            end += this.graph.animations[this.animations[i]].animationTime;
+            if(elapsed >= start && elapsed < end){
+                this.currentAnimation = i;
+                break;
+            }
+            start = end;
+        }
+
+        if(elapsed > end) {
+            this.currentAnimation = -1;
+            this.currentAnimationDelta = 0;
+            mat4.identity(this.animationMatrix);
+        }
+        else
+            this.currentAnimationDelta = elapsed - start;
+    }
 }
 
 /**
@@ -97,7 +153,6 @@ MyGraphNode.prototype.displayLeaves = function(texture) {
  * Displays this nodes's children
  */
 MyGraphNode.prototype.displayChildren = function(texture, material) {
-    for(let childrenID in this.children) {
+    for(let childrenID in this.children)
         this.graph.nodes[this.children[childrenID]].display(texture, material);
-    }
 }

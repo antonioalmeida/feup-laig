@@ -148,9 +148,41 @@
 </MATERIALS>
 
 
-<!-- The leaves -->
-<LEAVES>
-</LEAVES>
+<!-- The animations -->
+<ANIMATIONS>
+    <ANIMATION id="anim4" type="combo">
+        <SPANREF id="anim1" />
+        <SPANREF id="anim2" />
+        <SPANREF id="anim3" />
+    </ANIMATION>
+    <ANIMATION id="anim1" type="linear" speed="10">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="30" yy="7.5" zz="0"/>
+        <controlpoint xx="30" yy="0" zz="20"/>
+        <controlpoint xx="0" yy="7.5" zz="20"/>
+        <controlpoint xx="0" yy="10" zz="0"/>
+    </ANIMATION>
+    <ANIMATION id="anim2" type="circular" speed="10" centerx="0" centery="10" centerz="0" radius="10" startang="0" rotang="360" />
+    <ANIMATION id="anim3" type="bezier" speed="20">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="30" yy="10" zz="0"/>
+        <controlpoint xx="30" yy="10" zz="20"/>
+        <controlpoint xx="0" yy="0" zz="20"/>
+    </ANIMATION>
+    <ANIMATION id="anim5" type="linear" speed="10">
+        <controlpoint xx="0" yy="7.5" zz="20"/>
+        <controlpoint xx="30" yy="7.5" zz="20"/>
+    </ANIMATION>
+    <ANIMATION id="anim6" type="circular" speed="10" centerx="30" centery="7.5" centerz="10" radius="10" startang="-90" rotang="180" />
+    <ANIMATION id="anim7" type="linear" speed="10">
+        <controlpoint xx="30" yy="7.5" zz="0"/>
+        <controlpoint xx="0" yy="7.5" zz="0"/>
+    </ANIMATION>
+    <ANIMATION id="anim8" type="linear" speed="1">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="10" yy="0" zz="0"/>
+    </ANIMATION>
+</ANIMATIONS>
 
 
 <!-- The nodes -->
@@ -163,8 +195,13 @@
         <MATERIAL id="defaultMaterial" />
         <TEXTURE id="null" />
 
-        <DESCENDANTS>
+        <ANIMATIONREFS>
+            <ANIMATIONREF id="anim8" />
+        </ANIMATIONREFS>
 
+        <DESCENDANTS>
+            <NODEREF id="triangulo1" />
+            <NODEREF id="triangulo2" />
             <NODEREF id="luzes" />
             <NODEREF id="piramide" />
             <NODEREF id="arvores" />
@@ -208,8 +245,36 @@
     </NODE>
 
 
+    <NODE id="triangulo1">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ANIMATIONREFS>
+          <ANIMATIONREF id="anim5" />
+          <ANIMATIONREF id="anim6" />
+          <ANIMATIONREF id="anim7" />
+      </ANIMATIONREFS>
+
+      <DESCENDANTS>
+        <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
+      </DESCENDANTS>
+
+    </NODE>
+
+    <NODE id="triangulo2" selectable="true">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="20" />
+
+      <DESCENDANTS>
+        <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
+      </DESCENDANTS>
+
+    </NODE>
+
     <!-- The floor -->
-    <NODE id="chao">
+    <NODE id="chao" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="rocks" />
 
@@ -238,7 +303,7 @@
     </NODE>
 
     <!-- The first light -->
-     <NODE id="luz1">
+     <NODE id="luz1" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -300,7 +365,7 @@
     </NODE>
 
     <!-- Light bulb -->
-    <NODE id="luz_esfera">
+    <NODE id="luz_esfera" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -329,7 +394,7 @@
     </NODE>
 
     <!-- Street bench -->
-    <NODE id="bancos">
+    <NODE id="bancos" selectable="true">
         <MATERIAL id="lightMaterial" />
         <TEXTURE id="banco" />
 
@@ -341,7 +406,7 @@
     </NODE>
 
     <!-- One bench -->
-    <NODE id="banco2">
+    <NODE id="banco2" selectable="false">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -522,7 +587,7 @@
     </NODE>
 
     <!-- Another cube face -->
-    <NODE id="faceCubo5">
+    <NODE id="faceCubo5" selectable="true">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -537,7 +602,7 @@
     </NODE>
 
     <!-- Another cube face -->
-    <NODE id="faceCubo6">
+    <NODE id="faceCubo6" selectable="false">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
