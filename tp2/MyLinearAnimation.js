@@ -10,7 +10,7 @@ function MyLinearAnimation(id, velocity, controlPoints) {
     for(let i = 0; i < controlPoints.length; ++i){
         this.controlPoints.push(vec3.fromValues(controlPoints[i][0], controlPoints[i][1], controlPoints[i][2]));
         if(i > 0){
-            let currAngle = -Math.atan2(this.controlPoints[i][2]- this.controlPoints[i-1][2], this.controlPoints[i][0] - this.controlPoints[i-1][0]); //Not sure if works
+            let currAngle = -Math.atan2(this.controlPoints[i][2]- this.controlPoints[i-1][2], this.controlPoints[i][0] - this.controlPoints[i-1][0]);
             this.rotationAngles.push(currAngle);
             let currentLength = vec3.dist(this.controlPoints[i], this.controlPoints[i-1]);
             this.times.push(currentLength / velocity);
@@ -18,7 +18,6 @@ function MyLinearAnimation(id, velocity, controlPoints) {
             ++this.numLines;
         }
     }
-
     this.animationTime = totalLength / velocity;
 };
 

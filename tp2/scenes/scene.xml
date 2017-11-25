@@ -182,7 +182,7 @@
       <emission r="0" g="0" b="0" a="1" />
     </MATERIAL>
 
-    <!-- Red material to use in the ring ropes TODO: Lel make it better and more red -->
+    <!-- Red material to use in the ring ropes -->
     <MATERIAL id="redMaterial">
       <shininess value="10" />
       <specular r="1" g="0.2" b="0.2" a="1" />
@@ -215,6 +215,10 @@
       <controlpoint xx="30" yy="5" zz="-10"/>
       <controlpoint xx="-15" yy="2" zz="-5"/>
       <controlpoint xx="0" yy="0" zz="0"/>
+    </ANIMATION>
+    <ANIMATION id="2x4Linear1" type="linear" speed="10">
+        <controlpoint xx="0" yy="0" zz="0"/>
+        <controlpoint xx="0" yy="0" zz="-100"/>
     </ANIMATION>
 </ANIMATIONS>
 
@@ -388,7 +392,7 @@
   </NODE>
 
   <!-- The ring posts -->
-  <NODE id="postes">
+  <NODE id="postes" selectable="true">
     <MATERIAL id="posteMaterial" />
     <TEXTURE id="null" />
 
@@ -838,7 +842,7 @@
   </NODE>
 
   <!-- Entrance big screen -->
-  <NODE id="bigScreen" selectable="true">
+  <NODE id="bigScreen">
     <MATERIAL id="screenMaterial" />
     <TEXTURE id="raw-big" />
 
@@ -1304,6 +1308,10 @@
     <ROTATION axis="z" angle="-15" />
     <TRANSLATION x="15.1" y="2" z="-7.1" />
     <SCALE sx="0.075" sy="1.15" sz="0.075" />
+
+    <ANIMATIONREFS>
+        <ANIMATIONREF id="2x4Linear1"/>
+    </ANIMATIONREFS>
 
     <DESCENDANTS>
       <NODEREF id="box" />

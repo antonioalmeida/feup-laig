@@ -42,7 +42,7 @@ MyBezierAnimation.prototype.matrixAfter = function(delta) {
     //let rotationMat = [cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, 0, 0, 0, 1];
 
     let result = mat4.create();
-    mat4.translate(result, result, vec3.fromValues(this.P1[0]+currentQ[0], this.P1[1]+currentQ[1], this.P1[2]+currentQ[2]));
+    mat4.translate(result, result, vec3.fromValues(currentQ[0], currentQ[1], currentQ[2]));
     //mat4.multiply(result, result, rotationMat);
     mat4.rotateY(result, result, angle);
 

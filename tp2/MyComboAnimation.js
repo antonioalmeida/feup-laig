@@ -12,7 +12,6 @@ MyComboAnimation.prototype.constructor = MyComboAnimation;
 MyComboAnimation.prototype.updateAnimationTime = function() {
     for(let i = 0; i < this.animations.length; ++i)
         this.animationTime += this.animations[i].animationTime;
-    console.log("Combo: animation time is "+this.animationTime);
 }
 
 /**
@@ -34,8 +33,6 @@ MyComboAnimation.prototype.updateAnimationIndex = function(delta) {
 }
 
 MyComboAnimation.prototype.matrixAfter = function(delta) {
-    //console.log("Combo: delta is "+delta);
     let animationDelta = this.updateAnimationIndex(delta);
-    //console.log("Combo: animation delta is "+animationDelta+", index is "+this.currAnimation);
     return this.animations[this.currAnimation].matrixAfter(animationDelta);
 }
