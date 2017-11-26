@@ -33,11 +33,14 @@ MyQuad.prototype.initBuffers = function () {
         3, 2, 1
     ];
 
+    let p0p1 = [this.x1-this.x0, 0, 0];
+    let p0p2 = [0, this.y0-this.y1, 0];
+    let sign = (p0p1[0]*p0p2[1] < 0 ? -1 : 1);
     this.normals = [
-        0, 0, 1,
-        0, 0, 1,
-        0, 0, 1,
-        0, 0, 1
+        0, 0, sign,
+        0, 0, sign,
+        0, 0, sign,
+        0, 0, sign
     ];
 
     this.dx = this.x1-this.x0;

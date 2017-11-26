@@ -150,10 +150,6 @@
 
 <!-- The animations -->
 <ANIMATIONS>
-    <ANIMATION id="arvoreLinear1" type="linear" speed="0.5">
-        <controlpoint xx="0" yy="1" zz="5"/>
-        <controlpoint xx="0" yy="1" zz="5"/>
-    </ANIMATION>
     <ANIMATION id="luz2Linear1" type="linear" speed="5">
         <controlpoint xx="0" yy="0" zz="0"/>
         <controlpoint xx="0" yy="0" zz="10"/>
@@ -162,6 +158,28 @@
     <ANIMATION id="luz2Linear2" type="linear" speed="5">
         <controlpoint xx="-15" yy="0" zz="25"/>
         <controlpoint xx="-30" yy="0" zz="25"/>
+    </ANIMATION>
+    <ANIMATION id="starBezier1" type="bezier" speed="5">
+        <controlpoint xx="0" yy="0" zz="0" />
+        <controlpoint xx="5" yy="10" zz="3" />
+        <controlpoint xx="12.5" yy="10" zz="10" />
+        <controlpoint xx="12.5" yy="5.5" zz="10" />
+    </ANIMATION>
+    <ANIMATION id="starIntermediate" type="combo">
+        <SPANREF id="starLinear" />
+        <SPANREF id="starCircular" />
+    </ANIMATION>
+    <ANIMATION id="starLinear" type="linear" speed="5">
+        <controlpoint xx="12.5" yy="5.5" zz="10" />
+        <controlpoint xx="15" yy="6.5" zz="12.05" />
+        <controlpoint xx="15" yy="6.5" zz="25" />
+    </ANIMATION>
+    <ANIMATION id="starCircular" type="circular" speed="5" centerx="10" centery="6.5" centerz="25" radius="5" startang="0" rotang="-180"/>
+    <ANIMATION id="starBezier2" type="bezier" speed="3">
+        <controlpoint xx="5" yy="6.5" zz="25" />
+        <controlpoint xx="5" yy="10" zz="3" />
+        <controlpoint xx="12.5" yy="10" zz="10" />
+        <controlpoint xx="0.15" yy="10.75" zz="7.4" />
     </ANIMATION>
 </ANIMATIONS>
 
@@ -182,45 +200,42 @@
             <NODEREF id="luzes" />
             <NODEREF id="piramide" />
             <NODEREF id="arvores" />
+            <NODEREF id="star" />
             <NODEREF id="chao" />
             <NODEREF id="bancos" />
-            <NODEREF id="patchDemo" />
         </DESCENDANTS>
 
     </NODE>
 
-    <!-- The patch -->
-    <NODE id="patchDemo">
+    <NODE id="star">
         <MATERIAL id="null" />
-        <TEXTURE id="clear" />
+        <TEXTURE id="null" />
 
-        <TRANSLATION x="15" y="15" z="10" />
+        <TRANSLATION x="15" y="4" z="2.5" />
+
+        <ANIMATIONREFS>
+            <ANIMATIONREF id="starBezier1" />
+            <ANIMATIONREF id="starIntermediate" />
+            <ANIMATIONREF id="starBezier2" />
+        </ANIMATIONREFS>
 
         <DESCENDANTS>
-            <LEAF type="patch" args="20 20" >
-                <CPLINE>
-                    <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
-                    <CPOINT xx="-2.0" yy="-2.0" zz="2.0" ww="1" />
-                    <CPOINT xx="-2.0" yy="2.0" zz="2.0" ww="1" />
-                    <CPOINT xx="-1.5" yy="1.5" zz="0.0" ww="1" />
-                </CPLINE>
-                <CPLINE>
-                    <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
-                    <CPOINT xx="0" yy="-2.0" zz="3.0" ww="1" />
-                    <CPOINT xx="0" yy="2.0" zz="3.0" ww="1" />
-                    <CPOINT xx="0" yy="0" zz="3.0" ww="1" />
-                </CPLINE>
-                <CPLINE>
-                    <CPOINT xx="-1.5" yy="-1.5" zz="0.0" ww="1" />
-                    <CPOINT xx="2.0" yy="-2.0" zz="2.0" ww="1" />
-                    <CPOINT xx="2.0" yy="2.0" zz="2.0" ww="1" />
-                    <CPOINT xx="1.5" yy="1.5" zz="0.0" ww="1" />
-                </CPLINE>
-            </LEAF>
-    </DESCENDANTS>
+            <LEAF type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+            <LEAF type="rectangle" args="0.5 0.5 -0.5 -0.5" />
 
+            <LEAF type="triangle" args="-0.5 0.5 0 0.5 0.5 0 0 1.5 0" />
+            <LEAF type="triangle" args="-0.5 0.5 0 0 1.5 0 0.5 0.5 0" />
+
+            <LEAF type="triangle" args="-0.5 -0.5 0 0 -1.5 0 0.5 -0.5 0" />
+            <LEAF type="triangle" args="-0.5 -0.5 0 0.5 -0.5 0 0 -1.5 0" />
+
+            <LEAF type="triangle" args="0.5 0.5 0 0.5 -0.5 0 1.5 0 0" />
+            <LEAF type="triangle" args="0.5 0.5 0 1.5 0 0 0.5 -0.5 0" />
+
+            <LEAF type="triangle" args="-0.5 0.5 0 -1.5 0 0 -0.5 -0.5 0" />
+            <LEAF type="triangle" args="-0.5 0.5 0 -0.5 -0.5 0 -1.5 0 0" />
+        </DESCENDANTS>
     </NODE>
-
 
     <NODE id="triangulo1">
       <MATERIAL id="null" />
@@ -431,15 +446,7 @@
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
-        <TRANSLATION x="5" y="0" z="5" />
-
-        <ANIMATIONREFS>
-            <ANIMATIONREF id="arvoreLinear1"/>
-            <!--
-            <ANIMATIONREF id="arvoreCircular1"/>
-            <ANIMATIONREF id="arvoreLinear2"/>
-        -->
-        </ANIMATIONREFS>
+        <TRANSLATION x="0" y="0" z="5" />
 
         <DESCENDANTS>
             <NODEREF id="arvore" />
