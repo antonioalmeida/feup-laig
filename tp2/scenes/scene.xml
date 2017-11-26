@@ -214,7 +214,6 @@
     <SPANREF id="stairLinear"/>
     <SPANREF id="stairBezier2"/>
   </ANIMATION>
-  <ANIMATION id="stairCircular" type="circular" speed="5" centerx="10" centery="5" centerz="55" radius="5" startang="270" rotang="-180"/>
   <ANIMATION id="stairLinear" type="linear" speed="10">
     <controlpoint xx="10" yy="5" zz="40"/>
     <controlpoint xx="10" yy="5" zz="15"/>
@@ -231,16 +230,15 @@
   <controlpoint xx="-15" yy="0" zz="5"/>
   <controlpoint xx="0" yy="0" zz="0"/>
 </ANIMATION>
-<ANIMATION id="bezierHammer" type="bezier" speed="5">
+<ANIMATION id="hammerLinear1" type="linear" speed="5">
   <controlpoint xx="0" yy="0" zz="0"/>
-  <controlpoint xx="30" yy="5" zz="-10"/>
-  <controlpoint xx="-15" yy="2" zz="-5"/>
-  <controlpoint xx="0" yy="0" zz="0"/>
+  <controlpoint xx="10" yy="10" zz="0"/>
 </ANIMATION>
-<ANIMATION id="2x4Linear1" type="linear" speed="10">
-  <controlpoint xx="0" yy="0" zz="0"/>
-  <controlpoint xx="0" yy="0" zz="-100"/>
+<ANIMATION id="hammerLinear2" type="linear" speed="5">
+  <controlpoint xx="5" yy="10" zz="-5"/>
+  <controlpoint xx="5" yy="4" zz="-5"/>
 </ANIMATION>
+<ANIMATION id="hammerCircular" type="circular" speed="5" centerx="8" centery="10" centerz="0" radius="3" startang="-30" rotang="-250"/>
 </ANIMATIONS>
 
 
@@ -1129,10 +1127,11 @@
     <TEXTURE id="null" />
 
     <TRANSLATION x="5" y="2.25" z="-7" />
-    <ROTATION axis="y" angle="-22.5" />
 
     <ANIMATIONREFS>
-      <ANIMATIONREF id="bezierHammer"/>
+      <ANIMATIONREF id="hammerLinear1"/>
+      <ANIMATIONREF id="hammerCircular"/>
+      <ANIMATIONREF id="hammerLinear2"/>
     </ANIMATIONREFS>
 
     <DESCENDANTS>
@@ -1169,7 +1168,7 @@
     <MATERIAL id="null" />
     <TEXTURE id="null" />
 
-    <TRANSLATION x="10" y="5.25" z="-15" />
+    <TRANSLATION x="13" y="5.25" z="-11" />
 
     <DESCENDANTS>
       <NODEREF id="pernas" />
@@ -1334,10 +1333,6 @@
     <TRANSLATION x="15.1" y="2" z="-7.1" />
     <SCALE sx="0.075" sy="1.15" sz="0.075" />
 
-    <ANIMATIONREFS>
-        <ANIMATIONREF id="2x4Linear1"/>
-    </ANIMATIONREFS>
-
     <DESCENDANTS>
       <NODEREF id="box" />
     </DESCENDANTS>
@@ -1349,10 +1344,10 @@
     <TEXTURE id="trashCan" />
 
     <ROTATION axis="x" angle="90" />
-    <TRANSLATION x="11" y="-5.5" z="-6.25" />
+    <TRANSLATION x="11" y="-15.5" z="-6.25" />
 
     <DESCENDANTS>
-      <LEAF type="cylinder" args="4 1.5 1.5 20 40 0 1" />
+      <LEAF type="cylinder" args="4 1.5 1.5 20 40 1 1" />
     </DESCENDANTS>
   </NODE>
 
