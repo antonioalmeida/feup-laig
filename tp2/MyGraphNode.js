@@ -128,7 +128,7 @@ MyGraphNode.prototype.updateAnimationIndex = function() {
             this.currentAnimation = -1;
             this.currentAnimationDelta = 0;
             //Set matrix as last instant of last animation so object doesn't jump back suddenly to starting point
-            //Also, avoids doing it every time (unecessarily) further on
+            //By doing it here, it avoids doing it every time (unecessarily) further on
             let lastAnimationID = this.animations[this.animations.length-1];
             let lastAnimationObj = this.graph.animations[lastAnimationID];
             this.animationMatrix = lastAnimationObj.matrixAfter(lastAnimationObj.animationTime);

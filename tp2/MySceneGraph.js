@@ -879,6 +879,9 @@ MySceneGraph.prototype.parseAnimations = function(animationsNode) {
     return null;
 }
 
+/**
+ * Checks for any invalid animation references and substitutes IDs for respective object in ComboAnimations
+ */
 MySceneGraph.prototype.checkAnimations = function() {
   for(let animID in this.animations) {
     if(this.animations[animID] instanceof MyComboAnimation) {
@@ -889,7 +892,7 @@ MySceneGraph.prototype.checkAnimations = function() {
           return "Combo Animation cannot reference another Combo Animation";
         this.animations[animID].animations[j] = this.animations[this.animations[animID].animations[j]];
       }
-      this.animations[animID].updateAnimationTime();
+      this.animations[animID].updateAnimationTime(); //Now that ComboAnimation has the objects instead of IDs, it has access to their animation times
     }
   }
   return null;

@@ -35,10 +35,11 @@ MyBezierAnimation.prototype.matrixAfter = function(delta) {
     let s = delta/this.animationTime;
     let currentQ = this.Q(s);
     let currentDerivativeQ = this.derivativeQ(s);
+    let angle = Math.PI/2-Math.atan2(currentDerivativeQ[2], currentDerivativeQ[0]);
+    //Wasn't able to create mat4 manually (method not available in version 2.1.0). Code still left for reference sake
     //let currentDerivativeNorm = vec3.length(currentDerivativeQ);
-    let angle = -Math.atan2(currentDerivativeQ[2], currentDerivativeQ[0]);
     //let cos = currentQ[0] / currentDerivativeNorm;
-    //let sin = currentQ[2] / currentDerivativeNorm; //May be wrong
+    //let sin = currentQ[2] / currentDerivativeNorm;
     //let rotationMat = [cos, 0, sin, 0, 0, 1, 0, 0, -sin, 0, cos, 0, 0, 0, 0, 1];
 
     let result = mat4.create();

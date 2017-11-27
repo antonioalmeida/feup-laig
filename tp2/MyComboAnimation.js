@@ -9,6 +9,9 @@ function MyComboAnimation(id, animations) {
 MyComboAnimation.prototype = Object.create(MyAnimation.prototype);
 MyComboAnimation.prototype.constructor = MyComboAnimation;
 
+/**
+ * Calculates the animation time, which is the sum of all animation times from animations referenced
+ */
 MyComboAnimation.prototype.updateAnimationTime = function() {
     for(let i = 0; i < this.animations.length; ++i)
         this.animationTime += this.animations[i].animationTime;

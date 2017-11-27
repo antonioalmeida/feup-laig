@@ -178,9 +178,9 @@
         <controlpoint xx="30" yy="7.5" zz="0"/>
         <controlpoint xx="0" yy="7.5" zz="0"/>
     </ANIMATION>
-    <ANIMATION id="anim8" type="linear" speed="1">
+    <ANIMATION id="anim8" type="linear" speed="3">
         <controlpoint xx="0" yy="0" zz="0"/>
-        <controlpoint xx="10" yy="0" zz="0"/>
+        <controlpoint xx="10" yy="0" zz="10"/>
     </ANIMATION>
 </ANIMATIONS>
 
@@ -194,10 +194,6 @@
     <NODE id="root">
         <MATERIAL id="defaultMaterial" />
         <TEXTURE id="null" />
-
-        <ANIMATIONREFS>
-            <ANIMATIONREF id="anim8" />
-        </ANIMATIONREFS>
 
         <DESCENDANTS>
             <NODEREF id="triangulo1" />
@@ -256,7 +252,7 @@
       </ANIMATIONREFS>
 
       <DESCENDANTS>
-        <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
+        <LEAF type="triangle" args="-2.5 0 0 0 0 2.5 2.5 0 0" />
       </DESCENDANTS>
 
     </NODE>
@@ -267,8 +263,12 @@
 
       <TRANSLATION x="0" y="0" z="20" />
 
+      <ANIMATIONREFS>
+          <ANIMATIONREF id="anim8" />
+      </ANIMATIONREFS>
+
       <DESCENDANTS>
-        <LEAF type="triangle" args="2.5 0 0 0 0 -2.5 0 0 2.5" />
+        <LEAF type="triangle" args="-2.5 0 0 0 0 2.5 2.5 0 0" />
       </DESCENDANTS>
 
     </NODE>
