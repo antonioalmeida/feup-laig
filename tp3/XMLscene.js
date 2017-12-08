@@ -166,14 +166,6 @@ XMLscene.prototype.display = function() {
 
     if (this.graph.loadedOk)
     {
-        //Reset selected status
-        for(let i = 0; i < this.graph.selectableNodes.length; ++i)
-            this.graph.nodes[this.graph.selectableNodes[i]].selected = false;
-
-        //Active currently selected node
-        if(this.selectedNode != 'No selection')
-            this.graph.nodes[this.selectedNode].selected = true;
-
         // Applies initial transformations.
         this.multMatrix(this.graph.initialTransforms);
 
