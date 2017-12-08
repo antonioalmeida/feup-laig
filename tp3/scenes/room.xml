@@ -3,11 +3,11 @@
   <!-- Initial values -->
   <INITIALS>
     <frustum near="0.1" far="500" />
-    <translation x="0" y="3" z="0" />
+    <translation x="-5" y="-2" z="-5" />
     <rotation axis="x" angle="0" />
     <rotation axis="y" angle="0" />
     <rotation axis="z" angle="0" />
-    <scale sx="0.45" sy="0.45" sz="0.45" />
+    <scale sx="0.4" sy="0.4" sz="0.4" />
     <reference length="5" />
   </INITIALS>
 
@@ -249,6 +249,8 @@
     <NODE id="root" selectable="true">
       <MATERIAL id="defaultMaterial" />
       <TEXTURE id="null" />
+
+      <TRANSLATION x="-10" y="-2" z="-10" />
 
       <DESCENDANTS>
         <NODEREF id="floor" />

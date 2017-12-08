@@ -32,9 +32,6 @@ function MyGraphNode(graph, nodeID) {
     this.currentAnimationDelta = 0;
     this.animationMatrix = mat4.create();
 
-    // Is this node selected? (initially false, if node marked as selectable attribute is updated in scene.display according to GUI input)
-    this.selected = false;
-
     this.transformMatrix = mat4.create();
 
 }
@@ -85,15 +82,9 @@ MyGraphNode.prototype.display = function(textureID, materialID) {
             this.graph.textures[textureID][0].bind();
         }
 
-        if(this.selected === true)
-            this.graph.scene.setSelectableShader();
-
         this.displayLeaves(textureToPassOn);
 
         this.displayChildren(textureToPassOn, materialToPassOn);
-
-        if(this.selected === true)
-            this.graph.scene.setDefaultShader();
 
     this.graph.scene.popMatrix();
 }

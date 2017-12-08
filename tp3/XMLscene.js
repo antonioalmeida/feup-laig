@@ -11,6 +11,10 @@ function XMLscene(interface) {
 
     this.lightValues = {};
 
+    this.graphs = []; //For different game scenarios
+
+    this.game = null;
+
     this.startTime = -1;
     this.delta = 0;
 }
@@ -32,12 +36,21 @@ XMLscene.prototype.init = function(application) {
     this.gl.enable(this.gl.DEPTH_TEST);
     this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
+    this.gl.enable(this.gl.BLEND);
+	this.gl.blendEquation(this.gl.FUNC_ADD);
+	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    this.gl.depthFunc(this.gl.LEQUAL);
+	this.gl.depthMask(true);
 
     this.axis = new CGFaxis(this);
 
-    this.selectedShader = new CGFshader(this.gl, "shaders/myVertexShader.glsl", "shaders/myFragmentShader.glsl");
-    this.updateSelectionColor();
-    this.updateSelectionSize();
+    //Update period of 20ms
+    this.setUpdatePeriod(20);
+
+    //Enable object picking
+    this.setPickEnabled(true);
+
+    this.game = new MyCheversi(this);
 }
 
 /**
@@ -99,9 +112,6 @@ XMLscene.prototype.onGraphLoaded = function()
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
-
-    //Set update period to 20ms
-    this.setUpdatePeriod(20);
 }
 
 /**
@@ -114,35 +124,8 @@ XMLscene.prototype.update = function(currTime) {
         this.delta = (currTime - this.startTime) / 1000;
 
     let factor = Math.abs(Math.sin(0.005*currTime));
-    this.selectedShader.setUniformsValues({timeFactor: factor});
-}
-
-/**
- * Sets the selectable shader as the active shader
- */
-XMLscene.prototype.setSelectableShader = function() {
-    this.setActiveShader(this.selectedShader);
-}
-
-/**
- * Sets the default shader as the active shader
- */
-XMLscene.prototype.setDefaultShader = function() {
-    this.setActiveShader(this.defaultShader);
-}
-
-/**
- * Updates the selection color components in the selected shader
- */
-XMLscene.prototype.updateSelectionColor = function() {
-    this.selectedShader.setUniformsValues({r:this.selectionColorR, g:this.selectionColorG, b:this.selectionColorB});
-}
-
-/**
- * Updates the selection size offset component in the selected shader
- */
-XMLscene.prototype.updateSelectionSize = function() {
-    this.selectedShader.setUniformsValues({sizeFactor: this.selectionSize});
+    if(this.game != null)
+        this.game.selectedShader.setUniformsValues({timeFactor: factor});
 }
 
 /**
@@ -197,6 +180,8 @@ XMLscene.prototype.display = function() {
 		// Draw axis
 		this.axis.display();
 	}
+
+    this.game.display();
 
 
     this.popMatrix();

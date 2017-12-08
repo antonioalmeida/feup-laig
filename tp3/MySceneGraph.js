@@ -930,15 +930,6 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
             // Creates node.
             this.nodes[nodeID] = new MyGraphNode(this, nodeID);
 
-            // Retrieve selectable attribute, if it exists
-            var selectable = this.reader.getString(children[i], 'selectable', false);
-            if (selectable == "true") {
-                console.log("\tnode is selectable");
-                this.selectableNodes.push(nodeID);
-            }
-            else
-                console.log("\tcould not parse value, value is \"false\" or attribute not present; node isn't selectable");
-
             // Gathers child nodes.
             var nodeSpecs = children[i].children;
             var specsNames = [];
