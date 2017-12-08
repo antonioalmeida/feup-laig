@@ -130,12 +130,6 @@
       <amplif_factor s="1" t="1" />
     </TEXTURE>
 
-    <!-- Vacuum cleaner texture -->
-    <TEXTURE id="vacCleanerTexture">
-      <file path="images_room/vaccumCleaner.jpg" />
-      <amplif_factor s="1" t="1" />
-    </TEXTURE>
-
   </TEXTURES>
 
   <!-- Materials -->
@@ -242,64 +236,8 @@
 
   </MATERIALS>
 
-  <!-- Animations -->
+
   <ANIMATIONS>
-
-    <ANIMATION id="robot_linear_anim1" type="linear" speed="3">
-      <controlpoint xx="1.5" yy="0" zz="12"/>
-      <controlpoint xx="1.5" yy="0" zz="2"/>
-      <controlpoint xx="7" yy="0" zz="4"/>
-    </ANIMATION>
-
-    <ANIMATION id="robot_linear_anim2" type="linear" speed="3">
-      <controlpoint xx="7" yy="0" zz="10"/>
-      <controlpoint xx="14" yy="0" zz="11"/>
-      <controlpoint xx="11" yy="0" zz="14"/>
-      <controlpoint xx="7" yy="0" zz="11"/>
-    </ANIMATION>
-
-    <ANIMATION id="robot_linear_anim3" type="linear" speed="3">
-      <controlpoint xx="7" yy="0" zz="3"/>
-      <controlpoint xx="14" yy="0" zz="3"/>
-      <controlpoint xx="11" yy="0" zz="4"/>
-      <controlpoint xx="10" yy="0" zz="9"/>
-    </ANIMATION>
-
-    <ANIMATION id="robot_linear_anim4" type="linear" speed="3">
-      <controlpoint xx="8" yy="0" zz="11"/>
-      <controlpoint xx="1.5" yy="0" zz="12"/>
-    </ANIMATION>
-
-    <ANIMATION id="robot_circular_anim1" type="circular" speed="3" centerx="7" centery="0" centerz="7" radius="3" startang="90" rotang="-180" />
-
-    <ANIMATION id="robot_circular_anim2" type="circular" speed="3" centerx="7" centery="0" centerz="7" radius="4" startang="-90" rotang="-180" />
-
-    <ANIMATION id="robot_circular_anim3" type="circular" speed="3" centerx="8" centery="0" centerz="9" radius="2" startang="0" rotang="-90" />
-
-    <ANIMATION id="plane_circular_anim1" type="circular" speed="15" centerx="7.5" centery="2" centerz="14" radius="1" startang="-90" rotang="-360" />
-
-    <ANIMATION id="plane_circular_anim2" type="circular" speed="3" centerx="8" centery="0" centerz="9" radius="2" startang="0" rotang="-90" />
-
-    <ANIMATION id="plane_bezier_anim1" type="bezier" speed="10">
-      <controlpoint xx="5" yy="2" zz="3"/>
-      <controlpoint xx="18" yy="10" zz="2.5"/>
-      <controlpoint xx="20" yy="5" zz="18"/>
-      <controlpoint xx="7.5" yy="2" zz="15"/>
-    </ANIMATION>
-
-    <ANIMATION id="plane_bezier_anim2" type="bezier" speed="10">
-      <controlpoint xx="7.5" yy="2" zz="15"/>
-      <controlpoint xx="0" yy="5" zz="13"/>
-      <controlpoint xx="0" yy="7" zz="2.5"/>
-      <controlpoint xx="5" yy="2" zz="3"/>
-    </ANIMATION>
-
-    <ANIMATION id="robot_combo_anim" type="combo">
-      <SPANREF id="robot_linear_anim2"/>
-      <SPANREF id="robot_circular_anim2"/>
-      <SPANREF id="robot_linear_anim3"/>
-    </ANIMATION>
-
   </ANIMATIONS>
 
   <!-- The nodes -->
@@ -326,8 +264,6 @@
         <NODEREF id="fireplace" />
         <NODEREF id="speaker_system" />
         <NODEREF id="table_center" />
-        <NODEREF id="paper_plane" />
-        <NODEREF id="robot_vaccum_cleaner" />
       </DESCENDANTS>
     </NODE>
 
@@ -1363,88 +1299,6 @@
 
       <DESCENDANTS>
         <LEAF id="triangle1" type="triangle" args="2 0 12 12 0 2 0 0 0" />
-      </DESCENDANTS>
-    </NODE>
-
-    <!-- Robot Vacuum Cleaner -->
-    <NODE id="robot_vaccum_cleaner">
-      <MATERIAL id="metalMaterial" />
-      <TEXTURE id="null" />
-
-      <ANIMATIONREFS>
-        <ANIMATIONREF id="robot_linear_anim1"/>
-        <ANIMATIONREF id="robot_circular_anim1"/>
-        <ANIMATIONREF id="robot_combo_anim"/>
-        <ANIMATIONREF id="robot_circular_anim3"/>
-        <ANIMATIONREF id="robot_linear_anim4"/>
-      </ANIMATIONREFS>
-
-      <DESCENDANTS>
-        <NODEREF id="robot_vaccum_cleaner_top" />
-        <NODEREF id="robot_vaccum_cleaner_bottom" />
-      </DESCENDANTS>
-    </NODE>
-
-    <!-- Robot Vacuum Cleaner Top -->
-    <NODE id="robot_vaccum_cleaner_top">
-      <MATERIAL id="null" />
-      <TEXTURE id="vacCleanerTexture" />
-
-      <TRANSLATION x="0" y="0.2" z="0" />
-      <ROTATION axis="x" angle="180" />
-      <SCALE sx="1" sy="0.2" sz="1" />
-
-      <DESCENDANTS>
-        <LEAF type="sphere" args="0.6 30 20" />
-      </DESCENDANTS>
-    </NODE>
-
-    <!-- Robot Vacuum Cleaner Bottom -->
-    <NODE id="robot_vaccum_cleaner_bottom">
-      <MATERIAL id="plasticMaterial" />
-      <TEXTURE id="null" />
-
-      <ROTATION axis="x" angle="-90" />
-
-      <DESCENDANTS>
-        <LEAF type="cylinder" args="0.2 0.6 0.6 30 20 0 0" />
-      </DESCENDANTS>
-    </NODE>
-
-    <!-- Paper Plane -->
-    <NODE id="paper_plane" selectable="true">
-      <MATERIAL id="null" />
-      <TEXTURE id="null" />
-
-      <ANIMATIONREFS>
-        <ANIMATIONREF id="plane_bezier_anim1"/>
-        <ANIMATIONREF id="plane_circular_anim1"/>
-        <ANIMATIONREF id="plane_bezier_anim2"/>
-      </ANIMATIONREFS>
-
-      <DESCENDANTS>
-        <NODEREF id="paper_plane_bottom" />
-        <NODEREF id="paper_plane_top" />
-      </DESCENDANTS>
-    </NODE>
-
-    <!-- Paper Plane Bottom -->
-    <NODE id="paper_plane_bottom">
-      <MATERIAL id="null" />
-      <TEXTURE id="null" />
-
-      <DESCENDANTS>
-        <LEAF type="triangle" args="0.5 0 0 -0.5 0 0 0 0 0.5" />
-      </DESCENDANTS>
-    </NODE>
-
-    <!-- Paper Plane Top -->
-    <NODE id="paper_plane_top">
-      <MATERIAL id="null" />
-      <TEXTURE id="null" />
-
-      <DESCENDANTS>
-        <LEAF type="triangle" args="0 0 0 0 0.25 0 0 0 0.5" />
       </DESCENDANTS>
     </NODE>
 

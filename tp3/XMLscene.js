@@ -13,14 +13,6 @@ function XMLscene(interface) {
 
     this.startTime = -1;
     this.delta = 0;
-
-    this.selectedNode = 'No selection';
-
-    this.selectionColorR = 1.0;
-    this.selectionColorG = 0.0;
-    this.selectionColorB = 0.0;
-
-    this.selectionSize = 0.1;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -107,12 +99,6 @@ XMLscene.prototype.onGraphLoaded = function()
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
-
-    // Adds selectable nodes
-    this.interface.addSelectableListBox(this.graph.selectableNodes);
-
-    // Adds selection parametrization
-    this.interface.addSelectionParametrization();
 
     //Set update period to 20ms
     this.setUpdatePeriod(20);
