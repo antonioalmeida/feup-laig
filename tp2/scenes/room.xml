@@ -1,0 +1,1544 @@
+<SCENE>
+
+  <!-- Initial values -->
+  <INITIALS>
+    <frustum near="0.1" far="500" />
+    <translation x="0" y="3" z="0" />
+    <rotation axis="x" angle="0" />
+    <rotation axis="y" angle="0" />
+    <rotation axis="z" angle="0" />
+    <scale sx="0.45" sy="0.45" sz="0.45" />
+    <reference length="5" />
+  </INITIALS>
+
+  <!-- Illumination and clear colour -->
+  <ILLUMINATION>
+    <ambient r="0.2" g="0.2" b="0.2" a="1" />
+    <background r="0.1" g="0.1" b="0.1" a="1" /> <!-- Blue color like deep ocean -->
+  </ILLUMINATION>
+
+  <!-- Lights -->
+  <LIGHTS>
+
+    <!-- light in center of the scene -->
+    <LIGHT id="lamp_light">
+      <enable value ="1" />
+      <position  x="7.5" y="5" z="7.5" w="1" />
+      <ambient r="1" g="1" b="1" a="1.0" />
+      <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+      <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    </LIGHT>
+
+    <!-- Light in lamp stand -->
+    <LIGHT id="lamp_stand_light">
+      <enable value ="1" />
+      <position  x="13.5" y="3" z="13.5" w="1" />
+      <ambient r="1" g="1" b="1" a="0.1" />
+      <diffuse r="1.0" g="1.0" b="1.0" a="0.01" />
+      <specular r="1.0" g="1.0" b="1.0" a="0.01" />
+    </LIGHT>
+
+    <!-- Light in fireplace-->
+    <LIGHT id="fireplace_light">
+      <enable value ="0" />
+      <position  x="12" y="1.5" z="5" w="1" />
+      <ambient r="0.1" g="0.1" b="0.1" a="1" />
+      <diffuse r="1.0" g="0.0" b="0.0" a="1" />
+      <specular r="1.0" g="0.0" b="0.0" a="1" />
+    </LIGHT>
+
+  </LIGHTS>
+
+  <!-- Textures -->
+  <TEXTURES>
+
+    <!-- Leather texture -->
+    <TEXTURE id="leatherTexture">
+      <file path="images_room/leather.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Painting 1 texture -->
+    <TEXTURE id="painting1Texture">
+      <file path="images_room/painting1.jpg" />
+      <amplif_factor s="1.6" t="2.1" />
+    </TEXTURE>
+
+    <!-- Painting 2 texture -->
+    <TEXTURE id="painting2Texture">
+      <file path="images_room/painting2.jpg" />
+      <amplif_factor s="1.6" t="2.1" />
+    </TEXTURE>
+
+    <!-- Wood Floor texture -->
+    <TEXTURE id="woodFloorTexture">
+      <file path="images_room/floor.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Wood texture -->
+    <TEXTURE id="woodTexture">
+      <file path="images_room/wood.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Carpet texture -->
+    <TEXTURE id="carpetTexture">
+      <file path="images_room/carpet.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Fireplace Rock texture-->
+    <TEXTURE id="rockTexture">
+      <file path="images_room/fireplace.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Fire texture -->
+    <TEXTURE id="fireTexture">
+      <file path="images_room/fire.jpg" />
+      <amplif_factor s="3" t="2.4" />
+    </TEXTURE>
+
+    <!-- Wall texture -->
+    <TEXTURE id="wallTexture">
+      <file path="images_room/wall.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Television screen texture -->
+    <TEXTURE id="lionkingTexture">
+      <file path="images_room/reileao1.jpg" />
+      <amplif_factor s="1.8" t="0.8" />
+    </TEXTURE>
+
+    <!-- Speaker texture -->
+    <TEXTURE id="speakerTexture">
+      <file path="images_room/speaker.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Lamp bulb texture -->
+    <TEXTURE id="lampTexture">
+      <file path="images_room/lamp.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Glass bowl texture -->
+    <TEXTURE id="glassTexture">
+      <file path="images_room/glass.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+    <!-- Vacuum cleaner texture -->
+    <TEXTURE id="vacCleanerTexture">
+      <file path="images_room/vaccumCleaner.jpg" />
+      <amplif_factor s="1" t="1" />
+    </TEXTURE>
+
+  </TEXTURES>
+
+  <!-- Materials -->
+  <MATERIALS>
+
+    <!-- A default material -->
+    <MATERIAL id="defaultMaterial">
+      <shininess value="1" />
+      <specular r="0.0" g="0.0" b="0.0" a="1" />
+      <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+      <ambient r="0.4" g="0.4" b="0.4" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Metal material -->
+    <MATERIAL id="metalMaterial">
+      <shininess value="255" />
+      <specular r="1" g="1" b="1" a="0.5" />
+      <diffuse r="0.6" g="0.6" b="0.6" a="1" />
+      <ambient r="0.3" g="0.3" b="0.3" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Another Floor material -->
+    <MATERIAL id="floorMaterial">
+      <shininess value="1" />
+      <specular r="0" g="0" b="0" a="0" />
+      <diffuse r="0" g="0" b="0" a="0" />
+      <ambient r="1" g="1" b="1" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="0" />
+    </MATERIAL>
+
+    <!-- Wall material -->
+    <MATERIAL id="wallMaterial">
+      <shininess value="50" />
+      <specular r="0" g="0" b="0" a="0.5" />
+      <diffuse r="0" g="0" b="0" a="1" />
+      <ambient r="1" g="1" b="1" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Plastic material -->
+    <MATERIAL id="plasticMaterial">
+      <shininess value="50" />
+      <specular r="0.1" g="0.1" b="0.1" a="1" />
+      <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+      <ambient r="0.1" g="0.1" b="0.1" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Glass material -->
+    <MATERIAL id="glassMaterial">
+      <shininess value="255" />
+      <specular r="1" g="1" b="1" a="1" />
+      <diffuse r="0" g="0" b="0" a="1" />
+      <ambient r="0.5" g="0.5" b="0.5" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- A black material -->
+    <MATERIAL id="blackMaterial">
+      <shininess value="1" />
+      <specular r="0" g="0" b="0" a="1" />
+      <diffuse r="0" g="0" b="0" a="1" />
+      <ambient r="0.05" g="0.05" b="0.05" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- A grey material -->
+    <MATERIAL id="greyMaterial">
+      <shininess value="0.1" />
+      <specular r="0.0" g="0.0" b="0.0" a="1" />
+      <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+      <ambient r="0.2" g="0.2" b="0.2" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- A speaker material -->
+    <MATERIAL id="speakerMaterial">
+      <shininess value="1" />
+      <specular r="0.1" g="0.1" b="0.1" a="1" />
+      <diffuse r="0.3" g="0.3" b="0.3" a="1" />
+      <ambient r="0.2" g="0.2" b="0.2" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- A redWall material -->
+    <MATERIAL id="redWallMaterial">
+      <shininess value="0.1" />
+      <specular r="0" g="0" b="0" a="1" />
+      <diffuse r="0" g="0" b="0" a="1" />
+      <ambient r="0.35" g="0" b="0.05" a="0.1" />
+      <emission r="0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Wood material -->
+    <MATERIAL id="woodMaterial">
+      <shininess value="1" />
+      <specular r="0.0" g="0.0" b="0.0" a="1" />
+      <diffuse r="0" g="0" b="0" a="1" />
+      <ambient r="0.2" g="0.2" b="0.2" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+  </MATERIALS>
+
+  <!-- Animations -->
+  <ANIMATIONS>
+
+    <ANIMATION id="robot_linear_anim1" type="linear" speed="3">
+      <controlpoint xx="1.5" yy="0" zz="12"/>
+      <controlpoint xx="1.5" yy="0" zz="2"/>
+      <controlpoint xx="7" yy="0" zz="4"/>
+    </ANIMATION>
+
+    <ANIMATION id="robot_linear_anim2" type="linear" speed="3">
+      <controlpoint xx="7" yy="0" zz="10"/>
+      <controlpoint xx="14" yy="0" zz="11"/>
+      <controlpoint xx="11" yy="0" zz="14"/>
+      <controlpoint xx="7" yy="0" zz="11"/>
+    </ANIMATION>
+
+    <ANIMATION id="robot_linear_anim3" type="linear" speed="3">
+      <controlpoint xx="7" yy="0" zz="3"/>
+      <controlpoint xx="14" yy="0" zz="3"/>
+      <controlpoint xx="11" yy="0" zz="4"/>
+      <controlpoint xx="10" yy="0" zz="9"/>
+    </ANIMATION>
+
+    <ANIMATION id="robot_linear_anim4" type="linear" speed="3">
+      <controlpoint xx="8" yy="0" zz="11"/>
+      <controlpoint xx="1.5" yy="0" zz="12"/>
+    </ANIMATION>
+
+    <ANIMATION id="robot_circular_anim1" type="circular" speed="3" centerx="7" centery="0" centerz="7" radius="3" startang="90" rotang="-180" />
+
+    <ANIMATION id="robot_circular_anim2" type="circular" speed="3" centerx="7" centery="0" centerz="7" radius="4" startang="-90" rotang="-180" />
+
+    <ANIMATION id="robot_circular_anim3" type="circular" speed="3" centerx="8" centery="0" centerz="9" radius="2" startang="0" rotang="-90" />
+
+    <ANIMATION id="plane_circular_anim1" type="circular" speed="15" centerx="7.5" centery="2" centerz="14" radius="1" startang="-90" rotang="-360" />
+
+    <ANIMATION id="plane_circular_anim2" type="circular" speed="3" centerx="8" centery="0" centerz="9" radius="2" startang="0" rotang="-90" />
+
+    <ANIMATION id="plane_bezier_anim1" type="bezier" speed="10">
+      <controlpoint xx="5" yy="2" zz="3"/>
+      <controlpoint xx="18" yy="10" zz="2.5"/>
+      <controlpoint xx="20" yy="5" zz="18"/>
+      <controlpoint xx="7.5" yy="2" zz="15"/>
+    </ANIMATION>
+
+    <ANIMATION id="plane_bezier_anim2" type="bezier" speed="10">
+      <controlpoint xx="7.5" yy="2" zz="15"/>
+      <controlpoint xx="0" yy="5" zz="13"/>
+      <controlpoint xx="0" yy="7" zz="2.5"/>
+      <controlpoint xx="5" yy="2" zz="3"/>
+    </ANIMATION>
+
+    <ANIMATION id="robot_combo_anim" type="combo">
+      <SPANREF id="robot_linear_anim2"/>
+      <SPANREF id="robot_circular_anim2"/>
+      <SPANREF id="robot_linear_anim3"/>
+    </ANIMATION>
+
+  </ANIMATIONS>
+
+  <!-- The nodes -->
+  <NODES>
+
+    <ROOT id="root" />
+
+    <!-- The root node -->
+    <NODE id="root" selectable="true">
+      <MATERIAL id="defaultMaterial" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="floor" />
+        <NODEREF id="walls" />
+        <NODEREF id="floor_lamp" />
+        <NODEREF id="couch" />
+        <NODEREF id="tv_table" />
+        <NODEREF id="shelf" />
+        <NODEREF id="television" />
+        <NODEREF id="painting1" />
+        <NODEREF id="painting2" />
+        <NODEREF id="carpet" />
+        <NODEREF id="fireplace" />
+        <NODEREF id="speaker_system" />
+        <NODEREF id="table_center" />
+        <NODEREF id="paper_plane" />
+        <NODEREF id="robot_vaccum_cleaner" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The floor -->
+    <NODE id="floor">
+      <MATERIAL id="floorMaterial" />
+      <TEXTURE id="woodFloorTexture" />
+
+      <TRANSLATION x="7.5" y="0" z="7.5" />
+      <ROTATION axis="x" angle="-90" />
+      <SCALE sx="15" sy="15" sz="1" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The Walls -->
+    <NODE id="walls">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="wall_left" />
+        <NODEREF id="wall_back" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The Back Wall -->
+    <NODE id="wall_back">
+      <MATERIAL id="redWallMaterial" />
+      <TEXTURE id="wallTexture" />
+
+      <TRANSLATION x="7.5" y="2.5" z="0" />
+
+      <DESCENDANTS>
+        <NODEREF id="wall" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The Left Wall -->
+    <NODE id="wall_left">
+      <MATERIAL id="null" />
+      <TEXTURE id="wallTexture" />
+
+      <TRANSLATION x="0" y="2.5" z="7.5" />
+      <ROTATION axis="y" angle="90" />
+      <ROTATION axis="z" angle="180" />
+
+      <DESCENDANTS>
+        <NODEREF id="wall" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Wall -->
+    <NODE id="wall">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="15" sy="5" sz="0" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Floor lamp -->
+    <NODE id="floor_lamp">
+      <MATERIAL id="metalMaterial" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="13.6" y="0" z="13.6" />
+
+      <DESCENDANTS>
+        <NODEREF id="lamp_bulb" />
+        <NODEREF id="lamp_post" />
+        <NODEREF id="lamp_base" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Floor lamp bulb -->
+    <NODE id="lamp_bulb">
+      <MATERIAL id="glassMaterial" />
+      <TEXTURE id="lampTexture" />
+
+      <TRANSLATION x="0" y="3" z="0" />
+      <ROTATION axis="y" angle="180" />
+      <ROTATION axis="x" angle="90" />
+
+      <DESCENDANTS>
+        <LEAF type="sphere" args="0.8 20 20" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Floor lamp post -->
+    <NODE id="lamp_post">
+      <MATERIAL id="plasticMaterial" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="0.1" sy="0.8" sz="0.1" />
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="4 1 1 20 20 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Floor lamp base -->
+    <NODE id="lamp_base">
+      <MATERIAL id="plasticMaterial" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="0" />
+      <SCALE sx="0.3" sy="0.05" sz="0.3" />
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <LEAF type="sphere" args="2 20 20" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch -->
+    <NODE id="couch" selectable="true">
+      <MATERIAL id="greyMaterial" />
+      <TEXTURE id="leatherTexture" />
+
+      <TRANSLATION x="13" y="0.5" z="7.5"/>
+
+      <DESCENDANTS>
+        <NODEREF id="couch_top" />
+        <NODEREF id="couch_base" />
+        <NODEREF id="couch_base_pillow" />
+        <NODEREF id="couch_headboard" />
+        <NODEREF id="couch_side_l" />
+        <NODEREF id="couch_side_pillow_l" />
+        <NODEREF id="couch_side_r" />
+        <NODEREF id="couch_side_pillow_r" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch Top -->
+    <NODE id="couch_top">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="1" y="1" z="0" />
+      <SCALE sx="1" sy="1" sz="5" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!--Couch Base  -->
+    <NODE id="couch_base">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="3" sy="1" sz="5" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!--Couch Base Pillow  -->
+    <NODE id="couch_base_pillow">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.5" y="0.5" z="-1.5" />
+      <SCALE sx="2" sy="0.5" sz="3" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="1 0.5 0.5 20 20 1 1" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch Headboard -->
+    <NODE id="couch_headboard">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="1" y="2" z="-2.5" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="5 0.6 0.6 20 20 1 1" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch Side Left -->
+    <NODE id="couch_side_l">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.5" y="1" z="2" />
+      <SCALE sx="2" sy="1" sz="1" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch Side Pillow Left -->
+    <NODE id="couch_side_pillow_l">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.5" y="1.5" z="1.505" />
+      <SCALE sx="1" sy="0.25" sz="0.99" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="1 1 1 20 20 1 1" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch Side Right -->
+    <NODE id="couch_side_r">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.5" y="1" z="-2" />
+      <SCALE sx="2" sy="1" sz="1" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Couch Side Pillow Right -->
+    <NODE id="couch_side_pillow_r">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.5" y="1.5" z="-2.495" />
+      <SCALE sx="1" sy="0.25" sz="0.99" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="1 1 1 20 20 1 1" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- TV Table -->
+    <NODE id="tv_table">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="1.5" y="0" z="7.5" />
+
+      <DESCENDANTS>
+        <NODEREF id="table_top" />
+        <NODEREF id="table_legs" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Top -->
+    <NODE id="table_top">
+      <MATERIAL id="woodMaterial" />
+      <TEXTURE id="woodTexture" />
+
+      <TRANSLATION x="0" y="1" z="0" />
+      <SCALE sx="2.5" sy="0.5" sz="5"/>
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Legs -->
+    <NODE id="table_legs">
+      <MATERIAL id="speakerMaterial" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="table_legs1" />
+        <NODEREF id="table_legs2" />
+        <NODEREF id="table_legs3" />
+        <NODEREF id="table_legs4" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Legs1 -->
+    <NODE id="table_legs1">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.9" y="0" z="-2.2" />
+
+      <DESCENDANTS>
+        <NODEREF id="table_leg" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Legs2 -->
+    <NODE id="table_legs2">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0.9" y="0" z="-2.2" />
+
+      <DESCENDANTS>
+        <NODEREF id="table_leg" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Legs3 -->
+    <NODE id="table_legs3">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-0.9" y="0" z="2.2" />
+
+      <DESCENDANTS>
+        <NODEREF id="table_leg" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Legs4 -->
+    <NODE id="table_legs4">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0.9" y="0" z="2.2" />
+
+      <DESCENDANTS>
+        <NODEREF id="table_leg" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Leg -->
+    <NODE id="table_leg">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="0.2" sy="0.8" sz="0.2" />
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="1.5 1 1 20 20 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Shelf -->
+    <NODE id="shelf">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="5" y="3" z="0.5"/>
+
+      <DESCENDANTS>
+        <NODEREF id="shelf_base" />
+        <NODEREF id="shelf_panel_r" />
+        <NODEREF id="shelf_panel_l" />
+        <NODEREF id="pyramid1" />
+        <NODEREF id="pyramid2" />
+        <NODEREF id="bowl" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Shelf Base -->
+    <NODE id="shelf_base">
+      <MATERIAL id="woodMaterial" />
+      <TEXTURE id="woodTexture" />
+
+      <SCALE sx="5" sy="0.5" sz="1"/>
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Shelf Right Panel -->
+    <NODE id="shelf_panel_r">
+      <MATERIAL id="speakerMaterial" />
+      <TEXTURE id="clear" />
+
+      <TRANSLATION x="-2.55" y="0.25" z="-0.25"/>
+      <SCALE sx="0.1" sy="1" sz="0.5" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Shelf Left Panel -->
+    <NODE id="shelf_panel_l">
+      <MATERIAL id="speakerMaterial" />
+      <TEXTURE id="clear" />
+
+      <TRANSLATION x="2.55" y="0.25" z="-0.25"/>
+      <SCALE sx="0.1" sy="1" sz="0.5" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Bigger Pyramid Ornament -->
+    <NODE id="pyramid1">
+      <MATERIAL id="metalMaterial" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-2.5" y="0.25" z="-1"/>
+      <SCALE sx="0.1" sy="0.1" sz="0.1" />
+
+      <DESCENDANTS>
+        <NODEREF id="pyramid" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Smaller Pyramid Ornament -->
+    <NODE id="pyramid2">
+      <MATERIAL id="metalMaterial" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="-1" y="0.25" z="-0.5"/>
+      <SCALE sx="0.05" sy="0.05" sz="0.05" />
+
+      <DESCENDANTS>
+        <NODEREF id="pyramid" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Bowl Ornament -->
+    <NODE id="bowl">
+      <MATERIAL id="glassMaterial" />
+      <TEXTURE id="glassTexture" />
+
+      <TRANSLATION x="1.3" y="0.5" z="0.2"/>
+      <ROTATION axis="x" angle="90" />
+
+      <DESCENDANTS>
+        <NODEREF id="bowl_top" />
+        <NODEREF id="bowl_bottom" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Bowl Ornament Top -->
+    <NODE id="bowl_top">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <LEAF type="patch" args="20 20" >
+          <CPLINE>
+            <CPOINT xx="0.8" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="0.8" yy="0" zz="0" ww="1" />
+            <CPOINT xx="0.8" yy="0.4" zz="0" ww="1" />
+
+          </CPLINE>
+
+          <CPLINE>
+            <CPOINT xx="0" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="0" yy="0" zz="1" ww="1" />
+            <CPOINT xx="0" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+
+          <CPLINE>
+            <CPOINT xx="-0.8" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="-0.8" yy="0" zz="0" ww="1" />
+            <CPOINT xx="-0.8" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+        </LEAF>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Bowl Ornament Bottom -->
+    <NODE id="bowl_bottom">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <LEAF type="patch" args="20 20" >
+          <CPLINE>
+            <CPOINT xx="-0.8" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="-0.8" yy="0" zz="0" ww="1" />
+            <CPOINT xx="-0.8" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+
+          <CPLINE>
+            <CPOINT xx="0" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="0" yy="0" zz="1" ww="1" />
+            <CPOINT xx="0" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+
+          <CPLINE>
+            <CPOINT xx="0.8" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="0.8" yy="0" zz="0" ww="1" />
+            <CPOINT xx="0.8" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+        </LEAF>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television -->
+    <NODE id="television">
+      <MATERIAL id="blackMaterial" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="2" y="2.25" z="7.5"/>
+      <ROTATION axis="y" angle="90" />
+      <SCALE sx="1.2" sy="2" sz="1" />
+
+      <DESCENDANTS>
+        <NODEREF id="tv_main" />
+        <NODEREF id="tv_sec" />
+        <NODEREF id="tv_thrd" />
+        <NODEREF id="tv_screen" />
+        <NODEREF id="tv_antenna" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television main box -->
+    <NODE id="tv_main">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="2" sy="1" sz="1" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television second box -->
+    <NODE id="tv_sec">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="-0.65"/>
+      <SCALE sx="1.8" sy="0.8" sz="0.3" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television third box -->
+    <NODE id="tv_thrd">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="-1"/>
+      <SCALE sx="1" sy="0.6" sz="0.4" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television screen -->
+    <NODE id="tv_screen">
+      <MATERIAL id="defaultMaterial" />
+      <TEXTURE id="lionkingTexture" />
+
+      <TRANSLATION x="0" y="0" z="0.5"/>
+      <ROTATION axis="z" angle="180"/>
+
+      <DESCENDANTS>
+        <!-- <LEAF  type="rectangle" args="-0.9 0.4 0.9 -0.4" /> -->
+        <LEAF  type="patch" args="20 20" >
+          <CPLINE>
+            <CPOINT xx="-0.9" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="-0.9" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+
+          <CPLINE>
+            <CPOINT xx="0" yy="-0.4" zz="0.2" ww="1" />
+            <CPOINT xx="0" yy="0.4" zz="0.2" ww="1" />
+          </CPLINE>
+
+          <CPLINE>
+            <CPOINT xx="0.9" yy="-0.4" zz="0" ww="1" />
+            <CPOINT xx="0.9" yy="0.4" zz="0" ww="1" />
+          </CPLINE>
+        </LEAF>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television antenna -->
+    <NODE id="tv_antenna">
+      <MATERIAL id="metalMaterial" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0.5" y="0.5025" z="0"/>
+      <ROTATION axis="y" angle="-30"/>
+
+      <DESCENDANTS>
+        <NODEREF id="tv_antenna_base" />
+        <NODEREF id="tv_antenna_wire_l" />
+        <NODEREF id="tv_antenna_wire_r" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television antenna base -->
+    <NODE id="tv_antenna_base">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="0.15" sy="0.005" sz="0.15" />
+
+      <DESCENDANTS>
+        <LEAF type="sphere" args="2 5 20" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television antenna right wire -->
+    <NODE id="tv_antenna_wire_l">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <!-- <TRANSLATION x="0" y="0" z="-1"/> -->
+      <ROTATION axis="z" angle="-20"/>
+      <ROTATION axis="x" angle="-90"/>
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="0.7 0.01 0.01 5 5 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Television antenna left wire -->
+    <NODE id="tv_antenna_wire_r">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="z" angle="30"/>
+      <ROTATION axis="x" angle="-90"/>
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="0.5 0.01 0.01 5 5 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker system-->
+    <NODE id="speaker_system">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="speaker_left" />
+        <NODEREF id="speaker_right" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker left-->
+    <NODE id="speaker_left">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0.5" y="0" z="14.5"/>
+      <ROTATION axis="y" angle="20"/>
+
+      <DESCENDANTS>
+        <NODEREF id="speaker" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker right-->
+    <NODE id="speaker_right">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0.5" y="0" z="0.55"/>
+      <ROTATION axis="y" angle="-20"/>
+
+      <DESCENDANTS>
+        <NODEREF id="speaker" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker-->
+    <NODE id="speaker">
+      <MATERIAL id="speakerMaterial" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="speaker_post" />
+        <NODEREF id="speaker_base" />
+        <NODEREF id="speaker_box" />
+        <NODEREF id="speaker_sound" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker post-->
+    <NODE id="speaker_post">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="-90"/>
+      <SCALE sx="0.1" sy="0.1" sz="0.7" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="4 1 1 20 20 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker base-->
+    <NODE id="speaker_base">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="-90"/>
+      <SCALE sx="0.5" sy="0.5" sz="0.1" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="4 1 1 20 20 1 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker box-->
+    <NODE id="speaker_box">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="3.5" z="0" />
+      <SCALE sx="0.5" sy="1.5" sz="1" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Speaker box-->
+    <NODE id="speaker_sound">
+      <MATERIAL id="greyMaterial" />
+      <TEXTURE id="speakerTexture" />
+
+      <TRANSLATION x="0.2" y="3.5" z="0" />
+      <SCALE sx="0.3" sy="1.3" sz="0.8" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The left-most painting -->
+    <NODE id="painting1">
+      <MATERIAL id="null" />
+      <TEXTURE id="painting1Texture" />
+
+      <TRANSLATION x="0.1" y="2.5" z="11.3" />
+      <ROTATION axis="y" angle="90" />
+
+      <DESCENDANTS>
+        <NODEREF id="painting_frame" />
+        <NODEREF id="painting_canvas" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The right-most painting -->
+    <NODE id="painting2">
+      <MATERIAL id="null" />
+      <TEXTURE id="painting2Texture" />
+
+      <TRANSLATION x="0.1" y="2.5" z="3.75" />
+      <ROTATION axis="y" angle="90" />
+
+      <DESCENDANTS>
+        <NODEREF id="painting_frame" />
+        <NODEREF id="painting_canvas" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Painting frame -->
+    <NODE id="painting_frame">
+      <MATERIAL id="plasticMaterial" />
+      <TEXTURE id="woodTexture" />
+
+      <SCALE sx="1.7" sy="2.2" sz="0.2" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Painting canvas -->
+    <NODE id="painting_canvas">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="0.105" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.8 1.05 0.8 -1.05" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Carpet -->
+    <NODE id="carpet">
+      <MATERIAL id="redWallMaterial" />
+      <TEXTURE id="carpetTexture" />
+
+      <TRANSLATION x="7" y="0.05" z="7.5" />
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-3 4 3 -4" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Fireplace -->
+    <NODE id="fireplace">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="12" y="2.5" z="1" />
+
+      <DESCENDANTS>
+        <NODEREF id="fireplace_structure" />
+        <NODEREF id="fireplace_fire" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- FirePlace structure -->
+    <NODE id="fireplace_structure">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="fireplace_structure_vert" />
+        <NODEREF id="fireplace_structure_hor" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Fireplace rock structure -->
+    <NODE id="fireplace_structure_vert">
+      <MATERIAL id="null" />
+      <TEXTURE id="rockTexture" />
+
+      <SCALE sx="4" sy="5" sz="2" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Fireplace wood structure -->
+    <NODE id="fireplace_structure_hor">
+      <MATERIAL id="woodMaterial" />
+      <TEXTURE id="woodTexture" />
+
+      <TRANSLATION x="0" y="0" z="0.5" />
+      <SCALE sx="5" sy="0.5" sz="2.5" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Fireplace fire -->
+    <NODE id="fireplace_fire">
+      <MATERIAL id="null" />
+      <TEXTURE id="fireTexture" />
+
+      <TRANSLATION x="0" y="-1.3" z="1.05" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-1.5 1.2 1.5 -1.2" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Center -->
+    <NODE id="table_center">
+      <MATERIAL id="woodMaterial" />
+      <TEXTURE id="woodTexture" />
+
+      <TRANSLATION x="7" y="0.5" z="7.5" />
+      <SCALE sx="0.5" sy="0.5" sz="0.5" />
+      <ROTATION axis="x" angle="180" />
+
+      <DESCENDANTS>
+        <NODEREF id="tc_base"/>
+        <NODEREF id="tc_left"/>
+        <NODEREF id="tc_right"/>
+        <NODEREF id="tc_top"/>
+        <NODEREF id="center_tc"/>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Center part left -->
+    <NODE id="tc_left">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0.1" z="3" />
+      <SCALE sx="5" sy="1.5" sz="0.3" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube"/>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Center part right -->
+    <NODE id="tc_right">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0.1" z="-3" />
+      <SCALE sx="5" sy="1.5" sz="0.3" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube"/>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Center base -->
+    <NODE id="tc_base">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="-0.5" z="0" />
+      <SCALE sx="5" sy="0.3" sz="6" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube"/>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Table Center top -->
+    <NODE id="tc_top">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0.6" z="0" />
+      <SCALE sx="5" sy="0.3" sz="6" />
+
+      <DESCENDANTS>
+        <NODEREF id="cube"/>
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Center of table center-->
+    <NODE id="center_tc">
+      <MATERIAL id="glassMaterial" />
+      <TEXTURE id="clear" />
+
+      <ROTATION axis="x" angle="90" />
+      <TRANSLATION x="0" y="0" z="1.3" />
+      <SCALE sx="0.3" sy="0.3" sz="0.3" />
+
+      <DESCENDANTS>
+        <LEAF type="sphere" args="2 20 20" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- A pyramid -->
+    <NODE id="pyramid" selectable="true">
+
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="12" y="5.8" z="4.75" />
+      <SCALE sx="0.4" sy="2" sz="0.4" />
+
+      <DESCENDANTS>
+        <NODEREF id="halfPyramid1" />
+        <NODEREF id="halfPyramid2" />
+        <NODEREF id="basePyramid" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The pyramid base -->
+    <NODE id="basePyramid">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="90" />
+      <TRANSLATION x="1" y="6" z="2.87" />
+      <SCALE sx="2.8" sy="3.5" sz="1" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="0 4 5 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Half a pyramid -->
+    <NODE id="halfPyramid1">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="halfPyramid" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- The other half -->
+    <NODE id="halfPyramid2">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="16" y="0" z="26"	/>
+      <ROTATION axis="y" angle="180" />
+
+      <DESCENDANTS>
+        <NODEREF id="halfPyramid" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Generic half a pyramid -->
+    <NODE id="halfPyramid">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="facePyramid1" />
+        <NODEREF id="facePyramid2" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Pyramid face -->
+    <NODE id="facePyramid1">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="8" y="4" z="13" />
+      <ROTATION axis="x" angle="44.42" />
+      <ROTATION axis="y" angle="-45" />
+
+      <DESCENDANTS>
+        <LEAF id="triangle1" type="triangle" args="2 0 12 12 0 2 0 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Another pyramid face -->
+    <NODE id="facePyramid2">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="10" y="4" z="15" />
+      <TRANSLATION x="-2" y="0" z="-2" />
+      <ROTATION axis="z" angle="-44.42" />
+      <ROTATION axis="y" angle="45" />
+
+      <DESCENDANTS>
+        <LEAF id="triangle1" type="triangle" args="2 0 12 12 0 2 0 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Robot Vacuum Cleaner -->
+    <NODE id="robot_vaccum_cleaner">
+      <MATERIAL id="metalMaterial" />
+      <TEXTURE id="null" />
+
+      <ANIMATIONREFS>
+        <ANIMATIONREF id="robot_linear_anim1"/>
+        <ANIMATIONREF id="robot_circular_anim1"/>
+        <ANIMATIONREF id="robot_combo_anim"/>
+        <ANIMATIONREF id="robot_circular_anim3"/>
+        <ANIMATIONREF id="robot_linear_anim4"/>
+      </ANIMATIONREFS>
+
+      <DESCENDANTS>
+        <NODEREF id="robot_vaccum_cleaner_top" />
+        <NODEREF id="robot_vaccum_cleaner_bottom" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Robot Vacuum Cleaner Top -->
+    <NODE id="robot_vaccum_cleaner_top">
+      <MATERIAL id="null" />
+      <TEXTURE id="vacCleanerTexture" />
+
+      <TRANSLATION x="0" y="0.2" z="0" />
+      <ROTATION axis="x" angle="180" />
+      <SCALE sx="1" sy="0.2" sz="1" />
+
+      <DESCENDANTS>
+        <LEAF type="sphere" args="0.6 30 20" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Robot Vacuum Cleaner Bottom -->
+    <NODE id="robot_vaccum_cleaner_bottom">
+      <MATERIAL id="plasticMaterial" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="-90" />
+
+      <DESCENDANTS>
+        <LEAF type="cylinder" args="0.2 0.6 0.6 30 20 0 0" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Paper Plane -->
+    <NODE id="paper_plane" selectable="true">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ANIMATIONREFS>
+        <ANIMATIONREF id="plane_bezier_anim1"/>
+        <ANIMATIONREF id="plane_circular_anim1"/>
+        <ANIMATIONREF id="plane_bezier_anim2"/>
+      </ANIMATIONREFS>
+
+      <DESCENDANTS>
+        <NODEREF id="paper_plane_bottom" />
+        <NODEREF id="paper_plane_top" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Paper Plane Bottom -->
+    <NODE id="paper_plane_bottom">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <LEAF type="triangle" args="0.5 0 0 -0.5 0 0 0 0 0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Paper Plane Top -->
+    <NODE id="paper_plane_top">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <LEAF type="triangle" args="0 0 0 0 0.25 0 0 0 0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Unitary Cube -->
+    <NODE id="cube">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="faceCube1" />
+        <NODEREF id="faceCube2" />
+        <NODEREF id="faceCube3" />
+        <NODEREF id="faceCube4" />
+        <NODEREF id="faceCube5" />
+        <NODEREF id="faceCube6" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- A cube face -->
+    <NODE id="faceCube1">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <TRANSLATION x="0" y="0" z="0.5" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Another cube face -->
+    <NODE id="faceCube2">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="180" />
+      <TRANSLATION x="0" y="0" z="0.5" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Another cube face -->
+    <NODE id="faceCube3">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="-90" />
+      <TRANSLATION x="0" y="0" z="0.5" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Another cube face -->
+    <NODE id="faceCube4">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="x" angle="90" />
+      <TRANSLATION x="0" y="0" z="0.5" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Another cube face -->
+    <NODE id="faceCube5">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="y" angle="-90" />
+      <TRANSLATION x="0" y="0" z="0.5" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Another cube face -->
+    <NODE id="faceCube6">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <ROTATION axis="y" angle="90" />
+      <TRANSLATION x="0" y="0" z="0.5" />
+
+      <DESCENDANTS>
+        <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
+    </NODE>
+
+  </NODES>
+</SCENE>
