@@ -3,9 +3,9 @@
 <!-- Initial values -->
 <INITIALS>
     <frustum near="0.1" far="500"/>
-    <translation x="-1" y="1" z="0" />
+    <translation x="-5" y="1" z="-5" />
     <rotation axis="x" angle="0" />
-    <rotation axis="y" angle="0" />
+    <rotation axis="y" angle="45" />
     <rotation axis="z" angle="0" />
     <scale sx="0.25" sy="0.25" sz="0.25" />
     <reference length="5" />

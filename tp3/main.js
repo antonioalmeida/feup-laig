@@ -31,6 +31,12 @@ serialInclude(
 'animations/MyComboAnimation.js',
 'game/MyBoard.js',
 'game/MyCheversi.js',
+'game/MyPiece.js',
+'game/MyKing.js',
+'game/MyQueen.js',
+'game/MyBishop.js',
+'game/MyKnight.js',
+'game/MyRook.js',
 
 main=function() {
 

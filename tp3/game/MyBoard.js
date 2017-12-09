@@ -14,8 +14,7 @@ MyBoard.prototype.constructor = MyBoard;
 MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 
-    //this.scene.translate(0, 20, 0);
-    this.scene.scale(10, 10, 10);
+    this.scene.scale(20, 1, 20);
     this.scene.rotate(Math.PI/2, -1, 0, 0); //TODO: Remove after board is implemented via MyPatch
 
     this.boardTexture.apply();

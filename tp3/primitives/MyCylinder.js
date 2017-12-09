@@ -18,9 +18,9 @@ function MyCylinder(scene, args) {
 
     this.angle = 2 * Math.PI / this.slices;
 
-    if(this.bottom)
+    if(this.drawBottom)
         this.bottomCircle = new MyCircle(scene, this.bottom, this.slices);
-    if(this.top)
+    if(this.drawTop)
         this.topCircle = new MyCircle(scene, this.top, this.slices);
 
     this.initBuffers();
@@ -66,7 +66,7 @@ MyCylinder.prototype.initBuffers = function() {
     }
 
     //Interior part (only need to draw if at least one of the cover circles isn't present)
-    if (!this.top || !this.bottom) {
+    if (!this.drawTop || !this.drawBottom) {
         for (j = 0; j <= this.stacks; j++) {
             for (i = 0; i <= this.slices; i++) {
                 //Push current vertex
