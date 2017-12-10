@@ -2,9 +2,10 @@ function MyCheversi(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
 
-    this.board = new MyBoard(scene);
+    this.board = new MyBoard(this);
 
     this.selectedShader = new CGFshader(scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl");
+    this.transparentShader = new CGFshader(scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl");
     this.defaultShader = scene.defaultShader;
 
     let blackMaterial = new CGFappearance(scene);

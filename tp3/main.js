@@ -37,6 +37,7 @@ serialInclude(
 'game/MyBishop.js',
 'game/MyKnight.js',
 'game/MyRook.js',
+'game/MyTile.js',
 
 main=function() {
 
