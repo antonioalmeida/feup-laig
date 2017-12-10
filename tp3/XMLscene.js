@@ -15,6 +15,7 @@ function XMLscene(interface) {
 
     this.game = null;
 
+    this.currTime = 0;
     this.startTime = -1;
     this.delta = 0;
 }
@@ -118,6 +119,7 @@ XMLscene.prototype.onGraphLoaded = function()
  * Update scene (which is basically update animations)
  */
 XMLscene.prototype.update = function(currTime) {
+    this.currTime = currTime;
     if(this.startTime == -1)
         this.startTime = currTime;
     else
@@ -138,7 +140,8 @@ XMLscene.prototype.logPicking = function() {
     			var obj = this.pickResults[i][0];
                 if(!(obj instanceof MyTile)) //TODO: Lel sort this out to something decent
                     this.game.pickPiece(obj);
-
+                else
+                    this.game.movePiece(obj);
                 var customId = this.pickResults[i][1];
                 console.log("Picked object: " + obj + ", with pick id " + customId);
     		}

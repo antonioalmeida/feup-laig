@@ -3,6 +3,7 @@ function MyCheversi(scene) {
     this.scene = scene;
 
     this.board = new MyBoard(this);
+    this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
 
     this.selectedShader = new CGFshader(scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl");
     this.transparentShader = new CGFshader(scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl");
@@ -19,7 +20,25 @@ function MyCheversi(scene) {
 
     this.materials = {'black': blackMaterial, 'white': whiteMaterial};
 
-    this.pieces = [new MyKing(this, 'white'), new MyQueen(this, 'white'), new MyRook(this, 'black'), new MyBishop(this, 'white'), new MyKnight(this, 'black')];
+    this.pieces = [
+        new MyKing(this, 'white', [15, 0, -8.75]),
+        new MyKing(this, 'black', [-15, 0, -8.75]),
+        new MyQueen(this, 'white', [15, 0, -6.25]),
+        new MyQueen(this, 'black', [-15, 0, -6.25]),
+        new MyRook(this, 'white', [15, 0, -3.75]),
+        new MyRook(this, 'white', [15, 0, -1.25]),
+        new MyRook(this, 'black', [-15, 0, -3.75]),
+        new MyRook(this, 'black', [-15, 0, -1.25]),
+        new MyBishop(this, 'white', [15, 0, 1.25]),
+        new MyBishop(this, 'white', [15, 0, 3.75]),
+        new MyBishop(this, 'black', [-15, 0, 1.25]),
+        new MyBishop(this, 'black', [-15, 0, 3.75]),
+        new MyKnight(this, 'white', [15, 0, 6.25]),
+        new MyKnight(this, 'white', [15, 0, 8.75]),
+        new MyKnight(this, 'black', [-15, 0, 6.25]),
+        new MyKnight(this, 'black', [-15, 0, 8.75])
+    ];
+    this.selectedPiece = null;
 
     this.registerForPickID = 0;
 }
@@ -28,10 +47,16 @@ MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
 MyCheversi.prototype.pickPiece = function(piece) {
-    //TODO: Shit mechanism, unecessary loop. Keep more variables in game class
-    for(let id in this.pieces)
-        this.pieces[id].selected = false;
+    //Unselect previous piece, if necessary
+    if(this.selectedPiece !== null)
+        this.selectedPiece.selected = false;
+
+    this.selectedPiece = piece;
     piece.selected = true;
+}
+
+MyCheversi.prototype.movePiece = function(tile) {
+    //TODO: TBD
 }
 
 MyCheversi.prototype.display = function() {
@@ -39,12 +64,11 @@ MyCheversi.prototype.display = function() {
 
     this.scene.pushMatrix();
 
+    this.sidePlatforms[0].display();
+    this.sidePlatforms[1].display();
     this.board.display();
-    this.scene.translate(1.25, 0, -1.25);
-    for(let i = 0; i < this.pieces.length; ++i) {
-        this.pieces[i].display();
-        this.scene.translate(10, 0, 0);
-    }
+    for(let id in this.pieces)
+        this.pieces[id].display();
 
     this.scene.popMatrix();
 }

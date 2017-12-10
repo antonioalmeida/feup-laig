@@ -1,4 +1,4 @@
-function MyPiece(game, color) {
+function MyPiece(game, color, initialPosition) {
     if (this.constructor === MyPiece){
         throw new Error("Can't instantiate abstract class!");
     }
@@ -6,6 +6,7 @@ function MyPiece(game, color) {
     CGFobject.call(this,game.scene);
     this.game = game;
     this.scene = game.scene;
+    this.initialPosition = initialPosition;
 
     this.tile = null; //Tile object where it is positioned (invisible cells to be placed on board)
     this.color = color;
@@ -17,6 +18,23 @@ function MyPiece(game, color) {
 
 MyPiece.prototype = Object.create(CGFobject.prototype);
 MyPiece.prototype.constructor = MyPiece;
+
+MyPiece.prototype.display = function () {
+    this.scene.pushMatrix();
+    if(this.selected)
+        this.scene.setActiveShader(this.game.selectedShader);
+
+    this.game.materials[this.color].apply();
+    this.scene.translate(this.initialPosition[0], this.initialPosition[1], this.initialPosition[2]);
+    this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
+    this.scene.registerForPick(this.game.registerForPickID++, this);
+    this.primitive.display();
+
+    if(this.selected)
+        this.scene.setActiveShader(this.game.defaultShader);
+    this.scene.popMatrix();
+}
+
 
 MyPiece.prototype.setTile = function (tile) {
     this.tile = tile;

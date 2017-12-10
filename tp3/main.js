@@ -24,6 +24,7 @@ serialInclude(
 'MyGraphNode.js',
 'MyGraphLeaf.js',
 'MyInterface.js',
+'MyClient.js',
 'animations/MyAnimation.js',
 'animations/MyLinearAnimation.js',
 'animations/MyCircularAnimation.js',
@@ -38,6 +39,7 @@ serialInclude(
 'game/MyKnight.js',
 'game/MyRook.js',
 'game/MyTile.js',
+'game/MySidePlatform.js',
 
 main=function() {
 
