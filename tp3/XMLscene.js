@@ -138,7 +138,7 @@ XMLscene.prototype.logPicking = function() {
     	if (this.pickResults != null && this.pickResults.length > 0) {
     		for (var i=0; i< this.pickResults.length; i++) {
     			var obj = this.pickResults[i][0];
-                if(!(obj instanceof MyTile)) //TODO: Lel sort this out to something decent
+                if(!(obj instanceof MyTile)) //TODO: Try to sort out to something more decent
                     this.game.pickPiece(obj);
                 else
                     this.game.movePiece(obj);

@@ -22,9 +22,8 @@ MyBoard.prototype.display = function() {
     this.scene.setActiveShader(this.game.transparentShader);
     for(let id in this.tiles)
         this.tiles[id].display();
-
-    this.scene.clearPickRegistration();
     this.scene.setActiveShader(this.game.defaultShader);
+    this.scene.clearPickRegistration();
 
     this.scene.scale(20, 1, 20);
     this.scene.rotate(Math.PI/2, -1, 0, 0); //TODO: Remove after board is implemented via MyPatch
