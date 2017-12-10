@@ -129,6 +129,25 @@ XMLscene.prototype.update = function(currTime) {
 }
 
 /**
+ * Checks if user picked any object and acts accordingly
+ */
+XMLscene.prototype.logPicking = function() {
+    if (this.pickMode == false) {
+    	if (this.pickResults != null && this.pickResults.length > 0) {
+    		for (var i=0; i< this.pickResults.length; i++) {
+    			var obj = this.pickResults[i][0];
+                if(!(obj instanceof MyTile)) //TODO: Lel sort this out to something decent
+                    this.game.pickPiece(obj);
+
+                var customId = this.pickResults[i][1];
+                console.log("Picked object: " + obj + ", with pick id " + customId);
+    		}
+    		this.pickResults.splice(0,this.pickResults.length);
+    	}
+    }
+}
+
+/**
  * Displays the scene.
  */
 XMLscene.prototype.display = function() {
@@ -181,20 +200,7 @@ XMLscene.prototype.display = function() {
 		this.axis.display();
 	}
 
-    //Log picking (abstract later)
-	if (this.pickMode == false) {
-		if (this.pickResults != null && this.pickResults.length > 0) {
-			for (var i=0; i< this.pickResults.length; i++) {
-				var obj = this.pickResults[i][0];
-				if (obj)
-				{
-					var customId = this.pickResults[i][1];
-					console.log("Picked object: " + obj + ", with pick id " + customId + " with pos "+obj.row+" | "+obj.col);
-				}
-			}
-			this.pickResults.splice(0,this.pickResults.length);
-		}
-	}
+    this.logPicking();
     this.clearPickRegistration();
     this.game.display();
 

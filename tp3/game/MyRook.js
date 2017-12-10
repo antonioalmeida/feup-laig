@@ -14,6 +14,7 @@ MyRook.prototype.display = function () {
 
     this.game.materials[this.color].apply();
     this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
+    this.scene.registerForPick(this.game.registerForPickID++, this);
     this.primitive.display();
 
     if(this.selected)

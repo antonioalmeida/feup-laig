@@ -20,12 +20,23 @@ function MyCheversi(scene) {
     this.materials = {'black': blackMaterial, 'white': whiteMaterial};
 
     this.pieces = [new MyKing(this, 'white'), new MyQueen(this, 'white'), new MyRook(this, 'black'), new MyBishop(this, 'white'), new MyKnight(this, 'black')];
+
+    this.registerForPickID = 0;
 }
 
 MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
+MyCheversi.prototype.pickPiece = function(piece) {
+    //TODO: Shit mechanism, unecessary loop. Keep more variables in game class
+    for(let id in this.pieces)
+        this.pieces[id].selected = false;
+    piece.selected = true;
+}
+
 MyCheversi.prototype.display = function() {
+    this.registerForPickID = 0;
+
     this.scene.pushMatrix();
 
     this.board.display();

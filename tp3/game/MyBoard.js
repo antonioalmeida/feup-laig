@@ -10,7 +10,7 @@ function MyBoard(game) {
     this.tiles = [];
     for(let i = 1; i <= 8; ++i)
         for(let j = 1; j <= 8; ++j)
-            this.tiles.push(new MyTile(this.scene, i, j));
+            this.tiles.push(new MyTile(game, i, j));
 }
 
 MyBoard.prototype = Object.create(CGFobject.prototype);
@@ -20,10 +20,9 @@ MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 
     this.scene.setActiveShader(this.game.transparentShader);
-    for(let id in this.tiles) {
-        this.scene.registerForPick(id, this.tiles[id]);
+    for(let id in this.tiles)
         this.tiles[id].display();
-    }
+
     this.scene.clearPickRegistration();
     this.scene.setActiveShader(this.game.defaultShader);
 

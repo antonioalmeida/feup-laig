@@ -2,7 +2,6 @@ function MyQueen(game, color) {
     MyPiece.call(this, game, color);
 
     this.primitive = new MyCylinder(game.scene,[2.5, 1, 0.5, 5, 10, 1, 1]);
-    this.selected = true;
 }
 
 MyQueen.prototype = Object.create(MyPiece.prototype);
@@ -15,6 +14,7 @@ MyQueen.prototype.display = function () {
 
     this.game.materials[this.color].apply();
     this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
+    this.scene.registerForPick(this.game.registerForPickID++, this);
     this.primitive.display();
 
     if(this.selected)
