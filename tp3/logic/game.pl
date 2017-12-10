@@ -10,7 +10,7 @@
 :-dynamic connected/2.
 
 % case where game is finished
-playGame( Game ):-
+playGame( Game, Piece, X, Y, Game ):-
 	gameOver( Game ),
 	getBoard( Game, Board ),
 	displayBoard( Board ),
@@ -21,19 +21,15 @@ playGame( Game ):-
 	evaluateBoard( AttackedBoardWhite, WhiteScore ),
 	evaluateBoard( AttackedBoardBlack, BlackScore ),
 
+	% TODO: add final scores to final game object
 	displayScore( WhiteScore, BlackScore ),
 	displayWinner( WhiteScore, BlackScore ),
 
-	retractall(difficulty(_)),
 	retractall(connected(_,_)),
-
-	write('Press ENTER to continue.'), nl,
-	read_line(_),
-	clearScreen,	
-	!, start.
+	!.
 
 % regular case 
-playGame( Game ):-
+playGame( Game, Piece, X, Y, NewGame ):-
 	% get stuff from game class
 	getBoard( Game, Board ),
 	displayTurnInfo( Game ),
@@ -41,7 +37,7 @@ playGame( Game ):-
 	displayBoard( Board ),
 
 	% read and validate move
-	getNextMove( Game, Player, Piece, X, Y ),
+	% getNextMove( Game, Player, Piece, X, Y ),
 	validateMove( Game, Player, Piece, X, Y ),
 
 	% make and update moves
@@ -53,10 +49,8 @@ playGame( Game ):-
 	updateAttackedBoard( GameTemp2, GameTemp3 ),
 	incTurnIndex( GameTemp3, GameTemp4 ),
 	switchPlayer( GameTemp4, GameTemp5 ),
-	checkGameOver( GameTemp5, NewGame ),
+	checkGameOver( GameTemp5, NewGame ).
 
-	clearScreen,
-	playGame( NewGame ).
 
 % Single Player AI's turn
 getNextMove( Game, Player, Piece, X, Y ):-
