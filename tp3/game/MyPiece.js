@@ -57,11 +57,15 @@ MyPiece.prototype.setTile = function (tile) {
     tile.piece = this;
 
     //Create movement animation
-    this.animation = new MyBezierAnimation('bezier', 2.5, [
-        this.initialPosition,
-        [this.initialPosition[0], this.initialPosition[1]+2.5, this.initialPosition[2]],
-        [tile.coords[0], tile.coords[1]+2.5, tile.coords[2]],
-        tile.coords
+    let temp = [tile.coords[0]-this.initialPosition[0], 0, tile.coords[2]-this.initialPosition[2]];
+    //TODO: Substitute linear for pretty bezier (figure out generic control point structure to avoid collisions, etc)
+    /*this.animation = new MyBezierAnimation('bezier', 2.5, [
+        [0,0,0],
+        ,//TBD
+        ,//TBD
+        temp
     ]);
+    */
+    this.animation = new MyLinearAnimation('linear', 2.5, [[0,0,0], temp]);
     this.animationStartTime = this.game.scene.currTime;
 }
