@@ -28,7 +28,7 @@ MyPiece.prototype.display = function () {
 
     this.game.materials[this.color].apply();
     this.scene.translate(this.initialPosition[0], this.initialPosition[1], this.initialPosition[2]);
-    this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
+    //this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
     this.scene.multMatrix(this.animationMatrix);
     this.scene.registerForPick(this.game.registerForPickID++, this);
     this.primitive.display();
