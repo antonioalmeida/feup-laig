@@ -14,6 +14,7 @@ function XMLscene(interface) {
     this.graphs = []; //For different game scenarios
 
     this.game = null;
+    this.client = null;
 
     this.currTime = 0;
     this.startTime = -1;
@@ -52,6 +53,7 @@ XMLscene.prototype.init = function(application) {
     this.setPickEnabled(true);
 
     this.game = new MyCheversi(this);
+    this.client = new MyClient(8080);
 }
 
 /**
@@ -113,6 +115,9 @@ XMLscene.prototype.onGraphLoaded = function()
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graph.lights);
+
+    //Add game buttons
+    this.interface.addGameButtons(this);
 }
 
 /**
@@ -213,3 +218,11 @@ XMLscene.prototype.display = function() {
     // ---- END Background, camera and axis setup
 
 }
+
+XMLscene.prototype.startGame = function() {
+        let matchData = {};
+        if (this.game.match === null) {
+            matchData.type = 'noPlayer';
+            this.client.makeRequest('startGame', matchData);
+        }
+    };

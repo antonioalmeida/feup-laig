@@ -15,8 +15,10 @@
 
 MyClient.prototype.constructor = MyClient;
 
-function getPrologRequest(requestString, onSuccess, onError) {
+MyClient.prototype.getPrologRequest = function (requestString, onSuccess, onError) {
     let request = new XMLHttpRequest();
+    let url = 'http://localhost:' + this.port + '/' + requestString;
+    console.log(url);
     request.open('GET', 'http://localhost:' + this.port + '/' + requestString, true);
 
     request.onload = onSuccess || this.defaultOnSuccess;
@@ -26,18 +28,30 @@ function getPrologRequest(requestString, onSuccess, onError) {
     request.send();
 }
 
-function makeRequest(request) {
+MyClient.prototype.makeRequest = function (request, args) {
     //TODO: add request value confirmation
     // maybe add a different callback function
     // depending on the type of request?
-    let callback = handleReply;
+    let callback;
+    let requestString = '';
 
+    switch(request) {
+        case 'startGame':
+            requestString = 'initGame(' + args.type + ')';
+            callback = startGameListener;
+            break;
+        case 'handshake':
+            requestString = 'handshake';
+            callback = startGameListener;
+            break;
+    }
 
     // Make Request
-    getPrologRequest(request, callback);
+    this.getPrologRequest(requestString, callback);
 }
 
-//Handle the Reply
-function handleReply(data){
-    console.log('Sample reply handling. Data: ' + data);
+function startGameListener(data) {
+    console.log(typeof data.target.response);
+    console.log('Received startGame response: ' + data.target.response);
+    console.log(JSON.parse(data.target.response));
 }

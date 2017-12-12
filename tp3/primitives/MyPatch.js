@@ -5,7 +5,7 @@
 * @param {array} args - array containing the arguments of the patch - [ uDivs, vDivs ]
 * @param {array} controlPoints - array containing the patch's control points
 */
-function MyPatch(scene, args,  controlPoints) {
+function MyPatch(scene, args, controlPoints) {
     this.degreeU = controlPoints.length - 1;
     this.degreeV = controlPoints[0].length - 1;
 

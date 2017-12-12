@@ -47,3 +47,8 @@ MyInterface.prototype.addLightsGroup = function(lights) {
         }
     }
 }
+
+MyInterface.prototype.addGameButtons = function(scene) {
+    let startGame = this.gui.add(scene, 'startGame').name('Start Game');
+    //Add remaining buttons here
+}

@@ -79,7 +79,6 @@ read_request(_,syntax_error).
 read_request_aux([32|_],[46]) :- !.
 read_request_aux([C|Cs],[C|RCs]) :- read_request_aux(Cs, RCs).
 
-
 % Reads and Ignores the rest of the lines of the HTTP Header
 read_header(Stream) :-
 	repeat,
@@ -112,6 +111,7 @@ parse_input(playGame(Game, Piece, X, Y), NewGame):- playGame(Game, Piece, X, Y, 
 
 % sample requests
 parse_input(handshake, handshake).
+parse_input('handshake2', 'handshake2').
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
 

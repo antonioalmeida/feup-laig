@@ -1,6 +1,7 @@
 function MyCheversi(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
+    this.match = null;
 
     this.board = new MyBoard(this);
     this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
