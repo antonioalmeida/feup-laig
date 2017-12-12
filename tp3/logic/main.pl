@@ -16,7 +16,7 @@ start:-
 
 % Multiplayer game - no difficulty
 chooseDifficultyMenu( '1' ):-
-	startGame( multiPlayer, Game ), !,
+	startGame( 'multiPlayer', Game ), !,
 	playGame( Game ).
 
 % Single Player game
@@ -36,7 +36,8 @@ chooseDifficultyMenu( '2' ):-
 
 % No Player game - always medium
 chooseDifficultyMenu( '3' ):-
-	startGame( noPlayer, Game ), !,
+	startGame( 'noPlayer', Game ), !,
+	write('startGame'), nl,
 	playGame( Game ).
 
 % exit
@@ -45,9 +46,9 @@ chooseDifficultyMenu( '4').
 % case with invalid input
 chooseDifficultyMenu( _ ):- !, start.
 
-chooseDifficulty( '1', easy ).
-chooseDifficulty( '2', medium ).
-chooseDifficulty( '3', hard ).
+chooseDifficulty( '1', 'easy' ).
+chooseDifficulty( '2', 'medium' ).
+chooseDifficulty( '3', 'hard' ).
 
 chooseColorMenu( Difficulty ):-
 	write('Choose your color:'), nl,
@@ -60,11 +61,11 @@ chooseColorMenu( Difficulty ):-
 	startAndPlayGame( Difficulty, PlayerColor ).
 
 % This is switched, actually choosing AI's color
-chooseColor( '1', black ).
-chooseColor( '2', white).
+chooseColor( '1', 'black' ).
+chooseColor( '2', 'white').
 
 startAndPlayGame( Difficulty, PlayerColor ):-
-	startGame( singlePlayer, Difficulty, PlayerColor, Game ),
+	startGame( 'singlePlayer', Difficulty, PlayerColor, Game ),
 	clearScreen, !,
 	playGame( Game ).
 
@@ -73,11 +74,11 @@ startAndPlayGame( _, _ ):-
 	!,
 	start.
 
-startGame( singlePlayer, Difficulty, PlayerColor, Game ):-
+startGame( 'singlePlayer', Difficulty, PlayerColor, Game ):-
 	initSingleplayerGame( Game, PlayerColor, Difficulty ).
 
-startGame( multiPlayer, Game ):-
+startGame( 'multiPlayer', Game ):-
 	initMultiplayerGame( Game ).
 
-startGame( noPlayer, Game ):-
+startGame( 'noPlayer', Game ):-
 	initNoPlayerGame( Game ).

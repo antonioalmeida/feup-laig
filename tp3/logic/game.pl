@@ -15,8 +15,8 @@ playGame( Game, Piece, X, Y, Game ):-
 	getBoard( Game, Board ),
 	displayBoard( Board ),
 
-	getAttackedBoard( Game, white, AttackedBoardWhite ),
-	getAttackedBoard( Game, black, AttackedBoardBlack ),
+	getAttackedBoard( Game, 'white', AttackedBoardWhite ),
+	getAttackedBoard( Game, 'black', AttackedBoardBlack ),
 
 	evaluateBoard( AttackedBoardWhite, WhiteScore ),
 	evaluateBoard( AttackedBoardBlack, BlackScore ),
@@ -30,6 +30,7 @@ playGame( Game, Piece, X, Y, Game ):-
 
 % regular case 
 playGame( Game, Piece, X, Y, NewGame ):-
+	write('here'), nl,
 	% get stuff from game class
 	getBoard( Game, Board ),
 	displayTurnInfo( Game ),
@@ -49,12 +50,14 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	updateAttackedBoard( GameTemp2, GameTemp3 ),
 	incTurnIndex( GameTemp3, GameTemp4 ),
 	switchPlayer( GameTemp4, GameTemp5 ),
-	checkGameOver( GameTemp5, NewGame ).
+	checkGameOver( GameTemp5, NewGame ),
 
+	clearScreen,
+	playGame(NewGame).
 
 % Single Player AI's turn
 getNextMove( Game, Player, Piece, X, Y ):-
-	getGameType( Game, singlePlayer ),
+	getGameType( Game, 'singlePlayer' ),
 	getAIPlayer( Game, AIPlayer ),
 	AIPlayer == Player,
 	write('AI is thinking...'), nl,
@@ -62,17 +65,17 @@ getNextMove( Game, Player, Piece, X, Y ):-
 
 % Single Player user's turn
 getNextMove( Game, Player, Piece, X, Y ):-
-	getGameType( Game, singlePlayer ),
+	getGameType( Game, 'singlePlayer' ),
 	readMoveFromUser( Player, Piece, X, Y ).
 
 %  Multiplayer regular turn
 getNextMove( Game, Player, Piece, X, Y ):-
-	getGameType( Game, multiPlayer ),
+	getGameType( Game, 'multiPlayer' ),
 	readMoveFromUser( Player, Piece, X, Y ).
 
 % AI vs AI regular turn
 getNextMove( Game, Player, Piece, X, Y ):-
-	getGameType( Game, noPlayer ),
+	getGameType( Game, 'noPlayer' ),
 	write('AI is thinking...'), nl,
 	getAIMove( Game, Player, Piece, X, Y ),
 	write('The AI has decided!'), nl,
@@ -92,46 +95,46 @@ initMultiplayerGame( Game ):-
 	% 0 - game board %		
 	% 1 - current player %		
 	% 2 - turn counter %		
-	% 3 - board with white player's attacked positions %		
-	% 4 - board with black player's attacked positions %		
+	% 3 - board with 'white' player's attacked positions %		
+	% 4 - board with 'black' player's attacked positions %		
 	% 5 - if singleplayer, color which AI is playing for %		
 	% 6 - list with the pieces played %		
-	% 7 - boolean, true if white player needs to play queen %
-	% 8 - boolean, true if black player needs to play queen %
+	% 7 - boolean, true if 'white' player needs to play queen %
+	% 8 - boolean, true if 'black' player needs to play queen %
 	% 9 - boolean, true if game is over %
-	% 10 - atom, sets game type - singlePlayer or multiPlayer %
+	% 10 - atom, sets game type - 'singlePlayer' or 'multiPlayer' %
 	% 11 - atom, difficulty - easy, medium or hard - only in single player mode
-	Game = [ Board, white, 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, multiPlayer ].
+	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'multiPlayer' ].
 
 initSingleplayerGame( Game, AIPlayer, Difficulty ):-
 	initialBoard( Board ),
 	initialBoard( AttackedBoardWhite ),
 	initialBoard( AttackedBoardBlack ),
-	Game = [ Board, white, 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, singlePlayer, Difficulty ].
+	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'singlePlayer', Difficulty ].
 
 initNoPlayerGame( Game ):-
 	initialBoard( Board ),
 	initialBoard( AttackedBoardWhite ),
 	initialBoard( AttackedBoardBlack ),
 
-	Game = [ Board, white, 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, noPlayer ].
+	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'noPlayer' ].
 
 getBoard( Game, Board ):-
 	elementAt(0, Game, Board).
 
-getAttackedBoard( Game, white, AttackedBoard):-
+getAttackedBoard( Game, 'white', AttackedBoard):-
 	elementAt(3, Game, AttackedBoard).
 
-getAttackedBoard( Game, black, AttackedBoard):-
+getAttackedBoard( Game, 'black', AttackedBoard):-
 	elementAt(4, Game, AttackedBoard).
 
 setBoard( Game, Board, NewGame ):-
 	replace( Game, 0, Board, NewGame).
 
-setAttackedBoard( Game, white, AttackedBoard, NewGame ):-
+setAttackedBoard( Game, 'white', AttackedBoard, NewGame ):-
 	replace( Game, 3, AttackedBoard, NewGame).
 
-setAttackedBoard( Game, black, AttackedBoard, NewGame ):-
+setAttackedBoard( Game, 'black', AttackedBoard, NewGame ):-
 	replace( Game, 4, AttackedBoard, NewGame).
 
 getCurrentPlayer( Game, Player ):-
@@ -171,17 +174,17 @@ piecePlayedTwice( Game, Player, Piece ):-
 	member(Player-Piece-X2-Y2, PlayedPieces),
 	(X1 \= X2 ; Y1 \= Y2).
 
-setNeedsToPlayQueen( Game, white, Value, NewGame ):-
+setNeedsToPlayQueen( Game, 'white', Value, NewGame ):-
 	replace( Game, 7, Value, NewGame ).
 
-setNeedsToPlayQueen( Game, black, Value, NewGame ):-
+setNeedsToPlayQueen( Game, 'black', Value, NewGame ):-
 	replace( Game, 8, Value, NewGame ).
 
-needsToPlayQueen( Game, white ):-
+needsToPlayQueen( Game, 'white' ):-
 	elementAt( 7, Game, Value ),
 	Value == true.
 
-needsToPlayQueen( Game, black ):-
+needsToPlayQueen( Game, 'black' ):-
 	elementAt( 8, Game, Value ),
 	Value == true.
 
@@ -275,8 +278,8 @@ displayScore( White, Black ):-
 	nl,	emoji(flag),
 	write(' Game Over! '), 
 	emoji(flag), nl,
-	emoji(white), write(' White Score: '), write(White), nl,
-	emoji(black), write(' Black Score: '), write(Black), nl.
+	emoji('white'), write(' White Score: '), write(White), nl,
+	emoji('black'), write(' Black Score: '), write(Black), nl.
 
 displayWinner( White, Black ):-
 	White > Black,
@@ -297,9 +300,9 @@ displayWinner( White, Black ):-
 displayWinner( White, Black ):-
 	write('The match is a tie! '), nl.
 
-displayPlayer(white):- emoji(white), write(' White ').
-displayPlayer(black):- emoji(black), write(' Black ').
+displayPlayer('white'):- emoji('white'), write(' White ').
+displayPlayer('black'):- emoji('black'), write(' Black ').
 
-otherPlayer(white, black).
-otherPlayer(black, white).
+otherPlayer('white', 'black').
+otherPlayer('black', 'white').
 

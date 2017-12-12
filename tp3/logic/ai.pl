@@ -1,17 +1,17 @@
 :- use_module(library(random)).
 
 % valid Player-Piece pairs
-playerPiece(white, 'K').
-playerPiece(white, 'Q').
-playerPiece(white, 'R').
-playerPiece(white, 'N').
-playerPiece(white, 'B').
+playerPiece('white', 'K').
+playerPiece('white', 'Q').
+playerPiece('white', 'R').
+playerPiece('white', 'N').
+playerPiece('white', 'B').
 
-playerPiece(black, 'k').
-playerPiece(black, 'q').
-playerPiece(black, 'r').
-playerPiece(black, 'n').
-playerPiece(black, 'b').
+playerPiece('black', 'k').
+playerPiece('black', 'q').
+playerPiece('black', 'r').
+playerPiece('black', 'n').
+playerPiece('black', 'b').
 
 getValidMove( Game, Player, Piece, X, Y ):-
 	playerPiece(Player, Piece), 
@@ -24,28 +24,28 @@ getAllMoves( Game, Player, MovesList ):-
 
  % Easy AI
  getAIMove( Game, Player, Piece, X, Y ):-
- 	getDifficulty(Game, easy),
+ 	getDifficulty(Game, 'easy'),
  	easyGetMove( Game, Player, Piece, X, Y ).
 
  % Medium AI
  getAIMove( Game, Player, Piece, X, Y ):-
- 	getDifficulty(Game, medium),
+ 	getDifficulty(Game, 'medium'),
  	getBestMove( Game, Player, Piece, X, Y ).
 
  % Hard AI
  getAIMove( Game, Player, Piece, X, Y ):-
- 	getDifficulty(Game, hard),
+ 	getDifficulty(Game, 'hard'),
  	hardGetMove( Game, Player, Piece, X, Y ).
 
  % AI vs AI first turn
  getAIMove( Game, Player, Piece, X, Y ):-
- 	getGameType(Game, noPlayer),
+ 	getGameType(Game, 'noPlayer'),
  	getTurnIndex( Game, 0 ),
  	easyGetMove( Game, Player, Piece, X, Y ).
 
   % AI vs AI regular turn
  getAIMove( Game, Player, Piece, X, Y ):-
- 	getGameType(Game, noPlayer),
+ 	getGameType(Game, 'noPlayer'),
  	getBestMove( Game, Player, Piece, X, Y ).
 
 easyGetMove( Game, Player, Piece, X, Y ):-

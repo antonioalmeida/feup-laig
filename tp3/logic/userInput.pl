@@ -60,10 +60,10 @@ validInput(Move, PieceChar, Row, Col):-
 validInput(_, PieceChar, Row, Col):-
 	write('Invalid move format. Please try again.'), nl, fail.
 
-getPiece(black, PieceChar, FinalPiece):-
+getPiece('black', PieceChar, FinalPiece):-
 	toLowercase( PieceChar, FinalPiece).
 
-getPiece(white, PieceChar, FinalPiece):-
+getPiece('white', PieceChar, FinalPiece):-
 	toUppercase(PieceChar, FinalPiece).
 
 toUppercase(L, U):-

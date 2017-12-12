@@ -7,10 +7,10 @@ updateAttackedBoard( Game, NewGame ):-
     getBoard( Game, Board ),
     initialBoard( AttackedBoard ),
     X is 0, Y is 0,
-    updateAttackedBoardAux( white, Board, AttackedBoard, X, Y, NewAttackedBoardWhite ),
-    updateAttackedBoardAux( black, Board, AttackedBoard, X, Y, NewAttackedBoardBlack ),
-    setAttackedBoard( Game, white, NewAttackedBoardWhite, TempGame ),
-    setAttackedBoard( TempGame, black, NewAttackedBoardBlack, NewGame ).
+    updateAttackedBoardAux( 'white', Board, AttackedBoard, X, Y, NewAttackedBoardWhite ),
+    updateAttackedBoardAux( 'black', Board, AttackedBoard, X, Y, NewAttackedBoardBlack ),
+    setAttackedBoard( Game, 'white', NewAttackedBoardWhite, TempGame ),
+    setAttackedBoard( TempGame, 'black', NewAttackedBoardBlack, NewGame ).
 
 % case where board locations is NOT empty
 updateAttackedBoardAux( Player, Board, AttackedBoard, X, Y, NewAttackedBoard ):-
@@ -166,17 +166,17 @@ incValueAtAux( [ CurrentLine | RestOfBoard ], N, X, Y, TempBoard, NewBoard ):-
     N1 is N+1,
     incValueAtAux( RestOfBoard, N1, X, Y, [ CurrentLine | TempBoard ], NewBoard ).
 
-isKing('K', white).
-isKing('k', black).
+isKing('K', 'white').
+isKing('k', 'black').
 
-isKnight('N', white).
-isKnight('n', black).
+isKnight('N', 'white').
+isKnight('n', 'black').
 
-isRook('R', white).
-isRook('r', black).
+isRook('R', 'white').
+isRook('r', 'black').
 
-isBishop('B', white).
-isBishop('b', black).
+isBishop('B', 'white').
+isBishop('b', 'black').
 
-isQueen('Q', white).
-isQueen('q', black).
+isQueen('Q', 'white').
+isQueen('q', 'black').
