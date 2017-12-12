@@ -28,8 +28,8 @@ MyPiece.prototype.display = function () {
 
     this.game.materials[this.color].apply();
     this.scene.translate(this.initialPosition[0], this.initialPosition[1], this.initialPosition[2]);
-    this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
     this.scene.multMatrix(this.animationMatrix);
+    this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
     this.scene.registerForPick(this.game.registerForPickID++, this);
     this.primitive.display();
 
@@ -58,14 +58,13 @@ MyPiece.prototype.setTile = function (tile) {
 
     //Create movement animation
     let temp = [tile.coords[0]-this.initialPosition[0], 0, tile.coords[2]-this.initialPosition[2]];
-    //TODO: Substitute linear for pretty bezier (figure out generic control point structure to avoid collisions, etc)
-    /*this.animation = new MyBezierAnimation('bezier', 2.5, [
+    //TODO: Check it current control points are generic enough to avoid collisions, etc
+    this.animation = new MyBezierAnimation('bezier', 5, [
         [0,0,0],
-        ,//TBD
-        ,//TBD
+        [temp[0]/4,temp[1]/4+5,temp[2]/4],
+        [temp[0],temp[1]+5,temp[2]],
         temp
     ]);
-    */
-    this.animation = new MyLinearAnimation('linear', 2.5, [[0,0,0], temp]);
+
     this.animationStartTime = this.game.scene.currTime;
 }

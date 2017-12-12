@@ -143,12 +143,14 @@ XMLscene.prototype.logPicking = function() {
     	if (this.pickResults != null && this.pickResults.length > 0) {
     		for (var i=0; i< this.pickResults.length; i++) {
     			var obj = this.pickResults[i][0];
+          if(obj) {
                 if(!(obj instanceof MyTile)) //TODO: Try to sort out to something more decent
                     this.game.pickPiece(obj);
                 else
                     this.game.movePiece(obj);
                 var customId = this.pickResults[i][1];
                 console.log("Picked object: " + obj + ", with pick id " + customId);
+          }
     		}
     		this.pickResults.splice(0,this.pickResults.length);
     	}
@@ -159,6 +161,8 @@ XMLscene.prototype.logPicking = function() {
  * Displays the scene.
  */
 XMLscene.prototype.display = function() {
+    this.logPicking();
+    this.clearPickRegistration();
     // ---- BEGIN Background, camera and axis setup
 
     // Clear image and depth buffer everytime we update the scene
@@ -208,8 +212,6 @@ XMLscene.prototype.display = function() {
 		this.axis.display();
 	}
 
-    this.logPicking();
-    this.clearPickRegistration();
     this.game.display();
 
 

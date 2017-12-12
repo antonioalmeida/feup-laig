@@ -42,7 +42,7 @@ function MyCheversi(scene) {
     ];
     this.selectedPiece = null;
 
-    this.registerForPickID = 0;
+    this.registerForPickID = 1;
 }
 
 MyCheversi.prototype = Object.create(CGFobject.prototype);
@@ -52,7 +52,7 @@ MyCheversi.prototype.pickPiece = function(piece) {
     //Piece already played
     if(piece.tile !== null)
         return;
-    
+
     //Unselect previous piece, if necessary
     if(this.selectedPiece !== null)
         this.selectedPiece.selected = false;
@@ -73,8 +73,8 @@ MyCheversi.prototype.movePiece = function(tile) {
 }
 
 MyCheversi.prototype.display = function() {
-    //Reset pick IDs
-    this.registerForPickID = 0;
+    //Reset pick ID
+    this.registerForPickID = 1;
 
     this.scene.pushMatrix();
 
