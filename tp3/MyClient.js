@@ -30,28 +30,28 @@ MyClient.prototype.getPrologRequest = function (requestString, onSuccess, onErro
 
 MyClient.prototype.makeRequest = function (request, args) {
     //TODO: add request value confirmation
-    // maybe add a different callback function
-    // depending on the type of request?
     let callback;
     let requestString = '';
+    let argsStr = args.toString();
 
     switch(request) {
         case 'startGame':
-            requestString = 'initGame(' + args.type + ')';
-            callback = startGameListener;
+            requestString = 'initGame(' + argsStr + ')';
+            onSuccess = startGameOnSuccess;
             break;
         case 'handshake':
             requestString = 'handshake';
-            callback = startGameListener;
+            onSuccess = startGameListener;
             break;
     }
 
     // Make Request
-    this.getPrologRequest(requestString, callback);
+    this.getPrologRequest(requestString, onSuccess);
 }
 
-function startGameListener(data) {
+function startGameOnSuccess(data) {
     console.log(typeof data.target.response);
     console.log('Received startGame response: ' + data.target.response);
     console.log(JSON.parse(data.target.response));
 }
+

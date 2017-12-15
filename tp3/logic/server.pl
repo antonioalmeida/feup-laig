@@ -103,15 +103,14 @@ print_header_line(_).
 
 % starting game
 parse_input(initGame(singlePlayer, Playercolor, Difficulty), Game):- initSinglePlayerGame(Game, Playercolor, Difficulty).
-parse_input(initGame(multiPlayer), Game):- initMultiplayerGame(Game).
-parse_input(initGame(noPlayer), Game):- initNoPlayerGame(Game).
+parse_input(initGame(multiPlayer, Playercolor, Difficulty), Game):- initMultiplayerGame(Game).
+parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):- initNoPlayerGame(Game).
 
 % game progression
 parse_input(playGame(Game, Piece, X, Y), NewGame):- playGame(Game, Piece, X, Y, NewGame).
 
 % sample requests
 parse_input(handshake, handshake).
-parse_input('handshake2', 'handshake2').
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
 

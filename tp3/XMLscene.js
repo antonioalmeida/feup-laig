@@ -19,6 +19,11 @@ function XMLscene(interface) {
     this.currTime = 0;
     this.startTime = -1;
     this.delta = 0;
+
+    //match options (maybe put this inside cheversi?)
+    this.difficulty = null;
+    this.gameMode = null; 
+    this.player = null; 
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -53,7 +58,7 @@ XMLscene.prototype.init = function(application) {
     this.setPickEnabled(true);
 
     this.game = new MyCheversi(this);
-    this.client = new MyClient(8080);
+    this.client = new MyClient(8083);
 }
 
 /**
@@ -223,8 +228,10 @@ XMLscene.prototype.display = function() {
 
 XMLscene.prototype.startGame = function() {
         let matchData = {};
+
         if (this.game.match === null) {
-            matchData.type = 'noPlayer';
+            matchData.mode = this.gameMode;
+            matData.difficulty = this.difficulty;
             this.client.makeRequest('startGame', matchData);
         }
     };

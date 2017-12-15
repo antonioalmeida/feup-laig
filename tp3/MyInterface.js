@@ -49,6 +49,8 @@ MyInterface.prototype.addLightsGroup = function(lights) {
 }
 
 MyInterface.prototype.addGameButtons = function(scene) {
-    let startGame = this.gui.add(scene, 'startGame').name('Start Game');
-    //Add remaining buttons here
+    this.gui.add(scene,'gameMode',{'Multiplayer': 0, 'Single Player': 1, 'AI vs AI': 2}).name('Game Mode');
+    this.gui.add(scene,'difficulty',{'Easy': 0, 'Medium': 1}).name('Difficulty');
+    this.gui.add(scene,'player',{'White': 0, 'Black': 1}).name('Player');
+    this.gui.add(scene, 'startGame').name('Start Game');
 }

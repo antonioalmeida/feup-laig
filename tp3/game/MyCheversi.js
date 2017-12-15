@@ -3,6 +3,27 @@ function MyCheversi(scene) {
     this.scene = scene;
     this.match = null;
 
+    this.CheversiDifficulty = {
+        EASY: '0',
+        MEDIUM: '1',
+        HARD: '2',
+    };
+
+    this.CheversiMode = {
+        SINGLEPLAYER: '0',
+        MULTIPLAYER: '1',
+        NOPLAYER: '2',
+    };
+
+    this.CheversiPlayer = {
+        WHITE: '0',
+        BLACK: '1',
+    };
+    
+    this.difficulty = null;
+    this.mode = null;
+    this.player = null; 
+
     this.board = new MyBoard(this);
     this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
 
