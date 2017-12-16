@@ -38,7 +38,7 @@ MyMarker.prototype.update = function(currTime) {
     //TODO: Turn the 300 into a variable chosen by user in GUI and put it in the marker class
     let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
     this.game.marker.elapsed = 300 - turnTimerDelta;
-    
+
     //TODO: Remove these two when actual score update is implemented
     this.game.marker.scores.white = Math.floor(turnTimerDelta/5);
     this.game.marker.scores.black = Math.floor(turnTimerDelta/7);
@@ -54,24 +54,42 @@ MyMarker.prototype.display = function() {
     //Panel background TODO: Create texture for it later (with the captions basically)
     this.scene.pushMatrix();
     this.scene.translate(0, 8, -12.5);
-    this.scene.scale(54, 10, 1);
+    this.scene.scale(70, 10, 1);
     this.game.materials.black.apply();
     this.primitive.display();
     this.scene.popMatrix();
 
     //White player score
+    let whiteDozens = Math.floor(this.scores.white / 10);
+    let whiteUnits = this.scores.white % 10;
+    this.scene.pushMatrix();
+    this.scene.translate(-30, 8, -12.5);
+    this.scene.scale(8, 8, 1);
+    this.textures[whiteDozens].bind();
+    this.primitive.display();
+    this.scene.popMatrix();
+
     this.scene.pushMatrix();
     this.scene.translate(-23, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[this.scores.white].bind();
+    this.textures[whiteUnits].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     //Black player score
+    let blackDozens = Math.floor(this.scores.black / 10);
+    let blackUnits = this.scores.black % 10;
     this.scene.pushMatrix();
     this.scene.translate(23, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[this.scores.black].bind();
+    this.textures[blackDozens].bind();
+    this.primitive.display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.translate(30, 8, -12.5);
+    this.scene.scale(8, 8, 1);
+    this.textures[blackUnits].bind();
     this.primitive.display();
     this.scene.popMatrix();
 

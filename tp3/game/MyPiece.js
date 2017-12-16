@@ -58,7 +58,7 @@ MyPiece.prototype.setTile = function (tile) {
 
     //Create movement animation
     let temp = [tile.coords[0]-this.initialPosition[0], 0, tile.coords[2]-this.initialPosition[2]];
-    //TODO: Check it current control points are generic enough to avoid collisions, etc
+    //TODO: Check if current control points are generic enough to avoid collisions, etc
     this.animation = new MyBezierAnimation('bezier', 5, [
         [0,0,0],
         [temp[0]/4,temp[1]/4+5,temp[2]/4],
