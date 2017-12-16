@@ -94,6 +94,7 @@ MyCheversi.prototype.movePiece = function(tile) {
     this.selectedPiece.selected = false;
     this.selectedPiece.setTile(tile);
     this.selectedPiece = null;
+    this.marker.resetTurnTime();
 }
 
 MyCheversi.prototype.display = function() {

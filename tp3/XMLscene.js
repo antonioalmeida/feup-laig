@@ -16,7 +16,7 @@ function XMLscene(interface) {
     this.game = null;
     this.client = null;
 
-    this.currTime = 0;
+    this.currTime = new Date().getTime();
     this.startTime = -1;
     this.delta = 0;
 
@@ -59,7 +59,7 @@ XMLscene.prototype.init = function(application) {
     this.setPickEnabled(true);
 
     this.game = new MyCheversi(this);
-    this.client = new MyClient(8088); //TODO: Let user choose port in GUI?
+    this.client = new MyClient(8088); //TODO: Choose a standard port
 }
 
 /**
@@ -137,8 +137,10 @@ XMLscene.prototype.update = function(currTime) {
         this.delta = (currTime - this.startTime) / 1000;
 
     let factor = Math.abs(Math.sin(0.005*currTime));
-    if(this.game != null)
+    if(this.game != null) {
         this.game.shaders.selected.setUniformsValues({timeFactor: factor});
+        this.game.marker.update(currTime);
+    }
 }
 
 /**

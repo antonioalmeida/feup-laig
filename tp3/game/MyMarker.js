@@ -10,6 +10,8 @@ function MyMarker(game) {
     }
 
     this.elapsed = 0; //Time elapsed since last turn started
+    this.lastCurrTime = this.scene.currTime;
+
     this.textures = {
         0: new CGFtexture(this.scene, 'textures/0.png'),
         1: new CGFtexture(this.scene, 'textures/1.png'),
@@ -32,6 +34,20 @@ function MyMarker(game) {
 MyMarker.prototype = Object.create(CGFobject.prototype);
 MyMarker.prototype.constructor = MyMarker;
 
+MyMarker.prototype.update = function(currTime) {
+    //TODO: Turn the 300 into a variable chosen by user in GUI and put it in the marker class
+    let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
+    this.game.marker.elapsed = 300 - turnTimerDelta;
+    
+    //TODO: Remove these two when actual score update is implemented
+    this.game.marker.scores.white = Math.floor(turnTimerDelta/5);
+    this.game.marker.scores.black = Math.floor(turnTimerDelta/7);
+}
+
+MyMarker.prototype.resetTurnTime = function() {
+    this.lastCurrTime = this.scene.currTime;
+}
+
 MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
 
@@ -47,7 +63,7 @@ MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
     this.scene.translate(-23, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[0].bind();
+    this.textures[this.scores.white].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
@@ -55,17 +71,17 @@ MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
     this.scene.translate(23, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[1].bind();
+    this.textures[this.scores.black].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     //Time since last turn stoped
     //Minutes
     this.scene.pushMatrix();
-    let minutes = Math.floor(this.elasped/60);
+    let minutes = Math.floor(this.elapsed/60);
     this.scene.translate(-10, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[2].bind();
+    this.textures[minutes].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
@@ -78,19 +94,20 @@ MyMarker.prototype.display = function() {
     this.scene.popMatrix();
 
     //Seconds
-    let secondsDozen = Math.floor((this.elapsed % 60) / 10);
-    let secondsUnits = (this.elapsed % 60) % 10;
+    let secondsDozen = Math.floor((Math.floor(this.elapsed) % 60) / 10);
+    let secondsUnits = (Math.floor(this.elapsed) % 60) % 10;
+    console.log(secondsUnits);
     this.scene.pushMatrix();
     this.scene.translate(2, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[3].bind();
+    this.textures[secondsDozen].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
     this.scene.translate(8, 8, -12.5);
     this.scene.scale(8, 8, 1);
-    this.textures[4].bind();
+    this.textures[secondsUnits].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
