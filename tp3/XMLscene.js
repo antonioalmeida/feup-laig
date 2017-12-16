@@ -58,7 +58,7 @@ XMLscene.prototype.init = function(application) {
     this.setPickEnabled(true);
 
     this.game = new MyCheversi(this);
-    this.client = new MyClient(8083);
+    this.client = new MyClient(8088);
 }
 
 /**
@@ -231,7 +231,7 @@ XMLscene.prototype.startGame = function() {
 
         if (this.game.match === null) {
             matchData.mode = this.gameMode;
-            matData.difficulty = this.difficulty;
+            matchData.difficulty = this.difficulty;
             this.client.makeRequest('startGame', matchData);
         }
     };

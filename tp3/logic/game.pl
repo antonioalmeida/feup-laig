@@ -5,12 +5,14 @@
 :-include('ai.pl').
 :-include('utils.pl').
 :-include('main.pl').
+:-include('parse.pl').
 :-include('emojis.pl').
 
 :-dynamic connected/2.
 
 % case where game is finished
 playGame( Game, Piece, X, Y, Game ):-
+%playGame( Game):-
 	gameOver( Game ),
 	getBoard( Game, Board ),
 	displayBoard( Board ),
@@ -30,7 +32,6 @@ playGame( Game, Piece, X, Y, Game ):-
 
 % regular case 
 playGame( Game, Piece, X, Y, NewGame ):-
-	write('here'), nl,
 	% get stuff from game class
 	getBoard( Game, Board ),
 	displayTurnInfo( Game ),
@@ -38,7 +39,7 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	displayBoard( Board ),
 
 	% read and validate move
-	% getNextMove( Game, Player, Piece, X, Y ),
+	getNextMove( Game, Player, Piece, X, Y ),
 	validateMove( Game, Player, Piece, X, Y ),
 
 	% make and update moves
@@ -50,10 +51,12 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	updateAttackedBoard( GameTemp2, GameTemp3 ),
 	incTurnIndex( GameTemp3, GameTemp4 ),
 	switchPlayer( GameTemp4, GameTemp5 ),
-	checkGameOver( GameTemp5, NewGame ),
+	checkGameOver( GameTemp5, GameTemp6 ),
 
-	clearScreen,
-	playGame(NewGame).
+	parseGame(GameTemp6, NewGame).
+
+	%clearScreen,
+	%playGame(NewGame).
 
 % Single Player AI's turn
 getNextMove( Game, Player, Piece, X, Y ):-
@@ -104,7 +107,7 @@ initMultiplayerGame( Game ):-
 	% 9 - boolean, true if game is over %
 	% 10 - atom, sets game type - 'singlePlayer' or 'multiPlayer' %
 	% 11 - atom, difficulty - easy, medium or hard - only in single player mode
-	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'multiPlayer' ].
+	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'multiPlayer', Difficulty ].
 
 initSingleplayerGame( Game, AIPlayer, Difficulty ):-
 	initialBoard( Board ),
@@ -117,7 +120,7 @@ initNoPlayerGame( Game ):-
 	initialBoard( AttackedBoardWhite ),
 	initialBoard( AttackedBoardBlack ),
 
-	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'noPlayer' ].
+	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'noPlayer', Difficulty ].
 
 getBoard( Game, Board ):-
 	elementAt(0, Game, Board).

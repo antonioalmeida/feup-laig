@@ -32,16 +32,15 @@ MyClient.prototype.makeRequest = function (request, args) {
     //TODO: add request value confirmation
     let callback;
     let requestString = '';
-    let argsStr = args.toString();
 
     switch(request) {
         case 'startGame':
-            requestString = 'initGame(' + argsStr + ')';
-            onSuccess = startGameOnSuccess;
+            // sample request, need to create parsing JS->Prolog
+            requestString = 'initGame(noPlayer,1,2)';
+            onSuccess = startGameListener;
             break;
         case 'handshake':
             requestString = 'handshake';
-            onSuccess = startGameListener;
             break;
     }
 
@@ -49,9 +48,33 @@ MyClient.prototype.makeRequest = function (request, args) {
     this.getPrologRequest(requestString, onSuccess);
 }
 
-function startGameOnSuccess(data) {
-    console.log(typeof data.target.response);
-    console.log('Received startGame response: ' + data.target.response);
-    console.log(JSON.parse(data.target.response));
-}
+function startGameListener(data) {
+    let dataArr = JSON.parse(data.target.response);
+    let game = {};
 
+    game.board = dataArr[0];
+    game.currentPlayer = dataArr[1];
+    game.turnCounter = dataArr[2];
+
+    // Not sure if we'll need these
+    game.whiteAttacked = dataArr[3];
+    game.blackAttacked = dataArr[4];
+
+    // only useful for single player
+    game.AIPlayer = dataArr[5]; 
+
+    game.movesList = dataArr[6]; 
+
+    // maybe use these to improve UX when user needs to choose queen?
+    game.whiteNeedsQueen = dataArr[7];
+    game.blackNeedsQueen = dataArr[8];
+
+    game.isOver = dataArr[9];
+    game.mode = dataArr[10];
+    game.difficulty = dataArr[11];
+
+    console.log(game);
+
+    //Add this to game class
+    return game;
+}

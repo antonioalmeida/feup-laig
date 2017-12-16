@@ -5,6 +5,13 @@ replace([_|T], 0, X, [X|T]).
 replace([H|T], I, X, [H|R]):- I > -1, NI is I-1, replace(T, NI, X, R), !.
 replace(L, _, _, L).
 
+replaceAll([],X,Y,[]).
+replaceAll([X|T], X, Y, Z) :-
+   replaceAll(T, X, Y, Z1),
+   Z = [Y|Z1].
+replaceAll([H|T], X, Y, [H|Z]) :-
+   replaceAll(T, X, Y, Z). 
+
 % replace element at I 
 inc([H|T], 0, R):- H1 is H+1, R = [H1|T].
 inc([H|T], I, [H|R]):- I > -1, NI is I-1, inc(T, NI, R), !.
@@ -38,3 +45,4 @@ isWithinLimits(N):-
 
 clearScreen:-
 	nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl,nl.
+

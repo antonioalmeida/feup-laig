@@ -102,9 +102,9 @@ print_header_line(_).
 :- include('game.pl').
 
 % starting game
-parse_input(initGame(singlePlayer, Playercolor, Difficulty), Game):- initSinglePlayerGame(Game, Playercolor, Difficulty).
+parse_input(initGame(singlePlayer, Playercolor, Difficulty), Game):- initSinglePlayerGame(Temp, Playercolor, Difficulty), parseGame(Temp, Game).
 parse_input(initGame(multiPlayer, Playercolor, Difficulty), Game):- initMultiplayerGame(Game).
-parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):- initNoPlayerGame(Game).
+parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):- initNoPlayerGame(Temp), parseGame(Temp,Game).
 
 % game progression
 parse_input(playGame(Game, Piece, X, Y), NewGame):- playGame(Game, Piece, X, Y, NewGame).
@@ -113,6 +113,8 @@ parse_input(playGame(Game, Piece, X, Y), NewGame):- playGame(Game, Piece, X, Y, 
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
+
+parse_input(cenas, {ola}).
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
