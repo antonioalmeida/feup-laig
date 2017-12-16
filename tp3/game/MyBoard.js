@@ -20,8 +20,14 @@ MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 
     this.scene.setActiveShader(this.game.shaders.transparent);
-    for(let id in this.tiles)
+    for(let id in this.tiles) {
+        //TODO: Remove this ite later
+        if(id % 5 == 0)
+            this.scene.setActiveShader(this.game.shaders.highlighted);
+        else
+            this.scene.setActiveShader(this.game.shaders.transparent);
         this.tiles[id].display();
+    }
     this.scene.setActiveShader(this.game.shaders.default);
     this.scene.clearPickRegistration();
 

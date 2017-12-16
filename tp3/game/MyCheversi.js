@@ -31,6 +31,7 @@ function MyCheversi(scene) {
     this.shaders = {
         selected: new CGFshader(scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl"),
         transparent: new CGFshader(scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl"),
+        highlighted: new CGFshader(scene.gl, "shaders/highlightedVertexShader.glsl", "shaders/highlightedFragmentShader.glsl"),
         default: scene.defaultShader
     };
 
