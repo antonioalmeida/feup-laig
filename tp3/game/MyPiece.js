@@ -24,7 +24,7 @@ MyPiece.prototype.display = function () {
     this.updateAnimationMatrix();
     this.scene.pushMatrix();
     if(this.selected)
-        this.scene.setActiveShader(this.game.selectedShader);
+        this.scene.setActiveShader(this.game.shaders.selected);
 
     this.game.materials[this.color].apply();
     this.scene.translate(this.initialPosition[0], this.initialPosition[1], this.initialPosition[2]);
@@ -34,7 +34,7 @@ MyPiece.prototype.display = function () {
     this.primitive.display();
 
     if(this.selected)
-        this.scene.setActiveShader(this.game.defaultShader);
+        this.scene.setActiveShader(this.game.shaders.default);
     this.scene.popMatrix();
 }
 

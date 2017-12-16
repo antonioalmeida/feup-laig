@@ -40,6 +40,7 @@ serialInclude(
 'game/MyRook.js',
 'game/MyTile.js',
 'game/MySidePlatform.js',
+'game/MyMarker.js',
 
 main=function() {
 

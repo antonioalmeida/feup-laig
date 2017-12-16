@@ -21,9 +21,10 @@ function XMLscene(interface) {
     this.delta = 0;
 
     //match options (maybe put this inside cheversi?)
+    //can't, variables used in myinterface must be declared in the scene
     this.difficulty = null;
-    this.gameMode = null; 
-    this.player = null; 
+    this.gameMode = null;
+    this.player = null;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -58,7 +59,7 @@ XMLscene.prototype.init = function(application) {
     this.setPickEnabled(true);
 
     this.game = new MyCheversi(this);
-    this.client = new MyClient(8088);
+    this.client = new MyClient(8088); //TODO: Let user choose port in GUI?
 }
 
 /**
@@ -137,7 +138,7 @@ XMLscene.prototype.update = function(currTime) {
 
     let factor = Math.abs(Math.sin(0.005*currTime));
     if(this.game != null)
-        this.game.selectedShader.setUniformsValues({timeFactor: factor});
+        this.game.shaders.selected.setUniformsValues({timeFactor: factor});
 }
 
 /**

@@ -4,7 +4,7 @@ function MyBoard(game) {
     this.scene = game.scene;
 
     this.boardTexture = new CGFappearance(this.scene);
-    this.boardTexture.loadTexture('textures/board2.png');
+    this.boardTexture.loadTexture('textures/board.png');
     this.defaultTexture = new CGFappearance(this.scene);
     this.primitive = new MyPatch(this.scene, [20,20], [[[ 0.5, 0.0, -0.5, 1], [0.5, 0.0, 0.5, 1] ], [[-0.5, 0.0, -0.5, 1], [-0.5, 0.0, 0.5, 1]]]);
     this.tiles = [];
@@ -19,10 +19,10 @@ MyBoard.prototype.constructor = MyBoard;
 MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 
-    this.scene.setActiveShader(this.game.transparentShader);
+    this.scene.setActiveShader(this.game.shaders.transparent);
     for(let id in this.tiles)
         this.tiles[id].display();
-    this.scene.setActiveShader(this.game.defaultShader);
+    this.scene.setActiveShader(this.game.shaders.default);
     this.scene.clearPickRegistration();
 
     this.scene.scale(20, 1, 20);

@@ -19,17 +19,20 @@ function MyCheversi(scene) {
         WHITE: '0',
         BLACK: '1',
     };
-    
+
     this.difficulty = null;
     this.mode = null;
-    this.player = null; 
+    this.player = null;
 
     this.board = new MyBoard(this);
     this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
+    this.marker = new MyMarker(this);
 
-    this.selectedShader = new CGFshader(scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl");
-    this.transparentShader = new CGFshader(scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl");
-    this.defaultShader = scene.defaultShader;
+    this.shaders = {
+        selected: new CGFshader(scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl"),
+        transparent: new CGFshader(scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl"),
+        default: scene.defaultShader
+    };
 
     let blackMaterial = new CGFappearance(scene);
     blackMaterial.setAmbient(0.05, 0.05, 0.05, 1);
@@ -101,6 +104,7 @@ MyCheversi.prototype.display = function() {
 
     this.sidePlatforms[0].display();
     this.sidePlatforms[1].display();
+    this.marker.display();
     this.board.display();
     for(let id in this.pieces)
         this.pieces[id].display();
