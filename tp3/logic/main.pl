@@ -75,7 +75,7 @@ startAndPlayGame( _, _ ):-
 	start.
 
 startGame( 'singlePlayer', Difficulty, PlayerColor, Game ):-
-	initSingleplayerGame( Game, PlayerColor, Difficulty ).
+	initSinglePlayerGame( Game, PlayerColor, Difficulty ).
 
 startGame( 'multiPlayer', Game ):-
 	initMultiplayerGame( Game ).

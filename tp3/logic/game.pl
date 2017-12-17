@@ -109,7 +109,7 @@ initMultiplayerGame( Game ):-
 	% 11 - atom, difficulty - easy, medium or hard - only in single player mode
 	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'multiPlayer', Difficulty ].
 
-initSingleplayerGame( Game, AIPlayer, Difficulty ):-
+initSinglePlayerGame( Game, AIPlayer, Difficulty ):-
 	initialBoard( Board ),
 	initialBoard( AttackedBoardWhite ),
 	initialBoard( AttackedBoardBlack ),

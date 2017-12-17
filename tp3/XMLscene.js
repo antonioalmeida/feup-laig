@@ -14,7 +14,7 @@ function XMLscene(interface) {
     this.graphs = []; //For different game scenarios
 
     this.game = null;
-    this.client = null;
+
 
     this.currTime = new Date().getTime();
     this.startTime = -1;
@@ -59,7 +59,6 @@ XMLscene.prototype.init = function(application) {
     this.setPickEnabled(true);
 
     this.game = new MyCheversi(this);
-    this.client = new MyClient(8088); //TODO: Choose a standard port
 }
 
 /**
@@ -230,11 +229,10 @@ XMLscene.prototype.display = function() {
 }
 
 XMLscene.prototype.startGame = function() {
-        let matchData = {};
+    // values from dat.gui get casted to string
+    let mode = parseInt(this.gameMode);
+    let player = parseInt(this.player);
+    let difficulty = parseInt(this.difficulty);
 
-        if (this.game.match === null) {
-            matchData.mode = this.gameMode;
-            matchData.difficulty = this.difficulty;
-            this.client.makeRequest('startGame', matchData);
-        }
-    };
+    this.game.startGame(mode, player, difficulty);
+};
