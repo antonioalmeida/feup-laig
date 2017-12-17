@@ -20,11 +20,12 @@ function XMLscene(interface) {
     this.startTime = -1;
     this.delta = 0;
 
-    //match options (maybe put this inside cheversi?)
-    //can't, variables used in myinterface must be declared in the scene
-    this.difficulty = null;
-    this.gameMode = null;
-    this.player = null;
+    // Game options retrieved from GUI
+    this.difficulty = 1;
+    this.gameMode = 0;
+    this.player = 0;
+    this.turnTime = 30;
+    this.realisticPieces = true;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);

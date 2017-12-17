@@ -49,8 +49,18 @@ MyInterface.prototype.addLightsGroup = function(lights) {
 }
 
 MyInterface.prototype.addGameButtons = function(scene) {
-    this.gui.add(scene,'gameMode',{'Single Player': 0, 'Multiplayer': 1, 'AI vs AI': 2}).name('Game Mode');
-    this.gui.add(scene,'difficulty',{'Easy': 0, 'Medium': 1}).name('Difficulty');
-    this.gui.add(scene,'player',{'White': 0, 'Black': 1}).name('Player');
-    this.gui.add(scene, 'startGame').name('Start Game');
+    let customizationGroup = this.gui.addFolder("Game customization");
+    customizationGroup.open();
+
+    customizationGroup.add(scene, 'realisticPieces').name('Realistic Pieces');
+
+    let optionsGroup = this.gui.addFolder("Game Properties");
+    optionsGroup.open();
+
+    optionsGroup.add(scene, 'turnTime', 30, 300).name('Turn Timeout');
+    optionsGroup.add(scene, 'gameMode',{'Single Player': 0, 'Multiplayer': 1, 'AI vs AI': 2}).name('Game Mode');
+    optionsGroup.add(scene, 'difficulty',{'Easy': 0, 'Medium': 1}).name('Difficulty');
+    optionsGroup.add(scene, 'player',{'White': 0, 'Black': 1}).name('Player');
+    optionsGroup.add(scene, 'startGame').name('Start Game');
+
 }
