@@ -34,8 +34,8 @@ MyBezierAnimation.prototype.approximateCurveLength = function() {
 MyBezierAnimation.prototype.matrixAfter = function(delta) {
     let s = delta/this.animationTime;
     let currentQ = this.Q(s);
-    let currentDerivativeQ = this.derivativeQ(s);
-    let angle = Math.PI/2-Math.atan2(currentDerivativeQ[2], currentDerivativeQ[0]);
+    //let currentDerivativeQ = this.derivativeQ(s);
+    //let angle = Math.PI/2-Math.atan2(currentDerivativeQ[2], currentDerivativeQ[0]);
     //Wasn't able to create mat4 manually (method not available in version 2.1.0). Code still left for reference sake
     //let currentDerivativeNorm = vec3.length(currentDerivativeQ);
     //let cos = currentQ[0] / currentDerivativeNorm;
@@ -45,7 +45,7 @@ MyBezierAnimation.prototype.matrixAfter = function(delta) {
     let result = mat4.create();
     mat4.translate(result, result, vec3.fromValues(currentQ[0], currentQ[1], currentQ[2]));
     //mat4.multiply(result, result, rotationMat);
-    mat4.rotateY(result, result, angle);
+    //mat4.rotateY(result, result, angle);
 
     return result;
 }

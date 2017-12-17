@@ -114,7 +114,6 @@ MyMarker.prototype.display = function() {
     //Seconds
     let secondsDozen = Math.floor((Math.floor(this.elapsed) % 60) / 10);
     let secondsUnits = (Math.floor(this.elapsed) % 60) % 10;
-    console.log(secondsUnits);
     this.scene.pushMatrix();
     this.scene.translate(2, 8, -12.5);
     this.scene.scale(8, 8, 1);
