@@ -20,7 +20,7 @@ function MyCheversi(scene) {
     this.scene = scene;
     this.match = null;
 
-    this.client = new MyClient(8899);
+    this.client = new MyClient(8898);
 
     this.difficulty = null;
     this.mode = null;
@@ -130,6 +130,7 @@ function MyCheversi(scene) {
     }
 
     this.client.makeRequest(request, (data) => { //using arrow function to preserve 'this'
+        console.log(data.target.response);
         let dataArr = JSON.parse(data.target.response);
         let game = {};
 

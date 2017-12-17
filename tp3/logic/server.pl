@@ -103,7 +103,7 @@ print_header_line(_).
 
 % starting game
 parse_input(initGame(singlePlayer, Playercolor, Difficulty), Game):- initSinglePlayerGame(Temp, Playercolor, Difficulty), parseGame(Temp, Game).
-parse_input(initGame(multiPlayer, Playercolor, Difficulty), Game):- initMultiplayerGame(Game).
+parse_input(initGame(multiPlayer, Playercolor, Difficulty), Game):- initMultiplayerGame(Temp), parseGame(Temp,Game).
 parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):- initNoPlayerGame(Temp), parseGame(Temp,Game).
 
 % game progression
