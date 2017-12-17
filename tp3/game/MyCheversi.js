@@ -63,7 +63,8 @@ function MyCheversi(scene) {
         new MyKnight(this, 'white', [15, 0, 6.25]),
         new MyKnight(this, 'white', [15, 0, 8.75]),
         new MyKnight(this, 'black', [-15, 0, 6.25]),
-        new MyKnight(this, 'black', [-15, 0, 8.75])
+        //new MyKnight(this, 'black', [-15, 0, 8.75]),
+        new MyMonkey(this, 'white', [-15, 0, 8.75], 'objs/monkey.obj')
     ];
     this.selectedPiece = null;
 
