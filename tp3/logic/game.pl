@@ -5,7 +5,6 @@
 :-include('ai.pl').
 :-include('utils.pl').
 :-include('main.pl').
-:-include('parse.pl').
 :-include('emojis.pl').
 
 :-dynamic connected/2.
@@ -39,7 +38,7 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	displayBoard( Board ),
 
 	% read and validate move
-	getNextMove( Game, Player, Piece, X, Y ),
+	% getNextMove( Game, Player, Piece, X, Y ),
 	validateMove( Game, Player, Piece, X, Y ),
 
 	% make and update moves
@@ -51,9 +50,7 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	updateAttackedBoard( GameTemp2, GameTemp3 ),
 	incTurnIndex( GameTemp3, GameTemp4 ),
 	switchPlayer( GameTemp4, GameTemp5 ),
-	checkGameOver( GameTemp5, GameTemp6 ),
-
-	parseGame(GameTemp6, NewGame).
+	checkGameOver( GameTemp5, NewGame ).
 
 	%clearScreen,
 	%playGame(NewGame).
@@ -308,4 +305,3 @@ displayPlayer('black'):- emoji('black'), write(' Black ').
 
 otherPlayer('white', 'black').
 otherPlayer('black', 'white').
-

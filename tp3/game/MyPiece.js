@@ -1,4 +1,4 @@
-function MyPiece(game, color, initialPosition) {
+function MyPiece(game, color, representation, initialPosition) {
     if (this.constructor === MyPiece){
         throw new Error("Can't instantiate abstract class!");
     }
@@ -6,6 +6,7 @@ function MyPiece(game, color, initialPosition) {
     CGFobject.call(this,game.scene);
     this.game = game;
     this.scene = game.scene;
+    this.representation = representation;
     this.initialPosition = initialPosition;
 
     this.tile = null; //Tile object where it is positioned (invisible cells to be placed on board)

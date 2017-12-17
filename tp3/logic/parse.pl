@@ -36,14 +36,15 @@ parseDifficulty(_, -1). % for matches without difficulty (multiplayer)
 
 parsePlayer('white', 0).
 parsePlayer('black', 1).
+parsePlayer(_, _). % for matches without ai player
 
 parsePlayedPieces(Played, Output):-
 	parsePlayedPiecesAux(Played, [], Output).
 
 parsePlayedPiecesAux([], Parsed, Parsed).
 parsePlayedPiecesAux([Move|Rest], Aux, Parsed):-
-	parseMove(Move, ParsedMove),
-	append(Aux, [ParsedMove], NextAux),
+	parseMove(Move, Player-Piece-X-Y),
+	append(Aux, [[Player,Piece,X,Y]], NextAux),
 	parsePlayedPiecesAux(Rest, NextAux, Parsed).
 
 parseMove(Player-Piece-X-Y, ParsedPlayer-ParsedPiece-X-Y):-
@@ -80,3 +81,4 @@ parsePiece('q', 7). % queen
 parsePiece('r', 8). % rook
 parsePiece('b', 9). % bishop
 parsePiece('n', 10). % knight
+

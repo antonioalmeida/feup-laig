@@ -100,14 +100,28 @@ print_header_line(_).
 
 % Require your Prolog Files here
 :- include('game.pl').
+:- include('parse.pl').
+:- include('parseJS.pl').
 
 % starting game
-parse_input(initGame(singlePlayer, Playercolor, Difficulty), Game):- initSinglePlayerGame(Temp, Playercolor, Difficulty), parseGame(Temp, Game).
-parse_input(initGame(multiPlayer, Playercolor, Difficulty), Game):- initMultiplayerGame(Temp), parseGame(Temp,Game).
-parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):- initNoPlayerGame(Temp), parseGame(Temp,Game).
+parse_input(initGame(singlePlayer, Playercolor, Difficulty), Game):- 
+	initSinglePlayerGame(Temp, Playercolor, Difficulty), 
+	parseGame(Temp, Game).
+
+parse_input(initGame(multiPlayer, Playercolor, Difficulty), Game):- 
+	initMultiplayerGame(Temp), 
+	parseGame(Temp,Game).
+
+parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):- 
+	initNoPlayerGame(Temp), 
+	parseGame(Temp,Game).
 
 % game progression
-parse_input(playGame(Game, Piece, X, Y), NewGame):- playGame(Game, Piece, X, Y, NewGame).
+parse_input(makeMove(Game, Piece, X, Y), NewGame):- 
+	parseGameJS(Game, Parsed), !
+	parsePiece(ParsedPiece, Piece), !,
+	playGame(Parsed, ParsedPiece, X, Y, Temp), !,
+	parseGame(Temp, NewGame).
 
 % sample requests
 parse_input(handshake, handshake).
@@ -118,4 +132,3 @@ parse_input(cenas, {ola}).
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
-	

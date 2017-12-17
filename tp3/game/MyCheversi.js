@@ -20,13 +20,42 @@ function MyCheversi(scene) {
     this.scene = scene;
     this.match = null;
 
-    this.client = new MyClient(8898);
+    this.client = new MyClient(5555);
 
     this.difficulty = null;
     this.mode = null;
     this.player = null;
 
-    this.logic = null;
+    this.parseGameObject = (data) => {
+        console.log(data.target.response);
+        let dataArr = JSON.parse(data.target.response);
+        let game = {};
+
+        game.raw = data.target.response;
+        game.board = dataArr[0];
+        game.currentPlayer = dataArr[1];
+        game.turnCounter = dataArr[2];
+
+        // Not sure if we'll need these
+        game.whiteAttacked = dataArr[3];
+        game.blackAttacked = dataArr[4];
+
+        // only useful for single player
+        game.AIPlayer = dataArr[5]; 
+
+        game.movesList = dataArr[6]; 
+
+        // maybe use these to improve UX when user needs to choose queen?
+        game.whiteNeedsQueen = dataArr[7];
+        game.blackNeedsQueen = dataArr[8];
+
+        game.isOver = dataArr[9];
+        game.mode = dataArr[10];
+        game.difficulty = dataArr[11];
+
+        console.log(game);
+        this.match = game;
+    }
 
     this.board = new MyBoard(this);
     this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
@@ -52,33 +81,33 @@ function MyCheversi(scene) {
     this.materials = {'black': blackMaterial, 'white': whiteMaterial};
 
     this.pieces = [
-    new MyKing(this, 'white', [15, 0, -8.75]),
-    new MyKing(this, 'black', [-15, 0, -8.75]),
-    new MyQueen(this, 'white', [15, 0, -6.25]),
-    new MyQueen(this, 'black', [-15, 0, -6.25]),
-    new MyRook(this, 'white', [15, 0, -3.75]),
-    new MyRook(this, 'white', [15, 0, -1.25]),
-    new MyRook(this, 'black', [-15, 0, -3.75]),
-    new MyRook(this, 'black', [-15, 0, -1.25]),
-    new MyBishop(this, 'white', [15, 0, 1.25]),
-    new MyBishop(this, 'white', [15, 0, 3.75]),
-    new MyBishop(this, 'black', [-15, 0, 1.25]),
-    new MyBishop(this, 'black', [-15, 0, 3.75]),
-    new MyKnight(this, 'white', [15, 0, 6.25]),
-    new MyKnight(this, 'white', [15, 0, 8.75]),
-    new MyKnight(this, 'black', [-15, 0, 6.25]),
-        //new MyKnight(this, 'black', [-15, 0, 8.75]),
-        new MyMonkey(this, 'white', [-15, 0, 8.75], 'objs/monkey.obj')
-        ];
-        this.selectedPiece = null;
+    new MyKing(this, 'white', '1', [15, 0, -8.75]),
+    new MyKing(this, 'black', '6', [-15, 0, -8.75]),
+    new MyQueen(this, 'white', '2', [15, 0, -6.25]),
+    new MyQueen(this, 'black', '7', [-15, 0, -6.25]),
+    new MyRook(this, 'white', '3', [15, 0, -3.75]),
+    new MyRook(this, 'white', '3', [15, 0, -1.25]),
+    new MyRook(this, 'black', '8', [-15, 0, -3.75]),
+    new MyRook(this, 'black', '8', [-15, 0, -1.25]),
+    new MyBishop(this, 'white', '4', [15, 0, 1.25]),
+    new MyBishop(this, 'white', '4', [15, 0, 3.75]),
+    new MyBishop(this, 'black', '9', [-15, 0, 1.25]),
+    new MyBishop(this, 'black', '9', [-15, 0, 3.75]),
+    new MyKnight(this, 'white', '5', [15, 0, 6.25]),
+    new MyKnight(this, 'white', '5', [15, 0, 8.75]),
+    new MyKnight(this, 'black', '10', [-15, 0, 6.25]),
+    new MyKnight(this, 'black', '10', [-15, 0, 8.75])
+    //    new MyMonkey(this, 'white', [-15, 0, 8.75], 'objs/monkey.obj')
+     ];
+    this.selectedPiece = null;
 
-        this.registerForPickID = 1;
-    }
+    this.registerForPickID = 1;
+}
 
-    MyCheversi.prototype = Object.create(CGFobject.prototype);
-    MyCheversi.prototype.constructor = MyCheversi;
+MyCheversi.prototype = Object.create(CGFobject.prototype);
+MyCheversi.prototype.constructor = MyCheversi;
 
-    MyCheversi.prototype.pickPiece = function(piece) {
+MyCheversi.prototype.pickPiece = function(piece) {
     //Piece already played
     if(piece.tile !== null)
         return;
@@ -99,10 +128,6 @@ function MyCheversi(scene) {
  */
  MyCheversi.prototype.startGame = function(mode, player, difficulty) {
     let request = 'initGame(';
-    console.log(mode);
-    console.log(MyCheversi.mode.SINGLEPLAYER);
-    console.log(player);
-    console.log(difficulty);
     switch(mode) {
         case MyCheversi.mode.SINGLEPLAYER: 
             request+= 'singlePlayer,'; 
@@ -129,37 +154,31 @@ function MyCheversi(scene) {
         case MyCheversi.difficulty.HARD: request+= 'hard)'; break;
     }
 
-    this.client.makeRequest(request, (data) => { //using arrow function to preserve 'this'
-        console.log(data.target.response);
-        let dataArr = JSON.parse(data.target.response);
-        let game = {};
+    this.client.makeRequest(request, this.parseGameObject);
+}
 
-        game.board = dataArr[0];
-        game.currentPlayer = dataArr[1];
-        game.turnCounter = dataArr[2];
+MyCheversi.prototype.movePiece = function(tile) {
+    console.log(tile);
+    if(this.selectedPiece === null) //No piece to make a move
+        return;
+    if(tile.piece !== null) //Tile already occupied
+        return;
 
-        // Not sure if we'll need these
-        game.whiteAttacked = dataArr[3];
-        game.blackAttacked = dataArr[4];
+    console.log(this.match);
+    let request = 'makeMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + tile.row + ',' + tile.col + ')';
 
-        // only useful for single player
-        game.AIPlayer = dataArr[5]; 
+    this.client.makeRequest(request, (data) => {
+        this.parseGameObject(data);
+        //How to add move validation?? 
 
-        game.movesList = dataArr[6]; 
-
-        // maybe use these to improve UX when user needs to choose queen?
-        game.whiteNeedsQueen = dataArr[7];
-        game.blackNeedsQueen = dataArr[8];
-
-        game.isOver = dataArr[9];
-        game.mode = dataArr[10];
-        game.difficulty = dataArr[11];
-
-        console.log(game);
-        this.logic = game;
+        this.selectedPiece.selected = false;
+        this.selectedPiece.setTile(tile);
+        this.selectedPiece = null;
+        this.marker.resetTurnTime();
     });
 }
 
+/*
 MyCheversi.prototype.movePiece = function(tile) {
     if(this.selectedPiece === null) //No piece to make a move
         return;
@@ -170,7 +189,7 @@ MyCheversi.prototype.movePiece = function(tile) {
     this.selectedPiece.setTile(tile);
     this.selectedPiece = null;
     this.marker.resetTurnTime();
-}
+} */
 
 MyCheversi.prototype.display = function() {
     //Reset pick ID
