@@ -12,6 +12,8 @@ function MyMarker(game) {
     this.elapsed = 0; //Time elapsed since last turn started
     this.lastCurrTime = this.scene.currTime;
 
+    this.turnTime = 30;
+
     this.textures = {
         0: new CGFtexture(this.scene, 'textures/0.png'),
         1: new CGFtexture(this.scene, 'textures/1.png'),
@@ -35,9 +37,8 @@ MyMarker.prototype = Object.create(CGFobject.prototype);
 MyMarker.prototype.constructor = MyMarker;
 
 MyMarker.prototype.update = function(currTime) {
-    //TODO: Turn the 300 into a variable chosen by user in GUI and put it in the marker class
     let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
-    this.game.marker.elapsed = 300 - turnTimerDelta;
+    this.game.marker.elapsed = this.turnTime - turnTimerDelta;
 
     //TODO: Remove these two when actual score update is implemented
     this.game.marker.scores.white = Math.floor(turnTimerDelta/5);

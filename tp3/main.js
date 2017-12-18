@@ -41,7 +41,6 @@ serialInclude(
 'game/MyTile.js',
 'game/MySidePlatform.js',
 'game/MyMarker.js',
-'game/MyMonkey.js',
 
 main=function() {
 

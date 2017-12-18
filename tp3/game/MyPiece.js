@@ -1,4 +1,4 @@
-function MyPiece(game, color, representation, initialPosition) {
+function MyPiece(game, color, representation, initialPosition, file) {
     if (this.constructor === MyPiece){
         throw new Error("Can't instantiate abstract class!");
     }
@@ -16,6 +16,25 @@ function MyPiece(game, color, representation, initialPosition) {
     this.animationStartTime = 0;
 
     this.selected = false; //For when user clicks it (only when not played)
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", file, false);
+    xhttp.send();
+    let buffer = this.loadObj(xhttp.responseText);
+
+    this.vertices = [];
+    this.normals = [];
+    this.indices = [];
+
+    for(let i = 0; i < buffer.length; i += 6) {
+        this.vertices.push(buffer[i], buffer[i+1], buffer[i+2]);
+        this.normals.push(buffer[i+3], buffer[i+4], buffer[i+5]);
+    }
+    for(let i = 0; i < this.vertices.length/3; i += 3)
+        this.indices.push(i, i+1, i+2);
+
+    this.primitiveType = this.scene.gl.TRIANGLES;
+    this.initGLBuffers();
 }
 
 MyPiece.prototype = Object.create(CGFobject.prototype);
@@ -30,9 +49,15 @@ MyPiece.prototype.display = function () {
     this.game.materials[this.color].apply();
     this.scene.translate(this.initialPosition[0], this.initialPosition[1], this.initialPosition[2]);
     this.scene.multMatrix(this.animationMatrix);
-    this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
     this.scene.registerForPick(this.game.registerForPickID++, this);
-    this.primitive.display();
+    if(this.scene.realisticPieces) {
+        this.scene.translate(0, 1, 0); //TODO: Check situation for king and queen for now, later try to see if models can be re-exported so this translation is not needed
+        CGFobject.prototype.display.call(this);
+    }
+    else {
+        this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
+        this.primitive.display();
+    }
 
     if(this.selected)
         this.scene.setActiveShader(this.game.shaders.default);

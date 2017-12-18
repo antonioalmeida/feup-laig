@@ -41,9 +41,9 @@ function MyCheversi(scene) {
         game.blackAttacked = dataArr[4];
 
         // only useful for single player
-        game.AIPlayer = dataArr[5]; 
+        game.AIPlayer = dataArr[5];
 
-        game.movesList = dataArr[6]; 
+        game.movesList = dataArr[6];
 
         // maybe use these to improve UX when user needs to choose queen?
         game.whiteNeedsQueen = dataArr[7];
@@ -52,6 +52,8 @@ function MyCheversi(scene) {
         game.isOver = dataArr[9];
         game.mode = dataArr[10];
         game.difficulty = dataArr[11];
+
+        this.marker.turnTime = this.scene.turnTime;
 
         console.log(game);
         this.match = game;
@@ -81,23 +83,22 @@ function MyCheversi(scene) {
     this.materials = {'black': blackMaterial, 'white': whiteMaterial};
 
     this.pieces = [
-    new MyKing(this, 'white', '1', [15, 0, -8.75]),
-    new MyKing(this, 'black', '6', [-15, 0, -8.75]),
-    new MyQueen(this, 'white', '2', [15, 0, -6.25]),
-    new MyQueen(this, 'black', '7', [-15, 0, -6.25]),
-    new MyRook(this, 'white', '3', [15, 0, -3.75]),
-    new MyRook(this, 'white', '3', [15, 0, -1.25]),
-    new MyRook(this, 'black', '8', [-15, 0, -3.75]),
-    new MyRook(this, 'black', '8', [-15, 0, -1.25]),
-    new MyBishop(this, 'white', '4', [15, 0, 1.25]),
-    new MyBishop(this, 'white', '4', [15, 0, 3.75]),
-    new MyBishop(this, 'black', '9', [-15, 0, 1.25]),
-    new MyBishop(this, 'black', '9', [-15, 0, 3.75]),
-    new MyKnight(this, 'white', '5', [15, 0, 6.25]),
-    new MyKnight(this, 'white', '5', [15, 0, 8.75]),
-    new MyKnight(this, 'black', '10', [-15, 0, 6.25]),
-    new MyKnight(this, 'black', '10', [-15, 0, 8.75])
-    //    new MyMonkey(this, 'white', [-15, 0, 8.75], 'objs/monkey.obj')
+    new MyKing(this, 'white', '1', [15, 0, -8.75], 'objs/king.obj'),
+    new MyKing(this, 'black', '6', [-15, 0, -8.75], 'objs/king.obj'),
+    new MyQueen(this, 'white', '2', [15, 0, -6.25], 'objs/queen.obj'),
+    new MyQueen(this, 'black', '7', [-15, 0, -6.25], 'objs/queen.obj'),
+    new MyRook(this, 'white', '3', [15, 0, -3.75], 'objs/rook.obj'),
+    new MyRook(this, 'white', '3', [15, 0, -1.25], 'objs/rook.obj'),
+    new MyRook(this, 'black', '8', [-15, 0, -3.75], 'objs/rook.obj'),
+    new MyRook(this, 'black', '8', [-15, 0, -1.25], 'objs/rook.obj'),
+    new MyBishop(this, 'white', '4', [15, 0, 1.25], 'objs/bishop.obj'),
+    new MyBishop(this, 'white', '4', [15, 0, 3.75], 'objs/bishop.obj'),
+    new MyBishop(this, 'black', '9', [-15, 0, 1.25], 'objs/bishop.obj'),
+    new MyBishop(this, 'black', '9', [-15, 0, 3.75], 'objs/bishop.obj'),
+    new MyKnight(this, 'white', '5', [15, 0, 6.25], 'objs/knight.obj'),
+    new MyKnight(this, 'white', '5', [15, 0, 8.75], 'objs/knight.obj'),
+    new MyKnight(this, 'black', '10', [-15, 0, 6.25], 'objs/knight.obj'),
+    new MyKnight(this, 'black', '10', [-15, 0, 8.75], 'objs/knight.obj')
      ];
     this.selectedPiece = null;
 
@@ -129,17 +130,17 @@ MyCheversi.prototype.pickPiece = function(piece) {
  MyCheversi.prototype.startGame = function(mode, player, difficulty) {
     let request = 'initGame(';
     switch(mode) {
-        case MyCheversi.mode.SINGLEPLAYER: 
-            request+= 'singlePlayer,'; 
+        case MyCheversi.mode.SINGLEPLAYER:
+            request+= 'singlePlayer,';
             break;
-        case MyCheversi.mode.MULTIPLAYER: 
-            request+= 'multiPlayer,'; 
+        case MyCheversi.mode.MULTIPLAYER:
+            request+= 'multiPlayer,';
             break;
-        case MyCheversi.mode.NOPLAYER: 
-            request+= 'noPlayer,'; 
+        case MyCheversi.mode.NOPLAYER:
+            request+= 'noPlayer,';
             break;
         default:
-            request+= 'cenas,'; 
+            request+= 'cenas,';
             break;
     }
 
@@ -169,7 +170,7 @@ MyCheversi.prototype.movePiece = function(tile) {
 
     this.client.makeRequest(request, (data) => {
         this.parseGameObject(data);
-        //How to add move validation?? 
+        //How to add move validation??
 
         this.selectedPiece.selected = false;
         this.selectedPiece.setTile(tile);
