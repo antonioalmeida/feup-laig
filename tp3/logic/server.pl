@@ -116,9 +116,23 @@ parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):-
 	initNoPlayerGame(Temp), 
 	parseGame(Temp,Game).
 
+% move validation
+parse_input(checkMove(Game, Piece, X, Y), Result):-
+	parseGameJS(Game, Temp),
+	parsePiece(ParsedPiece, Piece), !, 
+	checkMoveAux(Temp, ParsedPiece, X, Y, Result).
+
+checkMoveAux(Game, Piece, X, Y, Result):-
+	getCurrentPlayer(Game, Player),
+	validateMove(Game, Player, Piece, X, Y),
+	Result = true.
+
+checkMoveAux(Game, Piece, X, Y, Result):-
+	Result = false.
+
 % game progression
 parse_input(makeMove(Game, Piece, X, Y), NewGame):- 
-	parseGameJS(Game, Parsed), !
+	parseGameJS(Game, Parsed), !,
 	parsePiece(ParsedPiece, Piece), !,
 	playGame(Parsed, ParsedPiece, X, Y, Temp), !,
 	parseGame(Temp, NewGame).

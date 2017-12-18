@@ -20,7 +20,7 @@ function MyCheversi(scene) {
     this.scene = scene;
     this.match = null;
 
-    this.client = new MyClient(5555);
+    this.client = new MyClient(8445);
 
     this.difficulty = null;
     this.mode = null;
@@ -158,14 +158,27 @@ MyCheversi.prototype.pickPiece = function(piece) {
     this.client.makeRequest(request, this.parseGameObject);
 }
 
-MyCheversi.prototype.movePiece = function(tile) {
-    console.log(tile);
+/**
+ * Checks if move is valid and executes it if true bu calling movePiece
+ * @param tile
+ */
+MyCheversi.prototype.makeMove = function(tile) {
     if(this.selectedPiece === null) //No piece to make a move
         return;
     if(tile.piece !== null) //Tile already occupied
         return;
 
-    console.log(this.match);
+    let request = 'checkMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + tile.row + ',' + tile.col + ')';
+
+    this.client.makeRequest(request, (data) => {
+        let validMove = JSON.parse(data.target.response);
+        console.log(validMove);
+        if(validMove)
+           this.movePiece(tile); 
+    });
+}
+
+MyCheversi.prototype.movePiece = function(tile) {
     let request = 'makeMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + tile.row + ',' + tile.col + ')';
 
     this.client.makeRequest(request, (data) => {
@@ -178,19 +191,6 @@ MyCheversi.prototype.movePiece = function(tile) {
         this.marker.resetTurnTime();
     });
 }
-
-/*
-MyCheversi.prototype.movePiece = function(tile) {
-    if(this.selectedPiece === null) //No piece to make a move
-        return;
-    if(tile.piece !== null) //Tile already occupied
-        return;
-
-    this.selectedPiece.selected = false;
-    this.selectedPiece.setTile(tile);
-    this.selectedPiece = null;
-    this.marker.resetTurnTime();
-} */
 
 MyCheversi.prototype.display = function() {
     //Reset pick ID

@@ -25,9 +25,7 @@ function MyMarker(game) {
         7: new CGFtexture(this.scene, 'textures/7.png'),
         8: new CGFtexture(this.scene, 'textures/8.png'),
         9: new CGFtexture(this.scene, 'textures/9.png'),
-        colon: new CGFtexture(this.scene, 'textures/colon.png'),
-        time: new CGFtexture(this.scene, 'textures/time.png'),
-        player_score: new CGFtexture(this.scene, 'textures/player_score.png'),
+        colon: new CGFtexture(this.scene, 'textures/colon.png')
     }
 
     this.primitive = new MyQuad(this.scene, [-0.5, 0.5, 0.5, -0.5]);

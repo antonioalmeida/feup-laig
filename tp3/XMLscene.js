@@ -155,7 +155,8 @@ XMLscene.prototype.logPicking = function() {
                 if(!(obj instanceof MyTile)) //TODO: Try to sort out to something more decent
                     this.game.pickPiece(obj);
                 else
-                    this.game.movePiece(obj);
+                    this.game.makeMove(obj);
+                    //this.game.movePiece(obj);
                 var customId = this.pickResults[i][1];
                 console.log("Picked object: " + obj + ", with pick id " + customId);
           }
