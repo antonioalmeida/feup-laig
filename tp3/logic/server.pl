@@ -124,6 +124,7 @@ parse_input(checkMove(Game, Piece, X, Y), Result):-
 
 checkMoveAux(Game, Piece, X, Y, Result):-
 	getCurrentPlayer(Game, Player),
+	playerPiece(Player, Piece),
 	validateMove(Game, Player, Piece, X, Y),
 	Result = true.
 

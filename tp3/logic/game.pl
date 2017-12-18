@@ -33,9 +33,9 @@ playGame( Game, Piece, X, Y, Game ):-
 playGame( Game, Piece, X, Y, NewGame ):-
 	% get stuff from game class
 	getBoard( Game, Board ),
-	displayTurnInfo( Game ),
 	getCurrentPlayer( Game, Player ),
-	displayBoard( Board ),
+	% displayTurnInfo( Game ),
+	% displayBoard( Board ),
 
 	% read and validate move
 	% getNextMove( Game, Player, Piece, X, Y ),
@@ -267,6 +267,7 @@ switchPlayer( Game, NewGame ):-
 	getCurrentPlayer( Game, CurrentPlayer ),
 	otherPlayer( CurrentPlayer, NewPlayer ),
 	replace( Game, 1, NewPlayer, NewGame ).
+
 
 displayTurnInfo( Game ):-
 	getCurrentPlayer( Game, CurrentPlayer ),

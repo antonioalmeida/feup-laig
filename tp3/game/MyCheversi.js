@@ -20,7 +20,7 @@ function MyCheversi(scene) {
     this.scene = scene;
     this.match = null;
 
-    this.client = new MyClient(8446);
+    this.client = new MyClient(5544);
 
     this.difficulty = null;
     this.mode = null;
