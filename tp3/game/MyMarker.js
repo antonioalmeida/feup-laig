@@ -37,14 +37,18 @@ MyMarker.prototype.constructor = MyMarker;
 MyMarker.prototype.update = function(currTime) {
     let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
     this.game.marker.elapsed = this.turnTime - turnTimerDelta;
-
-    //TODO: Remove these two when actual score update is implemented
-    this.game.marker.scores.white = Math.floor(turnTimerDelta/5);
-    this.game.marker.scores.black = Math.floor(turnTimerDelta/7);
 }
 
 MyMarker.prototype.resetTurnTime = function() {
     this.lastCurrTime = this.scene.currTime;
+}
+
+MyMarker.prototype.updateValuesAfterMove = function(white, black) {
+    let add = function(a,b){return a+b;};
+    let reduce = function(arr){return arr.reduce(add);};
+    this.scores.white = white.map(reduce).reduce(add);
+    this.scores.black = black.map(reduce).reduce(add);
+    this.resetTurnTime();
 }
 
 MyMarker.prototype.display = function() {

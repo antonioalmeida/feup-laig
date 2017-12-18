@@ -20,7 +20,7 @@ function MyCheversi(scene) {
     this.scene = scene;
     this.match = null;
 
-    this.client = new MyClient(8445);
+    this.client = new MyClient(8446);
 
     this.difficulty = null;
     this.mode = null;
@@ -168,18 +168,18 @@ MyCheversi.prototype.makeMove = function(tile) {
     if(tile.piece !== null) //Tile already occupied
         return;
 
-    let request = 'checkMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + tile.row + ',' + tile.col + ')';
+    let request = 'checkMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + (tile.row-1) + ',' + (tile.col-1) + ')';
 
     this.client.makeRequest(request, (data) => {
         let validMove = JSON.parse(data.target.response);
         console.log(validMove);
         if(validMove)
-           this.movePiece(tile); 
+           this.movePiece(tile);
     });
 }
 
 MyCheversi.prototype.movePiece = function(tile) {
-    let request = 'makeMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + tile.row + ',' + tile.col + ')';
+    let request = 'makeMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + (tile.row-1) + ',' + (tile.col-1) + ')';
 
     this.client.makeRequest(request, (data) => {
         this.parseGameObject(data);
@@ -188,7 +188,8 @@ MyCheversi.prototype.movePiece = function(tile) {
         this.selectedPiece.selected = false;
         this.selectedPiece.setTile(tile);
         this.selectedPiece = null;
-        this.marker.resetTurnTime();
+
+        this.marker.updateValuesAfterMove(this.match.whiteAttacked, this.match.blackAttacked);
     });
 }
 
