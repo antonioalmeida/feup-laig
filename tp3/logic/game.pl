@@ -131,7 +131,7 @@ initSinglePlayerGame( Game, Player, Difficulty ):-
 	initialBoard( Board ),
 	initialBoard( AttackedBoardWhite ),
 	initialBoard( AttackedBoardBlack ),
-	Game = [ Board, Player, 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'singlePlayer', Difficulty ].
+	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'singlePlayer', Difficulty ].
 
 initNoPlayerGame( Game ):-
 	initialBoard( Board ),

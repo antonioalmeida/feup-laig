@@ -27,7 +27,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8556);
+    this.client = new MyClient(8845);
 
     this.difficulty = null;
     this.mode = null;
@@ -230,10 +230,12 @@ MyCheversi.prototype.pickPiece = function(piece) {
         this.difficulty = difficulty;
         this.userPlayer = player;
 
-        // cases where match states starts with AI playing
+        // set initial turnState
         if((this.mode == MyCheversi.mode.SINGLEPLAYER && this.userPlayer == MyCheversi.player.BLACK)
-         || this.mode == MyCheversi.mode.NOPLAYER)
+         || this.mode == MyCheversi.mode.NOPLAYER) {
             this.turnState = MyCheversi.turnState.AI_TURN;
+            setTimeout(this.makeMoveAI, 1500);
+        }
         else
             this.turnState = MyCheversi.turnState.USER_TURN;
 
