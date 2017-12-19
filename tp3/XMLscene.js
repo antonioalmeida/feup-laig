@@ -25,7 +25,7 @@ function XMLscene(interface) {
     this.gameMode = 0;
     this.player = 0;
     this.turnTime = 30;
-    this.realisticPieces = true;
+    this.realisticPieces = false;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
