@@ -8,7 +8,7 @@ function MyPiece(game, color, representation, initialPosition, file) {
     this.scene = game.scene;
     this.representation = representation;
     this.initialPosition = initialPosition;
-
+    this.primitiveComponents = [];
     this.tile = null; //Tile object where it is positioned (invisible cells to be placed on board)
     this.color = color;
     this.animation = null; //Animation for when piece is played
@@ -63,10 +63,8 @@ MyPiece.prototype.display = function () {
         this.scene.translate(0, 1, 0); //TODO: Check situation for king and queen for now, later try to see if models can be re-exported so this translation is not needed
         CGFobject.prototype.display.call(this);
     }
-    else {
-        this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
-        this.primitive.display();
-    }
+    else
+        this.displayWithPrimitives();
 
     if(this.selected)
         this.scene.setActiveShader(this.game.shaders.default);

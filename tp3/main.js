@@ -19,6 +19,7 @@ serialInclude(
 'primitives/MyCircle.js',
 'primitives/MyCylinder.js',
 'primitives/MySphere.js',
+'primitives/MyCube.js',
 'XMLscene.js',
 'MySceneGraph.js',
 'MyGraphNode.js',
