@@ -55,6 +55,26 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	%clearScreen,
 	%playGame(NewGame).
 
+playGameAI(Game, NewGame):-
+	% get stuff from game class
+	getBoard( Game, Board ),
+	getCurrentPlayer( Game, Player ),
+
+	% read and validate move
+	getNextMove( Game, Player, Piece, X, Y ),
+	validateMove( Game, Player, Piece, X, Y ),
+
+	% make and update moves
+	makeMove( Board, Piece, X, Y, NextBoard ),
+	updateMadeMoves( Game, Player, Piece, X, Y, GameTemp ),
+
+	% prepare for next turn
+	setBoard( GameTemp, NextBoard, GameTemp2 ),
+	updateAttackedBoard( GameTemp2, GameTemp3 ),
+	incTurnIndex( GameTemp3, GameTemp4 ),
+	switchPlayer( GameTemp4, GameTemp5 ),
+	checkGameOver( GameTemp5, NewGame ).
+
 % Single Player AI's turn
 getNextMove( Game, Player, Piece, X, Y ):-
 	getGameType( Game, 'singlePlayer' ),
@@ -64,23 +84,23 @@ getNextMove( Game, Player, Piece, X, Y ):-
 	getAIMove( Game, Player, Piece, X, Y ).
 
 % Single Player user's turn
-getNextMove( Game, Player, Piece, X, Y ):-
-	getGameType( Game, 'singlePlayer' ),
-	readMoveFromUser( Player, Piece, X, Y ).
+% getNextMove( Game, Player, Piece, X, Y ):-
+%	getGameType( Game, 'singlePlayer' ),
+%	readMoveFromUser( Player, Piece, X, Y ).
 
 %  Multiplayer regular turn
-getNextMove( Game, Player, Piece, X, Y ):-
-	getGameType( Game, 'multiPlayer' ),
-	readMoveFromUser( Player, Piece, X, Y ).
+%getNextMove( Game, Player, Piece, X, Y ):-
+%	getGameType( Game, 'multiPlayer' ),
+%	readMoveFromUser( Player, Piece, X, Y ).
 
 % AI vs AI regular turn
 getNextMove( Game, Player, Piece, X, Y ):-
 	getGameType( Game, 'noPlayer' ),
 	write('AI is thinking...'), nl,
-	getAIMove( Game, Player, Piece, X, Y ),
-	write('The AI has decided!'), nl,
-	write('Press ENTER to apply the move.'), nl,
-	read_line(_).
+	getAIMove( Game, Player, Piece, X, Y ).
+	%write('The AI has decided!'), nl,
+	%write('Press ENTER to apply the move.'), nl.
+	%read_line(_).
 
 %%%%%%%%%%%%%%%%
 % Game "class" %
@@ -106,11 +126,12 @@ initMultiplayerGame( Game ):-
 	% 11 - atom, difficulty - easy, medium or hard - only in single player mode
 	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'multiPlayer', Difficulty ].
 
-initSinglePlayerGame( Game, AIPlayer, Difficulty ):-
+initSinglePlayerGame( Game, Player, Difficulty ):-
+	otherPlayer(Player, AIPlayer),
 	initialBoard( Board ),
 	initialBoard( AttackedBoardWhite ),
 	initialBoard( AttackedBoardBlack ),
-	Game = [ Board, 'white', 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'singlePlayer', Difficulty ].
+	Game = [ Board, Player, 0, AttackedBoardWhite, AttackedBoardBlack, AIPlayer, [], false, false, false, 'singlePlayer', Difficulty ].
 
 initNoPlayerGame( Game ):-
 	initialBoard( Board ),

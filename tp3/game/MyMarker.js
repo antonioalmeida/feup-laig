@@ -35,7 +35,7 @@ MyMarker.prototype = Object.create(CGFobject.prototype);
 MyMarker.prototype.constructor = MyMarker;
 
 MyMarker.prototype.update = function(currTime) {
-    if(this.game.matchState !== MyCheversi.matchState.NONE) {
+    if(this.game.turnState !== MyCheversi.turnState.NONE) {
         let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
         this.game.marker.elapsed = this.turnTime - turnTimerDelta;
     }
@@ -46,7 +46,7 @@ MyMarker.prototype.resetTurnTime = function() {
     this.lastCurrTime = this.scene.currTime;
 }
 
-MyMarker.prototype.updateValuesAfterMove = function(white, black) {
+MyMarker.prototype.updateScore = function(white, black) {
     let add = function(a,b){return a+b;};
     let reduce = function(arr){return arr.reduce(add);};
     this.scores.white = white.map(reduce).reduce(add);

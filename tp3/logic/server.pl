@@ -116,6 +116,7 @@ parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):-
 	initNoPlayerGame(Temp), 
 	parseGame(Temp,Game).
 
+
 % move validation
 parse_input(checkMove(Game, Piece, X, Y), Result):-
 	parseGameJS(Game, Temp),
@@ -136,6 +137,12 @@ parse_input(makeMove(Game, Piece, X, Y), NewGame):-
 	parseGameJS(Game, Parsed), !,
 	parsePiece(ParsedPiece, Piece), !,
 	playGame(Parsed, ParsedPiece, X, Y, Temp), !,
+	parseGame(Temp, NewGame).
+
+% ai move
+parse_input(makeMoveAI(Game), NewGame):-
+	parseGameJS(Game, Parsed), !,
+	playGameAI(Parsed, Temp), !,
 	parseGame(Temp, NewGame).
 
 % sample requests

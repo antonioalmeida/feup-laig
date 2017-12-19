@@ -14,7 +14,7 @@ MyCheversi.player = {
     BLACK: 1,
 };
 
-MyCheversi.matchState = {
+MyCheversi.turnState = {
     NONE: 0,
     USER_TURN: 1,
     AI_TURN: 2,
@@ -25,9 +25,9 @@ function MyCheversi(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
     this.match = null;
-    this.matchState = MyCheversi.matchState.NONE;
+    this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(5544);
+    this.client = new MyClient(8556);
 
     this.difficulty = null;
     this.mode = null;
@@ -64,6 +64,24 @@ function MyCheversi(scene) {
 
         console.log(obj);
         this.match = obj;
+    }
+
+    this.makeMoveAI = () => {
+        let request = 'makeMoveAI(' + this.match.raw + ')'; 
+
+        this.client.makeRequest(request, (data) => {
+            this.parseGameObject(data);
+            // at this point, match data is updated
+
+            //get move made by AI by accessing movesList
+            let madeMove = this.match.movesList[0];
+
+            //TODO: actually move the piece
+            //madeMove has the format [Player-Piece-X-Y]
+
+            //uncoment once movepiece is implemented (not tested)
+            //this.updateMatch();
+        })
     }
 
     this.board = new MyBoard(this);
@@ -117,7 +135,7 @@ MyCheversi.prototype.constructor = MyCheversi;
 
 MyCheversi.prototype.pickPiece = function(piece) {
     // not user's turn
-    if(this.matchState != MyCheversi.matchState.USER_TURN)
+    if(this.turnState != MyCheversi.turnState.USER_TURN)
         return;
 
     //Piece already played
@@ -173,9 +191,9 @@ MyCheversi.prototype.pickPiece = function(piece) {
         // cases where match states starts with AI playing
         if((this.mode == MyCheversi.mode.SINGLEPLAYER && this.userPlayer == MyCheversi.player.BLACK)
          || this.mode == MyCheversi.mode.NOPLAYER)
-            this.matchState = MyCheversi.matchState.AI_TURN;
+            this.turnState = MyCheversi.turnState.AI_TURN;
         else
-            this.matchState = MyCheversi.matchState.USER_TURN;
+            this.turnState = MyCheversi.turnState.USER_TURN;
 
         this.resetStatus();
     });
@@ -207,18 +225,46 @@ MyCheversi.prototype.movePiece = function(tile) {
     this.client.makeRequest(request, (data) => {
         this.parseGameObject(data);
 
+        // prepare for next turn
+        this.updateMatch();
+
         this.selectedPiece.selected = false;
         this.selectedPiece.setTile(tile);
         this.selectedPiece = null;
-
-        this.marker.updateValuesAfterMove(this.match.whiteAttacked, this.match.blackAttacked);
-
-        // Update highlighted tiles
-        if(this.match.currentPlayer == MyCheversi.player.WHITE)
-            this.board.highlightTiles(this.match.blackAttacked);
-        else
-            this.board.highlightTiles(this.match.whiteAttacked);
     });
+}
+
+MyCheversi.prototype.updateMatch = function() {
+    // Update match state
+    this.updateTurnState();
+
+    //At this point, turn info is updated
+    if(this.turnState == MyCheversi.turnState.AI_TURN)
+        setTimeout(this.makeMoveAI, 1500);
+
+    // Update score on marker
+    this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
+
+    // Update highlighted tiles
+    if(this.match.currentPlayer == MyCheversi.player.WHITE)
+        this.board.highlightTiles(this.match.blackAttacked);
+    else
+        this.board.highlightTiles(this.match.whiteAttacked);
+}
+
+MyCheversi.prototype.updateTurnState = function() {
+    // i think this one is redundant but let's leave it here for now just for logic's sake
+    if(this.mode == MyCheversi.mode.MULTIPLAYER) {
+        this.turnState = MyCheversi.turnState.USER_TURN;
+    }
+    else if(this.mode == MyCheversi.mode.SINGLEPLAYER) {
+        if(this.match.currentPlayer == this.userPlayer)
+            this.turnState = MyCheversi.turnState.USER_TURN;
+        else
+            this.turnState = MyCheversi.turnState.AI_TURN;
+    }
+    else // also redundant i think (NoPlayer)
+        this.turnState = MyCheversi.turnState.AI_TURN;
 }
 
 MyCheversi.prototype.resetStatus = function() {

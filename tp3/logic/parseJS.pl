@@ -4,13 +4,13 @@ parseGameJS(Game, Output):-
 	parseGameType(ParsedGameType, Type),
 
 	getDifficulty(Game, Difficulty),
-	parseDifficulty(Difficulty, ParsedDifficulty),
+	parseDifficulty(ParsedDifficulty, Difficulty),
 
 	getCurrentPlayer(Game, Player),
 	parsePlayer(ParsedPlayer, Player),
 
 	getAIPlayer(Game, AIPlayer),
-	parsePlayer(ParsedPlayer, AIPlayer),
+	parsePlayer(ParsedAIPlayer, AIPlayer),
 
 	getPlayedPieces(Game, Played),
 	parsePlayedPiecesJS(Played, ParsedPlayedPieces),
@@ -22,7 +22,6 @@ parseGameJS(Game, Output):-
 	replace(TempGame, 1, ParsedPlayer, TempGame2),
 	replace(TempGame2, 5, ParsedAIPlayer, TempGame3),
 	replace(TempGame3, 6, ParsedPlayedPieces, TempGame4),
-
 	replace(TempGame4, 10, ParsedGameType, TempGame5),
 	replace(TempGame5, 11, ParsedDifficulty, Output).
 
