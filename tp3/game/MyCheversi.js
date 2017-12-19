@@ -15,47 +15,56 @@ MyCheversi.player = {
     BLACK: 1,
 };
 
+MyCheversi.matchState = {
+    NONE: 0,
+    USER_TURN: 1,
+    AI_TURN: 2,
+    GAME_OVER: 3
+}
+
 function MyCheversi(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
     this.match = null;
+    this.matchState = MyCheversi.matchState.NONE;
 
     this.client = new MyClient(5544);
 
     this.difficulty = null;
     this.mode = null;
-    this.player = null;
+    this.userPlayer = null;
+    this.AIPlayer = null;
 
     this.parseGameObject = (data) => {
         let dataArr = JSON.parse(data.target.response);
-        let game = {};
+        let obj = {};
 
-        game.raw = data.target.response;
-        game.board = dataArr[0];
-        game.currentPlayer = dataArr[1];
-        game.turnCounter = dataArr[2];
+        obj.raw = data.target.response;
+        obj.board = dataArr[0];
+        obj.currentPlayer = dataArr[1];
+        obj.turnCounter = dataArr[2];
 
         // Not sure if we'll need these
-        game.whiteAttacked = dataArr[3];
-        game.blackAttacked = dataArr[4];
+        obj.whiteAttacked = dataArr[3];
+        obj.blackAttacked = dataArr[4];
 
         // only useful for single player
-        game.AIPlayer = dataArr[5];
+        obj.AIPlayer = dataArr[5];
 
-        game.movesList = dataArr[6];
+        obj.movesList = dataArr[6];
 
         // maybe use these to improve UX when user needs to choose queen?
-        game.whiteNeedsQueen = dataArr[7];
-        game.blackNeedsQueen = dataArr[8];
+        obj.whiteNeedsQueen = dataArr[7];
+        obj.blackNeedsQueen = dataArr[8];
 
-        game.isOver = dataArr[9];
-        game.mode = dataArr[10];
-        game.difficulty = dataArr[11];
+        obj.isOver = dataArr[9];
+        obj.mode = dataArr[10];
+        obj.difficulty = dataArr[11];
 
         this.marker.turnTime = this.scene.turnTime;
 
-        console.log(game);
-        this.match = game;
+        console.log(obj);
+        this.match = obj;
     }
 
     this.board = new MyBoard(this);
@@ -108,6 +117,10 @@ MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
 MyCheversi.prototype.pickPiece = function(piece) {
+    // not user's turn
+    if(this.matchState != MyCheversi.matchState.USER_TURN)
+        return;
+
     //Piece already played
     if(piece.tile !== null)
         return;
@@ -138,9 +151,6 @@ MyCheversi.prototype.pickPiece = function(piece) {
         case MyCheversi.mode.NOPLAYER:
             request+= 'noPlayer,';
             break;
-        default:
-            request+= 'cenas,';
-            break;
     }
 
     switch(player) {
@@ -154,7 +164,23 @@ MyCheversi.prototype.pickPiece = function(piece) {
         case MyCheversi.difficulty.HARD: request+= 'hard)'; break;
     }
 
-    this.client.makeRequest(request, this.parseGameObject);
+    this.client.makeRequest(request, (data) => {
+        this.parseGameObject(data);
+
+        //at this point, match data is updated
+        this.mode = mode;
+        this.difficulty = difficulty;
+        this.userPlayer = player;
+
+        // cases where match states starts with AI playing
+        if((this.mode == MyCheversi.mode.SINGLEPLAYER && this.userPlayer == MyCheversi.player.BLACK)
+         || this.mode == MyCheversi.mode.NOPLAYER)
+            this.matchState == MyCheversi.matchState.AI_TURN;
+        else
+            this.matchState == MyCheversi.matchState.USER_TURN;
+
+        // TODO: add reset piece positions case a match was already running (reset match)
+    });
 }
 
 /**
