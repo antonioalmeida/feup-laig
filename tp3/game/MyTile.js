@@ -6,6 +6,7 @@ function MyTile(game, row, col) {
     this.row = row;
     this.col = col;
     this.coords = [2.5*this.row-11.25, 0.03, 2.5*this.col-11.25];
+    this.highlighted = false;
 
     this.primitive = new MyQuad(this.scene, [-1.25, 1.25, 1.25, -1.25]);
     this.piece = null;

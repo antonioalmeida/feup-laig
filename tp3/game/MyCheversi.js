@@ -27,7 +27,6 @@ function MyCheversi(scene) {
     this.player = null;
 
     this.parseGameObject = (data) => {
-        console.log(data.target.response);
         let dataArr = JSON.parse(data.target.response);
         let game = {};
 
@@ -183,13 +182,18 @@ MyCheversi.prototype.movePiece = function(tile) {
 
     this.client.makeRequest(request, (data) => {
         this.parseGameObject(data);
-        //How to add move validation??
 
         this.selectedPiece.selected = false;
         this.selectedPiece.setTile(tile);
         this.selectedPiece = null;
 
         this.marker.updateValuesAfterMove(this.match.whiteAttacked, this.match.blackAttacked);
+
+        // Update highlighted tiles
+        if(this.match.currentPlayer == MyCheversi.player.WHITE)
+            this.board.highlightTiles(this.match.blackAttacked);
+        else
+            this.board.highlightTiles(this.match.whiteAttacked);
     });
 }
 

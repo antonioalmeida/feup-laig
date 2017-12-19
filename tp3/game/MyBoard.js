@@ -20,14 +20,15 @@ MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 
     this.scene.setActiveShader(this.game.shaders.transparent);
+
     for(let id in this.tiles) {
-        //TODO: Remove this ite later
-        if(id % 5 == 0)
-            this.scene.setActiveShader(this.game.shaders.highlighted);
+        if(this.tiles[id].highlighted)
+           this.scene.setActiveShader(this.game.shaders.highlighted);
         else
             this.scene.setActiveShader(this.game.shaders.transparent);
         this.tiles[id].display();
     }
+
     this.scene.setActiveShader(this.game.shaders.default);
     this.scene.clearPickRegistration();
 
@@ -37,4 +38,17 @@ MyBoard.prototype.display = function() {
     this.primitive.display();
 
     this.scene.popMatrix();
+}
+
+MyBoard.prototype.highlightTiles = function (board) {
+    for(let j = 0; j <= 7; j++) {
+        for(let i = 0; i <= 7; i++) {
+            // 8*i+j because tiles are added to array by column
+            // should probably replace this with i and j of MyTile
+            if(board[j][i] > 0)
+                this.tiles[8*i+j].highlighted = true;
+            else 
+                this.tiles[8*i+j].highlighted = false;
+        }
+    }
 }
