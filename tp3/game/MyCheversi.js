@@ -108,10 +108,11 @@ MyCheversi.prototype.getPieceFromInternalRepresentation = function(index) {
         case 6:
         case 7:
             return this.pieces[index+2];
-        case 8: {
+        case 8:
+        case 9:
+        case 10:
             firstPieceIndex = 2*index-6;
             break;
-        }
     }
 
     if(this.pieces[firstPieceIndex].tile === null)
