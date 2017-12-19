@@ -67,7 +67,7 @@ function MyCheversi(scene) {
     }
 
     this.makeMoveAI = () => {
-        let request = 'makeMoveAI(' + this.match.raw + ')'; 
+        let request = 'makeMoveAI(' + this.match.raw + ')';
 
         this.client.makeRequest(request, (data) => {
             this.parseGameObject(data);
@@ -76,62 +76,114 @@ function MyCheversi(scene) {
             //get move made by AI by accessing movesList
             let madeMove = this.match.movesList[0];
 
-            //TODO: actually move the piece
-            //madeMove has the format [Player-Piece-X-Y]
+            //madeMove is an array with format [Player, Piece, X, Y]
+            this.getPieceFromInternalRepresentation(madeMove[1]).setTile(this.getTileFromCoordinates(madeMove[2], madeMove[3]));
 
             //uncoment once movepiece is implemented (not tested)
-            //this.updateMatch();
+            this.updateMatch();
         })
     }
 
-    this.board = new MyBoard(this);
-    this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
-    this.marker = new MyMarker(this);
-
-    this.shaders = {
-        selected: new CGFshader(scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl"),
-        transparent: new CGFshader(scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl"),
-        highlighted: new CGFshader(scene.gl, "shaders/highlightedVertexShader.glsl", "shaders/highlightedFragmentShader.glsl"),
-        default: scene.defaultShader
-    };
-
-    let blackMaterial = new CGFappearance(scene);
-    blackMaterial.setAmbient(0.05, 0.05, 0.05, 1);
-    blackMaterial.setSpecular(0.9, 0.9, 0.9, 1);
-    blackMaterial.setDiffuse(0.1, 0.1, 0.1, 1);
-
-    let whiteMaterial = new CGFappearance(scene);
-    whiteMaterial.setAmbient(0.05, 0.05, 0.05, 1);
-    whiteMaterial.setSpecular(0.3, 0.3, 0.3, 1);
-    whiteMaterial.setDiffuse(0.8, 0.8, 0.8, 1);
-
-    this.materials = {'black': blackMaterial, 'white': whiteMaterial};
-
-    this.pieces = [
-    new MyKing(this, 'white', '1', [15, 0, -8.75], 'objs/king.obj'),
-    new MyKing(this, 'black', '6', [-15, 0, -8.75], 'objs/king.obj'),
-    new MyQueen(this, 'white', '2', [15, 0, -6.25], 'objs/queen.obj'),
-    new MyQueen(this, 'black', '7', [-15, 0, -6.25], 'objs/queen.obj'),
-    new MyRook(this, 'white', '3', [15, 0, -3.75], 'objs/rook.obj'),
-    new MyRook(this, 'white', '3', [15, 0, -1.25], 'objs/rook.obj'),
-    new MyRook(this, 'black', '8', [-15, 0, -3.75], 'objs/rook.obj'),
-    new MyRook(this, 'black', '8', [-15, 0, -1.25], 'objs/rook.obj'),
-    new MyBishop(this, 'white', '4', [15, 0, 1.25], 'objs/bishop.obj'),
-    new MyBishop(this, 'white', '4', [15, 0, 3.75], 'objs/bishop.obj'),
-    new MyBishop(this, 'black', '9', [-15, 0, 1.25], 'objs/bishop.obj'),
-    new MyBishop(this, 'black', '9', [-15, 0, 3.75], 'objs/bishop.obj'),
-    new MyKnight(this, 'white', '5', [15, 0, 6.25], 'objs/knight.obj'),
-    new MyKnight(this, 'white', '5', [15, 0, 8.75], 'objs/knight.obj'),
-    new MyKnight(this, 'black', '10', [-15, 0, 6.25], 'objs/knight.obj'),
-    new MyKnight(this, 'black', '10', [-15, 0, 8.75], 'objs/knight.obj')
-     ];
-    this.selectedPiece = null;
+    this.createBoardMarker();
+    this.createMaterialsShaders();
+    this.createPieces();
 
     this.registerForPickID = 1;
 }
 
 MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
+
+MyCheversi.prototype.getPieceFromInternalRepresentation = function(index) {
+    //Don't panic I'll fix it
+    switch(index) {
+        case 1:
+        case 2:
+            return this.pieces[index-1];
+        case 3:
+            if(this.pieces[2].tile === null)
+                return this.pieces[2];
+            return this.pieces[3];
+        case 4:
+            if(this.pieces[4].tile === null)
+                return this.pieces[4];
+            return this.pieces[5];
+        case 5:
+            if(this.pieces[6].tile === null)
+                return this.pieces[6];
+            return this.pieces[7];
+        case 6:
+        case 7:
+            return this.pieces[index+2];
+        case 8:
+            if(this.pieces[10].tile === null)
+                return this.pieces[10];
+            return this.pieces[11];
+        case 9:
+            if(this.pieces[12].tile === null)
+                return this.pieces[12];
+            return this.pieces[13];
+        case 10:
+            if(this.pieces[14].tile === null)
+                return this.pieces[14];
+            return this.pieces[15];
+    }
+}
+
+MyCheversi.prototype.getTileFromCoordinates = function(x,y) {
+    return this.board.tiles[8*x+y];
+}
+
+MyCheversi.prototype.createBoardMarker = function() {
+    this.board = new MyBoard(this);
+    this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
+    this.marker = new MyMarker(this);
+}
+
+MyCheversi.prototype.createMaterialsShaders = function() {
+    this.shaders = {
+        selected: new CGFshader(this.scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl"),
+        transparent: new CGFshader(this.scene.gl, "shaders/transparentVertexShader.glsl", "shaders/transparentFragmentShader.glsl"),
+        highlighted: new CGFshader(this.scene.gl, "shaders/highlightedVertexShader.glsl", "shaders/highlightedFragmentShader.glsl"),
+        default: this.scene.defaultShader
+    };
+
+    let blackMaterial = new CGFappearance(this.scene);
+    blackMaterial.setAmbient(0.05, 0.05, 0.05, 1);
+    blackMaterial.setSpecular(0.9, 0.9, 0.9, 1);
+    blackMaterial.setDiffuse(0.1, 0.1, 0.1, 1);
+
+    let whiteMaterial = new CGFappearance(this.scene);
+    whiteMaterial.setAmbient(0.05, 0.05, 0.05, 1);
+    whiteMaterial.setSpecular(0.3, 0.3, 0.3, 1);
+    whiteMaterial.setDiffuse(0.8, 0.8, 0.8, 1);
+
+    this.materials = {'black': blackMaterial, 'white': whiteMaterial};
+}
+
+MyCheversi.prototype.createPieces = function() {
+    this.pieces = [
+    //White pieces
+    new MyKing(this, 'white', '1', [15, 0, -8.75], 'objs/king.obj'),
+    new MyQueen(this, 'white', '2', [15, 0, -6.25], 'objs/queen.obj'),
+    new MyRook(this, 'white', '3', [15, 0, -3.75], 'objs/rook.obj'),
+    new MyRook(this, 'white', '3', [15, 0, -1.25], 'objs/rook.obj'),
+    new MyBishop(this, 'white', '4', [15, 0, 1.25], 'objs/bishop.obj'),
+    new MyBishop(this, 'white', '4', [15, 0, 3.75], 'objs/bishop.obj'),
+    new MyKnight(this, 'white', '5', [15, 0, 6.25], 'objs/knight.obj'),
+    new MyKnight(this, 'white', '5', [15, 0, 8.75], 'objs/knight.obj'),
+    //Black pieces
+    new MyKing(this, 'black', '6', [-15, 0, -8.75], 'objs/king.obj'),
+    new MyQueen(this, 'black', '7', [-15, 0, -6.25], 'objs/queen.obj'),
+    new MyRook(this, 'black', '8', [-15, 0, -3.75], 'objs/rook.obj'),
+    new MyRook(this, 'black', '8', [-15, 0, -1.25], 'objs/rook.obj'),
+    new MyBishop(this, 'black', '9', [-15, 0, 1.25], 'objs/bishop.obj'),
+    new MyBishop(this, 'black', '9', [-15, 0, 3.75], 'objs/bishop.obj'),
+    new MyKnight(this, 'black', '10', [-15, 0, 6.25], 'objs/knight.obj'),
+    new MyKnight(this, 'black', '10', [-15, 0, 8.75], 'objs/knight.obj')
+     ];
+    this.selectedPiece = null;
+}
 
 MyCheversi.prototype.pickPiece = function(piece) {
     // not user's turn
