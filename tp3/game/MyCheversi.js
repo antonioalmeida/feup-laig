@@ -95,39 +95,28 @@ MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
 MyCheversi.prototype.getPieceFromInternalRepresentation = function(index) {
-    //Don't panic I'll fix it
+    let firstPieceIndex;
     switch(index) {
         case 1:
         case 2:
             return this.pieces[index-1];
         case 3:
-            if(this.pieces[2].tile === null)
-                return this.pieces[2];
-            return this.pieces[3];
         case 4:
-            if(this.pieces[4].tile === null)
-                return this.pieces[4];
-            return this.pieces[5];
         case 5:
-            if(this.pieces[6].tile === null)
-                return this.pieces[6];
-            return this.pieces[7];
+            firstPieceIndex = 2*index-4;
+            break;
         case 6:
         case 7:
             return this.pieces[index+2];
-        case 8:
-            if(this.pieces[10].tile === null)
-                return this.pieces[10];
-            return this.pieces[11];
-        case 9:
-            if(this.pieces[12].tile === null)
-                return this.pieces[12];
-            return this.pieces[13];
-        case 10:
-            if(this.pieces[14].tile === null)
-                return this.pieces[14];
-            return this.pieces[15];
+        case 8: {
+            firstPieceIndex = 2*index-6;
+            break;
+        }
     }
+
+    if(this.pieces[firstPieceIndex].tile === null)
+        return this.pieces[firstPieceIndex];
+    return this.pieces[firstPieceIndex+1];
 }
 
 MyCheversi.prototype.getTileFromCoordinates = function(x,y) {
