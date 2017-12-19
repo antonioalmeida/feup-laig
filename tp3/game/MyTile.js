@@ -5,7 +5,7 @@ function MyTile(game, row, col) {
 
     this.row = row;
     this.col = col;
-    this.coords = [2.5*this.row-11.25, 0.03, 2.5*this.col-11.25];
+    this.coords = [2.5*this.row-11.25, 0.005, 2.5*this.col-11.25];
     this.highlighted = false;
 
     this.primitive = new MyQuad(this.scene, [-1.25, 1.25, 1.25, -1.25]);
@@ -14,6 +14,11 @@ function MyTile(game, row, col) {
 
 MyTile.prototype = Object.create(CGFobject.prototype);
 MyTile.prototype.constructor = MyTile;
+
+MyTile.prototype.resetStatus = function() {
+    this.piece = null;
+    this.highlighted = false;
+}
 
 MyTile.prototype.display = function() {
     this.scene.pushMatrix();

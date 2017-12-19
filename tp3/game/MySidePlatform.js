@@ -6,7 +6,6 @@ function MySidePlatform(game, sideSign) {
 
     this.platformTexture = new CGFappearance(this.scene);
     this.platformTexture.loadTexture('textures/platform.jpg');
-    this.defaultTexture = new CGFappearance(this.scene);
     this.primitive = new MyPatch(this.scene, [20,20], [[[ 0.5, 0.0, -0.5, 1], [0.5, 0.0, 0.5, 1] ], [[-0.5, 0.0, -0.5, 1], [-0.5, 0.0, 0.5, 1]]]);
 }
 

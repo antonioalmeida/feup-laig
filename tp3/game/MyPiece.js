@@ -17,6 +17,7 @@ function MyPiece(game, color, representation, initialPosition, file) {
 
     this.selected = false; //For when user clicks it (only when not played)
 
+    // Loading obj file
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", file, false);
     xhttp.send();
@@ -39,6 +40,14 @@ function MyPiece(game, color, representation, initialPosition, file) {
 
 MyPiece.prototype = Object.create(CGFobject.prototype);
 MyPiece.prototype.constructor = MyPiece;
+
+MyPiece.prototype.resetStatus = function() {
+    this.tile = null;
+    this.animation = null;
+    this.animationMatrix = mat4.create();
+    this.animationStartTime = 0;
+    this.selected = false;
+}
 
 MyPiece.prototype.display = function () {
     this.updateAnimationMatrix();

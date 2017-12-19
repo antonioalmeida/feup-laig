@@ -10,9 +10,9 @@ function MyMarker(game) {
     }
 
     this.elapsed = 0; //Time elapsed since last turn started
-    this.lastCurrTime = this.scene.currTime;
+    this.lastCurrTime = this.scene.currTime; //Reference point to calculate turn time deltas
 
-    this.turnTime = 30;
+    this.turnTime = 0;
 
     this.textures = {
         0: new CGFtexture(this.scene, 'textures/0.png'),
@@ -35,11 +35,14 @@ MyMarker.prototype = Object.create(CGFobject.prototype);
 MyMarker.prototype.constructor = MyMarker;
 
 MyMarker.prototype.update = function(currTime) {
-    let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
-    this.game.marker.elapsed = this.turnTime - turnTimerDelta;
+    if(this.game.matchState !== MyCheversi.matchState.NONE) {
+        let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
+        this.game.marker.elapsed = this.turnTime - turnTimerDelta;
+    }
 }
 
 MyMarker.prototype.resetTurnTime = function() {
+    this.turnTime = this.scene.turnTime;
     this.lastCurrTime = this.scene.currTime;
 }
 
@@ -48,6 +51,12 @@ MyMarker.prototype.updateValuesAfterMove = function(white, black) {
     let reduce = function(arr){return arr.reduce(add);};
     this.scores.white = white.map(reduce).reduce(add);
     this.scores.black = black.map(reduce).reduce(add);
+    this.resetTurnTime();
+}
+
+MyMarker.prototype.resetStatus = function() {
+    this.scores.white = 0;
+    this.scores.black = 0;
     this.resetTurnTime();
 }
 

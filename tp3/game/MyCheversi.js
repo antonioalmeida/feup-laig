@@ -1,7 +1,6 @@
 MyCheversi.difficulty = {
     EASY: 0,
     MEDIUM: 1,
-    HARD: 2,
 };
 
 MyCheversi.mode = {
@@ -61,7 +60,7 @@ function MyCheversi(scene) {
         obj.mode = dataArr[10];
         obj.difficulty = dataArr[11];
 
-        this.marker.turnTime = this.scene.turnTime;
+        this.marker.resetTurnTime();
 
         console.log(obj);
         this.match = obj;
@@ -161,7 +160,6 @@ MyCheversi.prototype.pickPiece = function(piece) {
     switch(difficulty) {
         case MyCheversi.difficulty.EASY: request+= 'easy)'; break;
         case MyCheversi.difficulty.MEDIUM: request+= 'medium)'; break;
-        case MyCheversi.difficulty.HARD: request+= 'hard)'; break;
     }
 
     this.client.makeRequest(request, (data) => {
@@ -175,11 +173,11 @@ MyCheversi.prototype.pickPiece = function(piece) {
         // cases where match states starts with AI playing
         if((this.mode == MyCheversi.mode.SINGLEPLAYER && this.userPlayer == MyCheversi.player.BLACK)
          || this.mode == MyCheversi.mode.NOPLAYER)
-            this.matchState == MyCheversi.matchState.AI_TURN;
+            this.matchState = MyCheversi.matchState.AI_TURN;
         else
-            this.matchState == MyCheversi.matchState.USER_TURN;
+            this.matchState = MyCheversi.matchState.USER_TURN;
 
-        // TODO: add reset piece positions case a match was already running (reset match)
+        this.resetStatus();
     });
 }
 
@@ -221,6 +219,14 @@ MyCheversi.prototype.movePiece = function(tile) {
         else
             this.board.highlightTiles(this.match.whiteAttacked);
     });
+}
+
+MyCheversi.prototype.resetStatus = function() {
+    this.marker.resetStatus();
+    this.board.resetStatus();
+    for(let id in this.pieces)
+        this.pieces[id].resetStatus();
+    this.selectedPiece = null;
 }
 
 MyCheversi.prototype.display = function() {
