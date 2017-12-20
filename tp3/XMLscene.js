@@ -239,3 +239,7 @@ XMLscene.prototype.startGame = function() {
 
     this.game.startGame(mode, player, difficulty);
 };
+
+XMLscene.prototype.undoMove = function() {
+    this.game.undoMove();
+}

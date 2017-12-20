@@ -317,6 +317,10 @@ MyCheversi.prototype.updateTurnState = function() {
         this.turnState = MyCheversi.turnState.AI_TURN;
 }
 
+MyCheversi.prototype.undoMove = function() {
+    console.log('Undo Move');
+}
+
 MyCheversi.prototype.matchOver = function() {
     this.turnState = MyCheversi.turnState.GAME_OVER;
 
