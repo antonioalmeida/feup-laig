@@ -42,7 +42,7 @@ MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 
     for(let id in this.tiles) {
-        if(this.tiles[id].highlighted)
+        if(this.tiles[id].highlighted && this.game.scene.highlightTiles)
            this.scene.setActiveShader(this.game.shaders.highlighted);
         else
             this.scene.setActiveShader(this.game.shaders.transparent);

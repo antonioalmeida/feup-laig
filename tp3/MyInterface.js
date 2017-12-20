@@ -49,10 +49,11 @@ MyInterface.prototype.addLightsGroup = function(lights) {
 }
 
 MyInterface.prototype.addGameButtons = function(scene) {
-    let customizationGroup = this.gui.addFolder("Game customization");
+    let customizationGroup = this.gui.addFolder("Game Customization");
     customizationGroup.open();
 
     customizationGroup.add(scene, 'realisticPieces').name('Realistic Pieces');
+    customizationGroup.add(scene, 'highlightTiles').name('Highlight Tiles');
 
     let optionsGroup = this.gui.addFolder("Game Properties");
     optionsGroup.open();
@@ -62,5 +63,4 @@ MyInterface.prototype.addGameButtons = function(scene) {
     optionsGroup.add(scene, 'difficulty',{'Easy': 0, 'Medium': 1}).name('Difficulty');
     optionsGroup.add(scene, 'player',{'White': 0, 'Black': 1}).name('Player');
     optionsGroup.add(scene, 'startGame').name('Start Game');
-
 }

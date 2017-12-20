@@ -21,11 +21,12 @@ function XMLscene(interface) {
     this.delta = 0;
 
     // Game options retrieved from GUI
-    this.difficulty = 1;
-    this.gameMode = 0;
-    this.player = 0;
+    this.difficulty = MyCheversi.difficulty.MEDIUM;
+    this.gameMode = MyCheversi.mode.SINGLEPLAYER;
+    this.player = MyCheversi.player.WHITE;
     this.turnTime = 30;
     this.realisticPieces = false;
+    this.highlightTiles = true;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
