@@ -148,7 +148,7 @@ parse_input(makeMoveAI(Game), NewGame):-
 % undo move
 parse_input(undoMove(Game), NewGame):-
 	parseGameJS(Game, Parsed), !,
-	undoMove(Game, Temp), !,
+	undoMove(Parsed, Temp), !,
 	parseGame(Temp, NewGame).
 
 % sample requests

@@ -27,7 +27,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8845);
+    this.client = new MyClient(7766);
 
     this.difficulty = null;
     this.mode = null;
@@ -318,7 +318,23 @@ MyCheversi.prototype.updateTurnState = function() {
 }
 
 MyCheversi.prototype.undoMove = function() {
-    console.log('Undo Move');
+    if(this.match.turnState == MyCheversi.turnState.NONE 
+    || this.match.turnState == MyCheversi.turnState.GAME_OVER)
+        return;
+
+    let request = 'undoMove(' + this.match.raw + ')';
+
+    this.client.makeRequest(request, (data) => {
+        let previousObject = Object.assign({}, this.match);
+        this.parseGameObject(data);
+
+        let length1 = previousObject.movesList.length;
+        let length2 = this.match.movesList.length;
+        let removedMoves = previousObject.movesList.slice(0, length1-length2);
+
+        for(let i = 0; i < removedMoves.length; i++)
+            this.getPieceFromInternalRepresentation(removedMoves[i][1]).resetStatus();
+    });
 }
 
 MyCheversi.prototype.matchOver = function() {

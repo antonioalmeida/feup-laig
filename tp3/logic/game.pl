@@ -215,6 +215,10 @@ getGameType( Game, Type ):-
 getAIPlayer( Game, AIPlayer ):-
 	elementAt(5, Game, AIPlayer ).
 
+getUserPlayer(Game, Player):-
+	getAIPlayer(Game, AIPlayer),
+	otherPlayer(AIPlayer, Player).
+
 getDifficulty( Game, Difficulty ):-
 	elementAt(11, Game, Difficulty).
 
@@ -262,17 +266,18 @@ undoMove(Game, NewGame):-
 undoMove(Game, NewGame):-
 	getGameType(Game, 'singlePlayer'),
 	getCurrentPlayer(Game, CurrentPlayer),
-	getAIPlayer(Game, CurrentPlayer),
+	getAIPlayer(Game, AIPlayer),
+	AIPlayer == CurrentPlayer,
 	undoMoveAux(Game, NewGame).
 
 % if user is playing, need to undo twice
 undoMove(Game, NewGame):-
 	getGameType(Game, 'singlePlayer'),
 	getCurrentPlayer(Game, CurrentPlayer),
-	getAIPlayer(Game, AIPlayer),
-	AIPlayer \= CurrentPlayer,
+	getUserPlayer(Game, Player),
+	Player == CurrentPlayer,
 	undoMoveAux(Game, Temp),
-	undoMoveAux(Game, NewGame).
+	undoMoveAux(Temp, NewGame).
 
 undoMove(Game, NewGame):-
 	getGameType(Game, 'multiPlayer'),
