@@ -16,15 +16,15 @@ playGame( Game, Piece, X, Y, Game ):-
 	getBoard( Game, Board ),
 	displayBoard( Board ),
 
-	getAttackedBoard( Game, 'white', AttackedBoardWhite ),
-	getAttackedBoard( Game, 'black', AttackedBoardBlack ),
+	%getAttackedBoard( Game, 'white', AttackedBoardWhite ),
+	%getAttackedBoard( Game, 'black', AttackedBoardBlack ),
 
-	evaluateBoard( AttackedBoardWhite, WhiteScore ),
-	evaluateBoard( AttackedBoardBlack, BlackScore ),
+	%evaluateBoard( AttackedBoardWhite, WhiteScore ),
+	%evaluateBoard( AttackedBoardBlack, BlackScore ),
 
 	% TODO: add final scores to final game object
-	displayScore( WhiteScore, BlackScore ),
-	displayWinner( WhiteScore, BlackScore ),
+	%displayScore( WhiteScore, BlackScore ),
+	%displayWinner( WhiteScore, BlackScore ),
 
 	retractall(connected(_,_)),
 	!.

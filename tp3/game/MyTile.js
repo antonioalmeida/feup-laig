@@ -15,6 +15,10 @@ function MyTile(game, row, col) {
 MyTile.prototype = Object.create(CGFobject.prototype);
 MyTile.prototype.constructor = MyTile;
 
+MyTile.prototype.resetHighlighted = function() {
+    this.highlighted = false;
+}
+
 MyTile.prototype.resetStatus = function() {
     this.piece = null;
     this.highlighted = false;

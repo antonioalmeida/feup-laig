@@ -279,6 +279,12 @@ MyCheversi.prototype.movePiece = function(tile) {
 }
 
 MyCheversi.prototype.updateMatch = function() {
+    // Check game over
+    if(this.match.isOver) {
+        this.matchOver();
+        return;
+    }
+
     // Update match state
     this.updateTurnState();
 
@@ -309,6 +315,18 @@ MyCheversi.prototype.updateTurnState = function() {
     }
     else // also redundant i think (NoPlayer)
         this.turnState = MyCheversi.turnState.AI_TURN;
+}
+
+MyCheversi.prototype.matchOver = function() {
+    this.turnState = MyCheversi.turnState.GAME_OVER;
+
+    // Update score on marker
+    this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
+
+    // Reset highlighted tiles
+    this.board.resetHighlighted();
+
+    //TODO: add some game over visual notification
 }
 
 MyCheversi.prototype.resetStatus = function() {

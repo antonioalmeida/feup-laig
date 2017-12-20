@@ -28,6 +28,11 @@ MyBoard.prototype.highlightTiles = function (board) {
     }
 }
 
+MyBoard.prototype.resetHighlighted = function() {
+    for(let id in this.tiles)
+        this.tiles[id].resetHighlighted();
+}
+
 MyBoard.prototype.resetStatus = function() {
     for(let id in this.tiles)
         this.tiles[id].resetStatus();
