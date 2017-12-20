@@ -145,6 +145,12 @@ parse_input(makeMoveAI(Game), NewGame):-
 	playGameAI(Parsed, Temp), !,
 	parseGame(Temp, NewGame).
 
+% undo move
+parse_input(undoMove(Game), NewGame):-
+	parseGameJS(Game, Parsed), !,
+	undoMove(Game, Temp), !,
+	parseGame(Temp, NewGame).
+
 % sample requests
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).

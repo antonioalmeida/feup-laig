@@ -254,8 +254,32 @@ updateMadeMoves( Game, Player, Piece, X, Y, NewGame ):-
 %% undo move %%
 %%%%%%%%%%%%%%%
 
-% case where game is over 
+% AIvsAI - do nothing
 undoMove(Game, NewGame):-
+	getGameType(Game, 'noPlayer').
+
+% if AI is playing, just need to undo once
+undoMove(Game, NewGame):-
+	getGameType(Game, 'singlePlayer'),
+	getCurrentPlayer(Game, CurrentPlayer),
+	getAIPlayer(Game, CurrentPlayer),
+	undoMoveAux(Game, NewGame).
+
+% if user is playing, need to undo twice
+undoMove(Game, NewGame):-
+	getGameType(Game, 'singlePlayer'),
+	getCurrentPlayer(Game, CurrentPlayer),
+	getAIPlayer(Game, AIPlayer),
+	AIPlayer \= CurrentPlayer,
+	undoMoveAux(Game, Temp),
+	undoMoveAux(Game, NewGame).
+
+undoMove(Game, NewGame):-
+	getGameType(Game, 'multiPlayer'),
+	undoMoveAux(Game, NewGame).
+
+% case where game is over 
+undoMoveAux(Game, NewGame):-
 	gameOver(Game),
 	setGameOver(Game, false, TempGame),
 	getLastPlayedPiece(TempGame, Player, Piece, X, Y),
@@ -263,7 +287,7 @@ undoMove(Game, NewGame):-
 	removeMove(TempGame2, X, Y, NewGame).
 
 % case where current player needs to play queen
-undoMove(Game, NewGame):-
+undoMoveAux(Game, NewGame):-
 	getCurrentPlayer(Game, Player),
 	needsToPlayQueen(Game, Player),
 	setNeedsToPlayQueen(Game, Player, false, TempGame),
@@ -272,7 +296,7 @@ undoMove(Game, NewGame):-
 	removeMove(TempGame2, X, Y, NewGame).
 
 % regular case undo
-undoMove(Game, NewGame):-
+undoMoveAux(Game, NewGame):-
 	getLastPlayedPiece(Game, Player, Piece, X, Y),
 	removeLastPlayedPiece(Game, TempGame),
 	removeMove(TempGame, X, Y, NewGame).
@@ -288,7 +312,6 @@ switchPlayer( Game, NewGame ):-
 	getCurrentPlayer( Game, CurrentPlayer ),
 	otherPlayer( CurrentPlayer, NewPlayer ),
 	replace( Game, 1, NewPlayer, NewGame ).
-
 
 displayTurnInfo( Game ):-
 	getCurrentPlayer( Game, CurrentPlayer ),
