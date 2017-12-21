@@ -29,7 +29,7 @@ playGame( Game, Piece, X, Y, Game ):-
 	retractall(connected(_,_)),
 	!.
 
-% regular case 
+% regular case
 playGame( Game, Piece, X, Y, NewGame ):-
 	% get stuff from game class
 	getBoard( Game, Board ),
@@ -112,13 +112,13 @@ initMultiplayerGame( Game ):-
 	initialBoard( AttackedBoardBlack ),
 
 	% Game Object %
-	% 0 - game board %		
-	% 1 - current player %		
-	% 2 - turn counter %		
-	% 3 - board with 'white' player's attacked positions %		
-	% 4 - board with 'black' player's attacked positions %		
-	% 5 - if singleplayer, color which AI is playing for %		
-	% 6 - list with the pieces played %		
+	% 0 - game board %
+	% 1 - current player %
+	% 2 - turn counter %
+	% 3 - board with 'white' player's attacked positions %
+	% 4 - board with 'black' player's attacked positions %
+	% 5 - if singleplayer, color which AI is playing for %
+	% 6 - list with the pieces played %
 	% 7 - boolean, true if 'white' player needs to play queen %
 	% 8 - boolean, true if 'black' player needs to play queen %
 	% 9 - boolean, true if game is over %
@@ -168,6 +168,11 @@ incTurnIndex( Game, NewGame ):-
 	getTurnIndex( Game, N ),
 	N1 is N+1,
 	replace( Game, 2, N1, NewGame ).
+
+decTurnIndex( Game, NewGame ):-
+	getTurnIndex( Game, N ),
+	N1 is N-1,
+	replace( Game, 2, N1, NewGame).
 
 getPlayedPieces( Game, PlayedPieces ):-
 	elementAt( 6, Game, PlayedPieces ).
@@ -232,10 +237,10 @@ setGameOver( Game, Value, NewGame ):-
 
 gameOver( Game ):-
 	elementAt(9, Game, true).
-	
+
 % case where player had to play queen and does so
 updateMadeMoves( Game, Player, Piece, X, Y, NewGame ):-
-	isQueen( Piece, Player ),	
+	isQueen( Piece, Player ),
 	needsToPlayQueen( Game, Player ),
 	setNeedsToPlayQueen( Game, Player, false, TempGame ),
 	otherPlayer( Player, Other ),
@@ -283,13 +288,20 @@ undoMove(Game, NewGame):-
 	getGameType(Game, 'multiPlayer'),
 	undoMoveAux(Game, NewGame).
 
-% case where game is over 
+% case when it is first turn
 undoMoveAux(Game, NewGame):-
-	gameOver(Game),
-	setGameOver(Game, false, TempGame),
-	getLastPlayedPiece(TempGame, Player, Piece, X, Y),
-	removeLastPlayedPiece(TempGame, TempGame2),
-	removeMove(TempGame2, X, Y, NewGame).
+	getTurnIndex(Game, Turn),
+	Turn == 0,
+	NewGame = Game.
+
+% case where game is over
+%undoMoveAux(Game, NewGame):-
+%	gameOver(Game),
+%	setGameOver(Game, false, TempGame),
+%	getLastPlayedPiece(TempGame, Player, Piece, X, Y),
+%	removeLastPlayedPiece(TempGame, TempGame2),
+%	removeMove(TempGame2, X, Y, TempGame3),
+%	decTurnIndex(TempGame3, NewGame).
 
 % case where current player needs to play queen
 undoMoveAux(Game, NewGame):-
@@ -298,13 +310,15 @@ undoMoveAux(Game, NewGame):-
 	setNeedsToPlayQueen(Game, Player, false, TempGame),
 	getLastPlayedPiece(TempGame, Player, Piece, X, Y),
 	removeLastPlayedPiece(TempGame, TempGame2),
-	removeMove(TempGame2, X, Y, NewGame).
+	removeMove(TempGame2, X, Y, TempGame3),
+	decTurnIndex(TempGame3, NewGame).
 
 % regular case undo
 undoMoveAux(Game, NewGame):-
 	getLastPlayedPiece(Game, Player, Piece, X, Y),
 	removeLastPlayedPiece(Game, TempGame),
-	removeMove(TempGame, X, Y, NewGame).
+	removeMove(TempGame, X, Y, TempGame2),
+	decTurnIndex(TempGame2, NewGame).
 
 % remove move from board
 removeMove(Game, X, Y, NewGame):-
@@ -326,7 +340,7 @@ displayTurnInfo( Game ):-
 
 displayScore( White, Black ):-
 	nl,	emoji(flag),
-	write(' Game Over! '), 
+	write(' Game Over! '),
 	emoji(flag), nl,
 	emoji('white'), write(' White Score: '), write(White), nl,
 	emoji('black'), write(' Black Score: '), write(Black), nl.
@@ -335,7 +349,7 @@ displayWinner( White, Black ):-
 	White > Black,
 	emoji(trophy, 8), nl,
 	emoji( trophy ),
-	write(' White Wins '), 
+	write(' White Wins '),
 	emoji(trophy), nl,
 	emoji(trophy, 8), nl.
 
@@ -343,7 +357,7 @@ displayWinner( White, Black ):-
 	Black > White,
 	nl, emoji(trophy, 8), nl,
 	emoji( trophy ),
-	write(' Black Wins '), 
+	write(' Black Wins '),
 	emoji(trophy), nl,
 	emoji(trophy, 8), nl.
 

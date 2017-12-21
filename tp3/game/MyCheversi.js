@@ -18,7 +18,6 @@ MyCheversi.turnState = {
     NONE: 0,
     USER_TURN: 1,
     AI_TURN: 2,
-    GAME_OVER: 3
 }
 
 function MyCheversi(scene) {
@@ -27,7 +26,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(7766);
+    this.client = new MyClient(8990);
 
     this.difficulty = null;
     this.mode = null;
@@ -318,8 +317,8 @@ MyCheversi.prototype.updateTurnState = function() {
 }
 
 MyCheversi.prototype.undoMove = function() {
-    if(this.match.turnState == MyCheversi.turnState.NONE 
-    || this.match.turnState == MyCheversi.turnState.GAME_OVER)
+    //TODO: Idea: On SP, have undo only available when it's the user's turn (undoing when AI is thinking doesn't seem to work very well)
+    if(this.match.turnState == MyCheversi.turnState.NONE)
         return;
 
     let request = 'undoMove(' + this.match.raw + ')';
@@ -332,13 +331,23 @@ MyCheversi.prototype.undoMove = function() {
         let length2 = this.match.movesList.length;
         let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
-        for(let i = 0; i < removedMoves.length; i++)
-            this.getPieceFromInternalRepresentation(removedMoves[i][1]).resetStatus();
+        for(let i = 0; i < removedMoves.length; i++) {
+            let removedPiece = this.getPieceFromInternalRepresentation(removedMoves[i][1]);
+            removedPiece.tile.resetStatus();
+            removedPiece.resetStatus();
+        }
+
+        this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
+        // Update highlighted tiles
+        if(this.match.currentPlayer == MyCheversi.player.WHITE)
+            this.board.highlightTiles(this.match.blackAttacked);
+        else
+            this.board.highlightTiles(this.match.whiteAttacked);
     });
 }
 
 MyCheversi.prototype.matchOver = function() {
-    this.turnState = MyCheversi.turnState.GAME_OVER;
+    this.turnState = MyCheversi.turnState.NONE;
 
     // Update score on marker
     this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
@@ -346,7 +355,7 @@ MyCheversi.prototype.matchOver = function() {
     // Reset highlighted tiles
     this.board.resetHighlighted();
 
-    //TODO: add some game over visual notification
+    alert('Game over!');
 }
 
 MyCheversi.prototype.resetStatus = function() {

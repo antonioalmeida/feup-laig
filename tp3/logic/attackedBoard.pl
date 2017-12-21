@@ -5,10 +5,11 @@ updateAttackedBoard( Board, Player, AttackedBoard ):-
 
 updateAttackedBoard( Game, NewGame ):-
     getBoard( Game, Board ),
-    initialBoard( AttackedBoard ),
+    initialBoard( AttackedBoardW ),
+    initialBoard( AttackedBoardB ),
     X is 0, Y is 0,
-    updateAttackedBoardAux( 'white', Board, AttackedBoard, X, Y, NewAttackedBoardWhite ),
-    updateAttackedBoardAux( 'black', Board, AttackedBoard, X, Y, NewAttackedBoardBlack ),
+    updateAttackedBoardAux( 'white', Board, AttackedBoardW, X, Y, NewAttackedBoardWhite ),
+    updateAttackedBoardAux( 'black', Board, AttackedBoardB, X, Y, NewAttackedBoardBlack ),
     setAttackedBoard( Game, 'white', NewAttackedBoardWhite, TempGame ),
     setAttackedBoard( TempGame, 'black', NewAttackedBoardBlack, NewGame ).
 
