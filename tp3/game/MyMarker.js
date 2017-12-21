@@ -37,7 +37,11 @@ MyMarker.prototype.constructor = MyMarker;
 MyMarker.prototype.update = function(currTime) {
     if(this.game.turnState !== MyCheversi.turnState.NONE) {
         let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
-        this.game.marker.elapsed = this.turnTime - turnTimerDelta;
+        this.elapsed = this.turnTime - turnTimerDelta;
+        if(this.elapsed <= 0) {
+            this.elapsed = 0;
+            this.game.matchOver(true);
+        }
     }
 }
 

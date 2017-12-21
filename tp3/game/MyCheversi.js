@@ -280,7 +280,7 @@ MyCheversi.prototype.movePiece = function(tile) {
 MyCheversi.prototype.updateMatch = function() {
     // Check game over
     if(this.match.isOver) {
-        this.matchOver();
+        this.matchOver(false);
         return;
     }
 
@@ -344,7 +344,7 @@ MyCheversi.prototype.undoMove = function() {
     });
 }
 
-MyCheversi.prototype.matchOver = function() {
+MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     this.turnState = MyCheversi.turnState.NONE;
 
     // Update score on marker
@@ -353,7 +353,11 @@ MyCheversi.prototype.matchOver = function() {
     // Reset highlighted tiles
     this.board.resetHighlighted();
 
-    alert('Game over!');
+    if((dueToTurnTime && this.match.currentPlayer == MyCheversi.player.WHITE) ||
+        (!dueToTurnTime && this.marker.scores.black > this.marker.scores.white))
+        alert('Black won!');
+    else
+        alert('White won!');
 }
 
 MyCheversi.prototype.resetStatus = function() {
