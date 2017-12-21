@@ -49,6 +49,24 @@ MyPiece.prototype.resetStatus = function() {
     this.selected = false;
 }
 
+MyPiece.prototype.retractPiece = function() {
+    let oldTileCoords = this.tile.coords;
+    this.tile.resetStatus();
+    this.resetStatus();
+
+    //Create movement animation
+    let p1 = [oldTileCoords[0]-this.initialPosition[0], 0, oldTileCoords[2]-this.initialPosition[2]];
+    //TODO: Check if current control points are generic enough to avoid collisions, etc
+    this.animation = new MyBezierAnimation('bezier', 5, [
+        p1,
+        [p1[0],p1[1]+5,p1[2]],
+        [p1[0]/4,p1[1]/4+5,p1[2]/4],
+        [0,0,0]
+    ]);
+
+    this.animationStartTime = this.scene.currTime;
+}
+
 MyPiece.prototype.display = function () {
     this.updateAnimationMatrix();
     this.scene.pushMatrix();

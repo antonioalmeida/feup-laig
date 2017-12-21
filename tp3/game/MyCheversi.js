@@ -332,9 +332,7 @@ MyCheversi.prototype.undoMove = function() {
         let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
         for(let i = 0; i < removedMoves.length; i++) {
-            let removedPiece = this.getPieceFromInternalRepresentation(removedMoves[i][1]);
-            removedPiece.tile.resetStatus();
-            removedPiece.resetStatus();
+            this.getPieceFromInternalRepresentation(removedMoves[i][1]).retractPiece();
         }
 
         this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
