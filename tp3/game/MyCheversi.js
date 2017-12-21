@@ -317,8 +317,8 @@ MyCheversi.prototype.updateTurnState = function() {
 }
 
 MyCheversi.prototype.undoMove = function() {
-    //TODO: Idea: On SP, have undo only available when it's the user's turn (undoing when AI is thinking doesn't seem to work very well)
-    if(this.match.turnState == MyCheversi.turnState.NONE)
+    if(this.match.turnState == MyCheversi.turnState.NONE ||
+        (this.match.turnState == MyCheversi.turnState.AI_TURN && this.mode == MyCheversi.mode.SINGLEPLAYER))
         return;
 
     let request = 'undoMove(' + this.match.raw + ')';

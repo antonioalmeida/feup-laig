@@ -265,15 +265,16 @@ updateMadeMoves( Game, Player, Piece, X, Y, NewGame ):-
 
 % AIvsAI - do nothing
 undoMove(Game, NewGame):-
-	getGameType(Game, 'noPlayer').
+	getGameType(Game, 'noPlayer')
+	NewGame = Game.
 
 % if AI is playing, just need to undo once
-undoMove(Game, NewGame):-
-	getGameType(Game, 'singlePlayer'),
-	getCurrentPlayer(Game, CurrentPlayer),
-	getAIPlayer(Game, AIPlayer),
-	AIPlayer == CurrentPlayer,
-	undoMoveAux(Game, NewGame).
+%undoMove(Game, NewGame):-
+%	getGameType(Game, 'singlePlayer'),
+%	getCurrentPlayer(Game, CurrentPlayer),
+%	getAIPlayer(Game, AIPlayer),
+%	AIPlayer == CurrentPlayer,
+%	undoMoveAux(Game, NewGame).
 
 % if user is playing, need to undo twice
 undoMove(Game, NewGame):-
