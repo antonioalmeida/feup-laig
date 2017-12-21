@@ -26,7 +26,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8990);
+    this.client = new MyClient(8993);
 
     this.difficulty = null;
     this.mode = null;
@@ -318,6 +318,7 @@ MyCheversi.prototype.updateTurnState = function() {
 
 MyCheversi.prototype.undoMove = function() {
     if(this.match.turnState == MyCheversi.turnState.NONE ||
+        this.mode == MyCheversi.mode.NOPLAYER ||
         (this.match.turnState == MyCheversi.turnState.AI_TURN && this.mode == MyCheversi.mode.SINGLEPLAYER))
         return;
 
@@ -331,9 +332,8 @@ MyCheversi.prototype.undoMove = function() {
         let length2 = this.match.movesList.length;
         let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
-        for(let i = 0; i < removedMoves.length; i++) {
+        for(let i = 0; i < removedMoves.length; i++)
             this.getPieceFromInternalRepresentation(removedMoves[i][1]).retractPiece();
-        }
 
         this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
         // Update highlighted tiles
