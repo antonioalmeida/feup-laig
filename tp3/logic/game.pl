@@ -264,9 +264,8 @@ updateMadeMoves( Game, Player, Piece, X, Y, NewGame ):-
 %%%%%%%%%%%%%%%
 
 % AIvsAI - do nothing
-undoMove(Game, NewGame):-
-	getGameType(Game, 'noPlayer')
-	NewGame = Game.
+undoMove(Game, Game):-
+	getGameType(Game, 'noPlayer').
 
 % if AI is playing, just need to undo once
 %undoMove(Game, NewGame):-
@@ -312,14 +311,16 @@ undoMoveAux(Game, NewGame):-
 	getLastPlayedPiece(TempGame, Player, Piece, X, Y),
 	removeLastPlayedPiece(TempGame, TempGame2),
 	removeMove(TempGame2, X, Y, TempGame3),
-	decTurnIndex(TempGame3, NewGame).
+	switchPlayer(TempGame3, TempGame4),
+	decTurnIndex(TempGame4, NewGame).
 
 % regular case undo
 undoMoveAux(Game, NewGame):-
 	getLastPlayedPiece(Game, Player, Piece, X, Y),
 	removeLastPlayedPiece(Game, TempGame),
 	removeMove(TempGame, X, Y, TempGame2),
-	decTurnIndex(TempGame2, NewGame).
+	switchPlayer(TempGame2, TempGame3),
+	decTurnIndex(TempGame3, NewGame).
 
 % remove move from board
 removeMove(Game, X, Y, NewGame):-

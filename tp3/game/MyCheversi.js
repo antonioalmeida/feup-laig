@@ -26,7 +26,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8993);
+    this.client = new MyClient(6776);
 
     this.difficulty = null;
     this.mode = null;
@@ -93,7 +93,7 @@ function MyCheversi(scene) {
 MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
-MyCheversi.prototype.getPieceFromInternalRepresentation = function(index) {
+MyCheversi.prototype.getPieceFromInternalRepresentation = function(index, inBoard = false) {
     let firstPieceIndex;
     switch(index) {
         case 1:
@@ -114,9 +114,19 @@ MyCheversi.prototype.getPieceFromInternalRepresentation = function(index) {
             break;
     }
 
-    if(this.pieces[firstPieceIndex].tile === null)
-        return this.pieces[firstPieceIndex];
-    return this.pieces[firstPieceIndex+1];
+    // i know it's ugly but i need to test this
+    if(inBoard) {
+        if(this.pieces[firstPieceIndex].tile !== null)
+            return this.pieces[firstPieceIndex];
+        if(this.pieces[firstPieceIndex+1].tile !== null)
+            return this.pieces[firstPieceIndex+1];
+    }
+    else {
+        if(this.pieces[firstPieceIndex].tile === null)
+            return this.pieces[firstPieceIndex];
+        if(this.pieces[firstPieceIndex+1].tile === null)
+            return this.pieces[firstPieceIndex+1];
+    }
 }
 
 MyCheversi.prototype.getTileFromCoordinates = function(x,y) {
@@ -332,8 +342,10 @@ MyCheversi.prototype.undoMove = function() {
         let length2 = this.match.movesList.length;
         let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
+        console.log(removedMoves);
+
         for(let i = 0; i < removedMoves.length; i++)
-            this.getPieceFromInternalRepresentation(removedMoves[i][1]).retractPiece();
+            this.getPieceFromInternalRepresentation(removedMoves[i][1], true).retractPiece();
 
         this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
         // Update highlighted tiles
