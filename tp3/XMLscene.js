@@ -11,16 +11,16 @@ function XMLscene(interface) {
 
     this.lightValues = {};
 
-    this.graphs = []; //For different game scenarios
+    this.graphs = [];
+    this.graphIndex = null;
 
     this.game = null;
-
 
     this.currTime = new Date().getTime();
     this.startTime = -1;
     this.delta = 0;
 
-    // Game options retrieved from GUI
+    // Game options retrieved from GUI in their default values
     this.difficulty = MyCheversi.difficulty.MEDIUM;
     this.gameMode = MyCheversi.mode.SINGLEPLAYER;
     this.player = MyCheversi.player.WHITE;
@@ -67,16 +67,19 @@ XMLscene.prototype.init = function(application) {
  * Initializes the scene lights with the values read from the LSX file.
  */
 XMLscene.prototype.initLights = function() {
+    if(this.graphIndex === null)
+        return;
+
     var i = 0;
     // Lights index.
 
     // Reads the lights from the scene graph.
-    for (var key in this.graph.lights) {
+    for (var key in this.graphs[this.graphIndex].lights) {
         if (i >= 8)
             break;              // Only eight lights allowed by WebGL.
 
-        if (this.graph.lights.hasOwnProperty(key)) {
-            var light = this.graph.lights[key];
+        if (this.graphs[this.graphIndex].lights.hasOwnProperty(key)) {
+            var light = this.graphs[this.graphIndex].lights[key];
 
             this.lights[i].setPosition(light[1][0], light[1][1], light[1][2], light[1][3]);
             this.lights[i].setAmbient(light[2][0], light[2][1], light[2][2], light[2][3]);
@@ -109,26 +112,26 @@ XMLscene.prototype.initCameras = function() {
  */
 XMLscene.prototype.onGraphLoaded = function()
 {
-    this.camera.near = this.graph.near;
-    this.camera.far = this.graph.far;
-    this.axis = new CGFaxis(this,this.graph.referenceLength);
+    if(this.graphIndex === null)
+        return;
 
-    this.setGlobalAmbientLight(this.graph.ambientIllumination[0], this.graph.ambientIllumination[1],
-    this.graph.ambientIllumination[2], this.graph.ambientIllumination[3]);
+    this.camera.near = this.graphs[this.graphIndex].near;
+    this.camera.far = this.graphs[this.graphIndex].far;
+    this.axis = new CGFaxis(this,this.graphs[this.graphIndex].referenceLength);
 
-    this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+    this.setGlobalAmbientLight(this.graphs[this.graphIndex].ambientIllumination[0], this.graphs[this.graphIndex].ambientIllumination[1],
+    this.graphs[this.graphIndex].ambientIllumination[2], this.graphs[this.graphIndex].ambientIllumination[3]);
+
+    this.gl.clearColor(this.graphs[this.graphIndex].background[0], this.graphs[this.graphIndex].background[1], this.graphs[this.graphIndex].background[2], this.graphs[this.graphIndex].background[3]);
 
     this.initLights();
 
     // Adds lights group.
-    this.interface.addLightsGroup(this.graph.lights);
-
-    //Add game buttons
-    this.interface.addGameButtons(this);
+    this.interface.addLightsGroup(this.graphs[this.graphIndex].lights);
 }
 
 /**
- * Update scene (which is basically update animations)
+ * Update scene
  */
 XMLscene.prototype.update = function(currTime) {
     this.currTime = currTime;
@@ -157,7 +160,6 @@ XMLscene.prototype.logPicking = function() {
                     this.game.pickPiece(obj);
                 else
                     this.game.makeMove(obj);
-                    //this.game.movePiece(obj);
                 var customId = this.pickResults[i][1];
                 console.log("Picked object: " + obj + ", with pick id " + customId);
           }
@@ -165,6 +167,30 @@ XMLscene.prototype.logPicking = function() {
     		this.pickResults.splice(0,this.pickResults.length);
     	}
     }
+}
+
+XMLscene.prototype.startGame = function() {
+    // values from dat.gui get casted to string
+    let mode = parseInt(this.gameMode);
+    let player = parseInt(this.player);
+    let difficulty = parseInt(this.difficulty);
+
+    this.game.startGame(mode, player, difficulty);
+}
+
+XMLscene.prototype.undoMove = function() {
+    this.game.undoMove();
+}
+
+XMLscene.prototype.loadGraphs = function(filenames) {
+    for(let id in filenames)
+        this.graphs.push(new MySceneGraph(filenames[id]+'.xml', this));
+
+    //Add game buttons
+    this.interface.addGameButtons(filenames);
+
+    //Set initial scenario to first one loaded
+
 }
 
 /**
@@ -188,10 +214,10 @@ XMLscene.prototype.display = function() {
 
     this.pushMatrix();
 
-    if (this.graph.loadedOk)
+    if (this.graphIndex !== null && this.graphs[this.graphIndex].loadedOk)
     {
         // Applies initial transformations.
-        this.multMatrix(this.graph.initialTransforms);
+        this.multMatrix(this.graphs[this.graphIndex].initialTransforms);
 
 		// Draw axis
 		this.axis.display();
@@ -213,7 +239,7 @@ XMLscene.prototype.display = function() {
         }
 
         // Displays the scene.
-        //this.graph.displayScene();
+        this.graphs[this.graphIndex].displayScene();
 
     }
 	else
@@ -229,17 +255,4 @@ XMLscene.prototype.display = function() {
 
     // ---- END Background, camera and axis setup
 
-}
-
-XMLscene.prototype.startGame = function() {
-    // values from dat.gui get casted to string
-    let mode = parseInt(this.gameMode);
-    let player = parseInt(this.player);
-    let difficulty = parseInt(this.difficulty);
-
-    this.game.startGame(mode, player, difficulty);
-};
-
-XMLscene.prototype.undoMove = function() {
-    this.game.undoMove();
 }

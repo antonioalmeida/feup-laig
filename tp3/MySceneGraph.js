@@ -18,9 +18,7 @@ var STOP = false;
 function MySceneGraph(filename, scene) {
     this.loadedOk = null;
 
-    // Establish bidirectional references between scene and graph.
     this.scene = scene;
-    scene.graph = this;
 
     this.nodes = [];
     this.idRoot = null; // The id of the root element.
@@ -64,9 +62,6 @@ MySceneGraph.prototype.onXMLReady = function() {
     }
 
     this.loadedOk = true;
-
-    // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-    this.scene.onGraphLoaded();
 }
 
 /**

@@ -122,7 +122,6 @@ MyPiece.prototype.setTile = function (tile) {
 
 MyPiece.prototype.loadObj = function (file) {
     var lines = file.split("\n");
-    console.log(lines);
    var positions = [];
    var normals = [];
    var vertices = [];
@@ -174,6 +173,5 @@ MyPiece.prototype.loadObj = function (file) {
      }
    }
    var vertexCount = vertices.length / 6;
-   console.log("Loaded mesh with " + vertexCount + " vertices");
    return vertices;
 }
