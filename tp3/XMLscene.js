@@ -49,8 +49,6 @@ XMLscene.prototype.init = function(application) {
     this.gl.enable(this.gl.BLEND);
 	this.gl.blendEquation(this.gl.FUNC_ADD);
 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-    this.gl.depthFunc(this.gl.LEQUAL);
-	this.gl.depthMask(true);
 
     this.axis = new CGFaxis(this);
 
@@ -183,14 +181,14 @@ XMLscene.prototype.undoMove = function() {
 }
 
 XMLscene.prototype.loadGraphs = function(filenames) {
+    this.scenarioNames = filenames;
     for(let id in filenames)
         this.graphs.push(new MySceneGraph(filenames[id]+'.xml', this));
 
+    this.graphIndex = 0;
+
     //Add game buttons
     this.interface.addGameButtons(filenames);
-
-    //Set initial scenario to first one loaded
-
 }
 
 /**

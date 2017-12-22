@@ -18,6 +18,8 @@ var STOP = false;
 function MySceneGraph(filename, scene) {
     this.loadedOk = null;
 
+    this.filename = filename.replace(/\.xml/g, '');
+
     this.scene = scene;
 
     this.nodes = [];
@@ -62,6 +64,10 @@ MySceneGraph.prototype.onXMLReady = function() {
     }
 
     this.loadedOk = true;
+
+    //So that first loaded scenario is set as the initial one
+    if(this.scene.scenarioNames[0] === this.filename)
+        this.scene.onGraphLoaded();
 }
 
 /**
