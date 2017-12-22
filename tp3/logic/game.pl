@@ -289,10 +289,8 @@ undoMove(Game, NewGame):-
 	undoMoveAux(Game, NewGame).
 
 % case when it is first turn
-undoMoveAux(Game, NewGame):-
-	getTurnIndex(Game, Turn),
-	Turn == 0,
-	NewGame = Game.
+undoMoveAux(Game, Game):-
+	getTurnIndex(Game, 0).
 
 % case where game is over
 %undoMoveAux(Game, NewGame):-
@@ -320,7 +318,8 @@ undoMoveAux(Game, NewGame):-
 	removeLastPlayedPiece(Game, TempGame),
 	removeMove(TempGame, X, Y, TempGame2),
 	switchPlayer(TempGame2, TempGame3),
-	decTurnIndex(TempGame3, NewGame).
+	decTurnIndex(TempGame3, TempGame4),
+	checkLastMoveIsQueen(TempGame4, NewGame).
 
 % remove move from board
 removeMove(Game, X, Y, NewGame):-
@@ -328,6 +327,17 @@ removeMove(Game, X, Y, NewGame):-
 	makeMove(Board, 0, X, Y, NewBoard),
 	setBoard(Game, NewBoard, TempGame),
 	updateAttackedBoard(TempGame, NewGame).
+
+% checking if need to readd needsToPlayQueen
+checkLastMoveIsQueen(Game, NewGame):-
+	getCurrentPlayer(Game, Player),
+	isQueen(Queen, Player),
+	\+piecePlayed(Game, Queen, Player),
+
+	otherPlayer(Player, OtherPlayer),
+	getLastPlayedPiece(Game, OtherPlayer, Piece, X, Y),
+	isQueen(Piece, OtherPlayer),
+	setNeedsToPlayQueen(Game, Player, true, NewGame).
 
 switchPlayer( Game, NewGame ):-
 	getCurrentPlayer( Game, CurrentPlayer ),
