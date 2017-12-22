@@ -25,7 +25,8 @@ function MyMarker(game) {
         7: new CGFtexture(this.scene, 'textures/7.png'),
         8: new CGFtexture(this.scene, 'textures/8.png'),
         9: new CGFtexture(this.scene, 'textures/9.png'),
-        colon: new CGFtexture(this.scene, 'textures/colon.png')
+        colon: new CGFtexture(this.scene, 'textures/colon.png'),
+        background: new CGFtexture(this.scene, 'textures/marker_background.png')
     }
 
     this.primitive = new MyQuad(this.scene, [-0.5, 0.5, 0.5, -0.5]);
@@ -70,8 +71,8 @@ MyMarker.prototype.display = function() {
     //Panel background TODO: Create texture for it later (with the captions basically)
     this.scene.pushMatrix();
     this.scene.translate(0, 8, -12.5);
-    this.scene.scale(70, 10, 1);
-    this.game.materials.black.apply();
+    this.scene.scale(80, 15, 1);
+    this.textures.background.bind();
     this.primitive.display();
     this.scene.popMatrix();
 
@@ -79,14 +80,14 @@ MyMarker.prototype.display = function() {
     let whiteDozens = Math.floor(this.scores.white / 10);
     let whiteUnits = this.scores.white % 10;
     this.scene.pushMatrix();
-    this.scene.translate(-30, 8, -12.45);
+    this.scene.translate(23, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[whiteDozens].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(-23, 8, -12.45);
+    this.scene.translate(31, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[whiteUnits].bind();
     this.primitive.display();
@@ -96,14 +97,14 @@ MyMarker.prototype.display = function() {
     let blackDozens = Math.floor(this.scores.black / 10);
     let blackUnits = this.scores.black % 10;
     this.scene.pushMatrix();
-    this.scene.translate(23, 8, -12.45);
+    this.scene.translate(-31, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[blackDozens].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(30, 8, -12.45);
+    this.scene.translate(-23, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[blackUnits].bind();
     this.primitive.display();
