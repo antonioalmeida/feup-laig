@@ -20,14 +20,16 @@ function XMLscene(interface) {
     this.startTime = -1;
     this.delta = 0;
 
-    //Auxiliar variables for camera movement
+    //Auxiliar variables for camera
     this.oldPerspective = 0;
     this.cameraTransitioning = false;
     this.cameraAccDelta = 0;
     this.cameraDelta = 0;
+    this.oldZoom = 0.3;
 
     // Game options retrieved from GUI in their default values
     this.perspective = 0;
+    this.zoom = 0.3;
     this.difficulty = MyCheversi.difficulty.MEDIUM;
     this.gameMode = MyCheversi.mode.SINGLEPLAYER;
     this.player = MyCheversi.player.WHITE;
@@ -188,10 +190,15 @@ XMLscene.prototype.logPicking = function() {
     }
 }
 
-XMLscene.prototype.changePerspectiveTo = function() {
+XMLscene.prototype.changePerspective = function() {
     this.cameraDelta = this.perspective - this.oldPerspective;
     this.oldPerspective = this.perspective;
     this.cameraTransitioning = true;
+}
+
+XMLscene.prototype.updateCameraZoom = function() {
+    this.camera.zoom(this.zoom-this.oldZoom);
+    this.oldZoom = this.zoom;
 }
 
 XMLscene.prototype.startGame = function() {
