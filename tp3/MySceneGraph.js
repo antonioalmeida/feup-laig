@@ -1086,7 +1086,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                 else if (descendants[j].nodeName == "LEAF") {
                     var leafInfo = {};
 
-                    var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch']);
+                    var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch', 'obj']);
                     if (type == null) {
                         this.onXMLMinorError("leaf type for node " + nodeID + " descendant unrecognised or couldn't be parsed; skipping");
                         continue;
@@ -1096,10 +1096,13 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     console.log("   Leaf: " + type);
 
                     var argsStr = this.reader.getString(descendants[j], 'args');
-                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Split numbers from string (integer or decimal) - returns values as strings
                     var argsFloat = [];
-                    for(let m = 0; m < args.length; m++) // Parse args values to float
-                        argsFloat[m] = parseFloat(args[m]);
+
+                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Split numbers from string (integer or decimal) - returns values as strings
+                    if(type != 'obj') {
+                        for(let m = 0; m < args.length; m++) // Parse args values to float
+                            argsFloat[m] = parseFloat(args[m]);
+                    }
 
                     var argsError = null;
                     if((argsError = this.checkLeafArgs(type, argsFloat)) != null) {
@@ -1136,6 +1139,11 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         }
 
                         leafInfo.controlPoints = controlPoints;
+                    }
+
+                    if(type == 'obj') {
+                        // arg of obj is filename - need unparsed string value
+                        leafInfo.args = argsStr;
                     }
 
                     this.nodes[nodeID].addLeaf(new MyGraphLeaf(this, leafInfo));
@@ -1205,6 +1213,10 @@ MySceneGraph.prototype.checkLeafArgs = function(type, args) {
             if(args.length < 3) return "insufficient number of arguments for primitive sphere";
             if(args.length > 3) this.onXMLMinorError("too many arguments for primitive sphere");
             if(args.filter(function(a) {return a > 0;}).length < 3) return "sphere args must be positive values";
+            return null;
+        case 'obj':
+            if(args.length < 0) return "insufficient number of arguments for primitive obj";
+            if(args.length > 1) this.onXMLMinorError("too many arguments for primitive obj");
             return null;
     }
 }

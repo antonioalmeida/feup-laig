@@ -23,6 +23,9 @@ function MyGraphLeaf(graph, leafInfo) {
         case 'sphere':
             this.primitive = new MySphere(graph.scene, leafInfo.args);
             break;
+        case 'obj':
+            this.primitive = new MyObj(graph.scene, leafInfo.args);
+            break;
     }
 }
 

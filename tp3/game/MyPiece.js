@@ -121,7 +121,7 @@ MyPiece.prototype.setTile = function (tile) {
 }
 
 MyPiece.prototype.loadObj = function (file) {
-    var lines = file.split("\n");
+   var lines = file.split("\n");
    var positions = [];
    var normals = [];
    var vertices = [];
