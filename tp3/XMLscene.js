@@ -180,6 +180,10 @@ XMLscene.prototype.undoMove = function() {
     this.game.undoMove();
 }
 
+XMLscene.prototype.watchMovie = function() {
+    this.game.watchMovie();
+}
+
 XMLscene.prototype.loadGraphs = function(filenames) {
     this.scenarioNames = filenames;
     for(let id in filenames)

@@ -18,6 +18,7 @@ MyCheversi.turnState = {
     NONE: 0,
     USER_TURN: 1,
     AI_TURN: 2,
+    GAME_OVER: 3
 }
 
 function MyCheversi(scene) {
@@ -26,7 +27,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(6776);
+    this.client = new MyClient(6655);
 
     this.difficulty = null;
     this.mode = null;
@@ -327,7 +328,7 @@ MyCheversi.prototype.updateTurnState = function() {
 }
 
 MyCheversi.prototype.undoMove = function() {
-    if(this.match.turnState == MyCheversi.turnState.NONE ||
+    if(this.match.turnState == MyCheversi.turnState.NONE || this.match.turnState == MyCheversi.turnState.GAME_OVER ||
         this.mode == MyCheversi.mode.NOPLAYER ||
         (this.match.turnState == MyCheversi.turnState.AI_TURN && this.mode == MyCheversi.mode.SINGLEPLAYER))
         return;
@@ -340,9 +341,9 @@ MyCheversi.prototype.undoMove = function() {
 
         let length1 = previousObject.movesList.length;
         let length2 = this.match.movesList.length;
-        let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
-        console.log(removedMoves);
+        // get moves to be retracted
+        let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
         for(let i = 0; i < removedMoves.length; i++)
             this.getPieceFromInternalRepresentation(removedMoves[i][1], true).retractPiece();
@@ -357,7 +358,7 @@ MyCheversi.prototype.undoMove = function() {
 }
 
 MyCheversi.prototype.matchOver = function(dueToTurnTime) {
-    this.turnState = MyCheversi.turnState.NONE;
+    this.turnState = MyCheversi.turnState.GAME_OVER;
 
     // Update score on marker
     this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
@@ -370,6 +371,25 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
         alert('Black won!');
     else
         alert('White won!');
+}
+
+MyCheversi.prototype.watchMovie = function() {
+    if(this.turnState !== MyCheversi.turnState.GAME_OVER) 
+        return;
+
+    this.resetStatus();
+
+    let nMoves = this.match.movesList.length;
+    for(let i = nMoves-1; i >= 0; i--) {
+        let currentMove = this.match.movesList[i];
+        let currentPiece = this.getPieceFromInternalRepresentation(currentMove[1]);
+        let currentTile = this.getTileFromCoordinates(currentMove[2], currentMove[3]);
+
+        // Need to update tile-piece bidirectional reference here because setTile is called asynchronously
+        currentTile.piece = currentPiece;
+        currentPiece.tile = currentTile;
+        setTimeout(() => {currentPiece.setTile(currentTile);}, (nMoves-i)*1500);
+    }
 }
 
 MyCheversi.prototype.resetStatus = function() {

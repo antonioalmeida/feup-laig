@@ -90,4 +90,5 @@ MyInterface.prototype.addGameButtons = function(filenames) {
 
     gameActionsGroup.add(this.scene, 'startGame').name('Start Game');
     gameActionsGroup.add(this.scene, 'undoMove').name('Undo Move');
+    gameActionsGroup.add(this.scene, 'watchMovie').name('Watch Movie');
 }

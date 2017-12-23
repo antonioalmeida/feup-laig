@@ -36,7 +36,7 @@ MyMarker.prototype = Object.create(CGFobject.prototype);
 MyMarker.prototype.constructor = MyMarker;
 
 MyMarker.prototype.update = function(currTime) {
-    if(this.game.turnState !== MyCheversi.turnState.NONE) {
+    if(this.game.turnState !== MyCheversi.turnState.NONE && this.game.turnState !== MyCheversi.turnState.GAME_OVER) {
         let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
         this.elapsed = this.turnTime - turnTimerDelta;
         if(this.elapsed <= 0) {
