@@ -111,9 +111,8 @@ XMLscene.prototype.initLights = function() {
  * Initializes the scene cameras.
  */
 XMLscene.prototype.initCameras = function() {
-    this.camera = new CGFcamera(0.4,0.1,500,vec3.fromValues(17.5, 10, 11),vec3.fromValues(0, 2.5, 0));
-    this.camera.orbit(CGFcameraAxis.X, -DEGREE_TO_RAD*15);
-    this.camera.orbit(CGFcameraAxis.Y, DEGREE_TO_RAD*3);
+    this.camera = new CGFcamera(0.6,0.1,500,vec3.fromValues(20, 20, 20),vec3.fromValues(0, 7.5, 0));
+    this.camera.zoom(20);
 }
 
 /* Handler called when the graph is finally loaded.
