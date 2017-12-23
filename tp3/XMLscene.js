@@ -20,7 +20,14 @@ function XMLscene(interface) {
     this.startTime = -1;
     this.delta = 0;
 
+    //Auxiliar variables for camera movement
+    this.oldPerspective = 0;
+    this.cameraTransitioning = false;
+    this.cameraAccDelta = 0;
+    this.cameraDelta = 0;
+
     // Game options retrieved from GUI in their default values
+    this.perspective = 0;
     this.difficulty = MyCheversi.difficulty.MEDIUM;
     this.gameMode = MyCheversi.mode.SINGLEPLAYER;
     this.player = MyCheversi.player.WHITE;
@@ -102,7 +109,9 @@ XMLscene.prototype.initLights = function() {
  * Initializes the scene cameras.
  */
 XMLscene.prototype.initCameras = function() {
-    this.camera = new CGFcamera(0.4,0.1,500,vec3.fromValues(15, 15, 15),vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4,0.1,500,vec3.fromValues(17.5, 10, 11),vec3.fromValues(0, 2.5, 0));
+    this.camera.orbit(CGFcameraAxis.X, -DEGREE_TO_RAD*15);
+    this.camera.orbit(CGFcameraAxis.Y, DEGREE_TO_RAD*3);
 }
 
 /* Handler called when the graph is finally loaded.
@@ -132,16 +141,28 @@ XMLscene.prototype.onGraphLoaded = function()
  * Update scene
  */
 XMLscene.prototype.update = function(currTime) {
+    //Update time gone since start of app
     this.currTime = currTime;
     if(this.startTime == -1)
         this.startTime = currTime;
     else
         this.delta = (currTime - this.startTime) / 1000;
 
+    //Update selection shader and marker time
     let factor = Math.abs(Math.sin(0.005*currTime));
     if(this.game != null) {
         this.game.shaders.selected.setUniformsValues({timeFactor: factor});
         this.game.marker.update(currTime);
+    }
+
+    //Update camera movement, if the case
+    if(this.cameraTransitioning) {
+        this.camera.orbit(CGFcameraAxis.Y, DEGREE_TO_RAD*Math.sign(this.cameraDelta));
+        //Movement done
+        if(++this.cameraAccDelta >= Math.abs(this.cameraDelta)) {
+            this.cameraAccDelta = 0;
+            this.cameraTransitioning = false;
+        }
     }
 }
 
@@ -153,18 +174,24 @@ XMLscene.prototype.logPicking = function() {
     	if (this.pickResults != null && this.pickResults.length > 0) {
     		for (var i=0; i< this.pickResults.length; i++) {
     			var obj = this.pickResults[i][0];
-          if(obj) {
-                if(!(obj instanceof MyTile)) //TODO: Try to sort out to something more decent
-                    this.game.pickPiece(obj);
-                else
-                    this.game.makeMove(obj);
-                var customId = this.pickResults[i][1];
-                console.log("Picked object: " + obj + ", with pick id " + customId);
-          }
+                  if(obj) {
+                        if(!(obj instanceof MyTile))
+                            this.game.pickPiece(obj);
+                        else
+                            this.game.makeMove(obj);
+                        var customId = this.pickResults[i][1];
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
+                  }
     		}
     		this.pickResults.splice(0,this.pickResults.length);
     	}
     }
+}
+
+XMLscene.prototype.changePerspectiveTo = function() {
+    this.cameraDelta = this.perspective - this.oldPerspective;
+    this.oldPerspective = this.perspective;
+    this.cameraTransitioning = true;
 }
 
 XMLscene.prototype.startGame = function() {

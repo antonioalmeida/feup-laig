@@ -77,6 +77,12 @@ MyInterface.prototype.addGameButtons = function(filenames) {
         obj[filenames[id]] = id;
     customizationGroup.add(this.scene, 'graphIndex', obj).name('Scenario').onChange(function(v){self.scene.onGraphLoaded();});
 
+    let cameraGroup = this.gui.addFolder('Camera settings');
+    cameraGroup.open();
+
+    cameraGroup.add(this.scene, 'perspective', {'Neutral': 0, 'Black': -  60, 'White': 60}).name('Perspective').onChange(function(v){self.scene.changePerspectiveTo();});
+    //cameraGroup.add(this.scene, 'zoom', [min, max]).name('Zoom');
+
     let optionsGroup = this.gui.addFolder("Game Properties");
     optionsGroup.open();
 
