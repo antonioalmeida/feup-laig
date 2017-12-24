@@ -28,6 +28,7 @@ serialInclude(
 'MyInterface.js',
 'MyClient.js',
 'animations/MyAnimation.js',
+'animations/MyCameraAnimation.js',
 'animations/MyLinearAnimation.js',
 'animations/MyCircularAnimation.js',
 'animations/MyBezierAnimation.js',

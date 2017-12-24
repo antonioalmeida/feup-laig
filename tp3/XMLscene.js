@@ -22,10 +22,8 @@ function XMLscene(interface) {
 
     //Auxiliar variables for camera
     this.oldPerspective = 0;
-    this.cameraTransitioning = false;
-    this.cameraAccDelta = 0;
-    this.cameraDelta = 0;
     this.oldZoom = 0.3;
+    this.cameraTransition = null;
 
     // Game options retrieved from GUI in their default values
     this.perspective = 0;
@@ -156,13 +154,12 @@ XMLscene.prototype.update = function(currTime) {
         this.game.marker.update(currTime);
     }
 
-    //Update camera movement, if the case
-    if(this.cameraTransitioning) {
-        this.camera.orbit(CGFcameraAxis.Y, DEGREE_TO_RAD*Math.sign(this.cameraDelta));
-        //Movement done
-        if(++this.cameraAccDelta >= Math.abs(this.cameraDelta)) {
-            this.cameraAccDelta = 0;
-            this.cameraTransitioning = false;
+    //Change camera perspective, if the case
+    if(this.cameraTransition !== null) {
+        this.cameraTransition.update();
+        if(this.cameraTransition.done) {
+            console.log("Done!");
+            this.cameraTransition = null;
         }
     }
 }
@@ -190,9 +187,8 @@ XMLscene.prototype.logPicking = function() {
 }
 
 XMLscene.prototype.changePerspective = function() {
-    this.cameraDelta = this.perspective - this.oldPerspective;
+    this.cameraTransition = new MyCameraAnimation(this, parseInt(this.oldPerspective), parseInt(this.perspective));
     this.oldPerspective = this.perspective;
-    this.cameraTransitioning = true;
 }
 
 XMLscene.prototype.updateCameraZoom = function() {
