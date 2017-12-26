@@ -71,7 +71,7 @@ MyMarker.prototype.display = function() {
     //Panel background TODO: Create texture for it later (with the captions basically)
     this.scene.pushMatrix();
     this.scene.translate(0, 8, -12.5);
-    this.scene.scale(80, 15, 1);
+    this.scene.scale(50, 15, 1);
     this.textures.background.bind();
     this.primitive.display();
     this.scene.popMatrix();
@@ -80,14 +80,14 @@ MyMarker.prototype.display = function() {
     let whiteDozens = Math.floor(this.scores.white / 10);
     let whiteUnits = this.scores.white % 10;
     this.scene.pushMatrix();
-    this.scene.translate(23, 8, -12.45);
+    this.scene.translate(15, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[whiteDozens].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(31, 8, -12.45);
+    this.scene.translate(20, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[whiteUnits].bind();
     this.primitive.display();
@@ -97,14 +97,14 @@ MyMarker.prototype.display = function() {
     let blackDozens = Math.floor(this.scores.black / 10);
     let blackUnits = this.scores.black % 10;
     this.scene.pushMatrix();
-    this.scene.translate(-31, 8, -12.45);
+    this.scene.translate(-20, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[blackDozens].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(-23, 8, -12.45);
+    this.scene.translate(-15, 8, -12.45);
     this.scene.scale(8, 8, 1);
     this.textures[blackUnits].bind();
     this.primitive.display();
@@ -114,16 +114,16 @@ MyMarker.prototype.display = function() {
     //Minutes
     this.scene.pushMatrix();
     let minutes = Math.floor(this.elapsed/60);
-    this.scene.translate(-10, 8, -12.45);
-    this.scene.scale(8, 8, 1);
+    this.scene.translate(-5, 8, -12.45);
+    this.scene.scale(5, 5, 1);
     this.textures[minutes].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     //Colon
     this.scene.pushMatrix();
-    this.scene.translate(-3.5, 8, -12.45);
-    this.scene.scale(4, 8, 1);
+    this.scene.translate(-2.5, 8, -12.45);
+    this.scene.scale(2.75, 5, 1);
     this.textures.colon.bind();
     this.primitive.display();
     this.scene.popMatrix();
@@ -132,15 +132,15 @@ MyMarker.prototype.display = function() {
     let secondsDozen = Math.floor((Math.floor(this.elapsed) % 60) / 10);
     let secondsUnits = (Math.floor(this.elapsed) % 60) % 10;
     this.scene.pushMatrix();
-    this.scene.translate(2, 8, -12.45);
-    this.scene.scale(8, 8, 1);
+    this.scene.translate(0.5, 8, -12.45);
+    this.scene.scale(5, 5, 1);
     this.textures[secondsDozen].bind();
     this.primitive.display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-    this.scene.translate(8, 8, -12.45);
-    this.scene.scale(8, 8, 1);
+    this.scene.translate(3.5, 8, -12.45);
+    this.scene.scale(5, 5, 1);
     this.textures[secondsUnits].bind();
     this.primitive.display();
     this.scene.popMatrix();
