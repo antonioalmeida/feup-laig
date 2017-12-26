@@ -81,7 +81,6 @@ MyInterface.prototype.addGameButtons = function(filenames) {
     cameraGroup.open();
 
     cameraGroup.add(this.scene, 'perspective', {'Neutral': 0, 'Black': 1, 'White': 2}).name('Perspective').onChange(function(v){self.scene.changePerspective();});
-    cameraGroup.add(this.scene, 'zoom', 0.3, 1).name('Zoom').onChange(function(v){self.scene.updateCameraZoom();});
 
     let optionsGroup = this.gui.addFolder("Game Properties");
     optionsGroup.open();

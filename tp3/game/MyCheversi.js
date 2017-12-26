@@ -77,7 +77,7 @@ function MyCheversi(scene) {
             let madeMove = this.match.movesList[0];
 
             //madeMove is an array with format [Player, Piece, X, Y]
-            this.getPieceFromInternalRepresentation(madeMove[1]).setTile(this.getTileFromCoordinates(madeMove[2], madeMove[3]));
+            this.getPieceFromInternalRepresentation(madeMove[1], function(a){return a === null;}).setTile(this.getTileFromCoordinates(madeMove[2], madeMove[3]));
 
             //uncoment once movepiece is implemented (not tested)
             this.updateMatch();
@@ -94,7 +94,7 @@ function MyCheversi(scene) {
 MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
-MyCheversi.prototype.getPieceFromInternalRepresentation = function(index, inBoard = false) {
+MyCheversi.prototype.getPieceFromInternalRepresentation = function(index, comparisonFunc) {
     let firstPieceIndex;
     switch(index) {
         case 1:
@@ -115,19 +115,9 @@ MyCheversi.prototype.getPieceFromInternalRepresentation = function(index, inBoar
             break;
     }
 
-    // i know it's ugly but i need to test this
-    if(inBoard) {
-        if(this.pieces[firstPieceIndex].tile !== null)
-            return this.pieces[firstPieceIndex];
-        if(this.pieces[firstPieceIndex+1].tile !== null)
-            return this.pieces[firstPieceIndex+1];
-    }
-    else {
-        if(this.pieces[firstPieceIndex].tile === null)
-            return this.pieces[firstPieceIndex];
-        if(this.pieces[firstPieceIndex+1].tile === null)
-            return this.pieces[firstPieceIndex+1];
-    }
+    if(comparisonFunc(this.pieces[firstPieceIndex].tile))
+        return this.pieces[firstPieceIndex];
+    return this.pieces[firstPieceIndex+1];
 }
 
 MyCheversi.prototype.getTileFromCoordinates = function(x,y) {
@@ -346,7 +336,7 @@ MyCheversi.prototype.undoMove = function() {
         let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
         for(let i = 0; i < removedMoves.length; i++)
-            this.getPieceFromInternalRepresentation(removedMoves[i][1], true).retractPiece();
+            this.getPieceFromInternalRepresentation(removedMoves[i][1], function(a){return a !== null;}).retractPiece();
 
         this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
         // Update highlighted tiles
@@ -374,7 +364,7 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
 }
 
 MyCheversi.prototype.watchMovie = function() {
-    if(this.turnState !== MyCheversi.turnState.GAME_OVER) 
+    if(this.turnState !== MyCheversi.turnState.GAME_OVER)
         return;
 
     this.resetStatus();
@@ -382,7 +372,7 @@ MyCheversi.prototype.watchMovie = function() {
     let nMoves = this.match.movesList.length;
     for(let i = nMoves-1; i >= 0; i--) {
         let currentMove = this.match.movesList[i];
-        let currentPiece = this.getPieceFromInternalRepresentation(currentMove[1]);
+        let currentPiece = this.getPieceFromInternalRepresentation(currentMove[1], function(a){return a === null;});
         let currentTile = this.getTileFromCoordinates(currentMove[2], currentMove[3]);
 
         // Need to update tile-piece bidirectional reference here because setTile is called asynchronously

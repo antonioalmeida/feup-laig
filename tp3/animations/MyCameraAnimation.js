@@ -11,6 +11,11 @@ MyCameraAnimation.values = [
     [15, 60]
 ];
 
+var BLACK_VALUES = 0;
+var WHITE_VALUES = 1;
+var PAN_X = 0;
+var ORBIT_ANGLE = 1;
+
 function MyCameraAnimation(scene, source, destination) {
     this.scene = scene;
     this.operations = [];
@@ -21,30 +26,26 @@ function MyCameraAnimation(scene, source, destination) {
 
     switch(source) {
         case MyCameraAnimation.perspective.NEUTRAL:
-        console.log("entered neutral");
             this.operations.push('pan', 'orbit');
-            this.limits.push(MyCameraAnimation.values[destination-1][0], MyCameraAnimation.values[destination-1][1]);
+            this.limits.push(MyCameraAnimation.values[destination-1][PAN_X], MyCameraAnimation.values[destination-1][ORBIT_ANGLE]);
             break;
         case MyCameraAnimation.perspective.WHITE:
             this.operations.push('orbit', 'pan');
-            this.limits.push(-MyCameraAnimation.values[1][1], -MyCameraAnimation.values[1][0]);
+            this.limits.push(-MyCameraAnimation.values[WHITE_VALUES][ORBIT_ANGLE], -MyCameraAnimation.values[WHITE_VALUES][PAN_X]);
             if(destination == MyCameraAnimation.perspective.BLACK) {
                 this.operations.push('pan', 'orbit');
-                this.limits.push(MyCameraAnimation.values[0][0], MyCameraAnimation.values[0][1]);
+                this.limits.push(MyCameraAnimation.values[BLACK_VALUES][PAN_X], MyCameraAnimation.values[BLACK_VALUES][ORBIT_ANGLE]);
             }
             break;
         case MyCameraAnimation.perspective.BLACK:
             this.operations.push('orbit', 'pan');
-            this.limits.push(-MyCameraAnimation.values[0][1], -MyCameraAnimation.values[0][0]);
+            this.limits.push(-MyCameraAnimation.values[BLACK_VALUES][ORBIT_ANGLE], -MyCameraAnimation.values[BLACK_VALUES][PAN_X]);
             if(destination == MyCameraAnimation.perspective.WHITE) {
                 this.operations.push('pan', 'orbit');
-                this.limits.push(MyCameraAnimation.values[1][0], MyCameraAnimation.values[1][1]);
+                this.limits.push(MyCameraAnimation.values[WHITE_VALUES][PAN_X], MyCameraAnimation.values[WHITE_VALUES][ORBIT_ANGLE]);
             }
             break;
     }
-
-    console.log(this.operations);
-    console.log(this.limits);
 }
 
 MyCameraAnimation.prototype.constructor = MyCameraAnimation;
