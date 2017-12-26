@@ -23,7 +23,7 @@
 <LIGHTS>
      <LIGHT id="light0">
         <enable value ="1" />
-        <position  x="-60" y="30" z="60" w="1" />
+        <position  x="-60" y="70" z="60" w="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -31,7 +31,7 @@
 
     <LIGHT id="light1">
         <enable value ="1" />
-        <position x="-60" y="30" z="60" w="1" />
+        <position x="-60" y="70" z="60" w="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -39,7 +39,7 @@
 
     <LIGHT id="light2">
         <enable value ="1" />
-        <position  x="60" y="30" z="60" w="1" />
+        <position  x="60" y="70" z="60" w="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -47,7 +47,7 @@
 
     <LIGHT id="light3">
         <enable value ="1" />
-        <position x="60" y="30" z="-60" w="1" />
+        <position x="60" y="70" z="-60" w="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -75,9 +75,21 @@
       <amplif_factor s="1" t="1" />
   </TEXTURE>
 
-  <!-- Chair leather texture -->
-  <TEXTURE id="chairTexture">
+  <!-- Leather texture -->
+  <TEXTURE id="leatherTexture">
       <file path="images/leather.jpg" />
+      <amplif_factor s="1" t="1" />
+  </TEXTURE>
+
+  <!-- Wall texture -->
+  <TEXTURE id="wallTexture">
+      <file path="images/wall.jpg" />
+      <amplif_factor s="1" t="1" />
+  </TEXTURE>
+
+  <!-- Wall Sides texture -->
+  <TEXTURE id="wallSidesTexture">
+      <file path="images/wallSides.png" />
       <amplif_factor s="1" t="1" />
   </TEXTURE>
 
@@ -106,12 +118,29 @@
     <!-- Wood material -->
     <MATERIAL id="chairMaterial">
       <shininess value="1" />
-      <specular r="0.0267" g="0.0216" b="0.0141" a="1" />
-      <diffuse r="0.0267" g="0.0216" b="0.0141" a="1" />
+      <specular r="0.0367" g="0.0316" b="0.0241" a="1" />
+      <diffuse r="0.0367" g="0.0316" b="0.0241" a="1" />
       <ambient r="0.0" g="0.0" b="0.0" a="1" />
-      <emission r="0.0267" g="0.0216" b="0.0141" a="1" />
+      <emission r="0.0367" g="0.0316" b="0.0241" a="1" />
     </MATERIAL>
 
+    <!-- Leather material -->
+    <MATERIAL id="leatherMaterial">
+      <shininess value="1" />
+      <specular r="0.1" g="0.1" b="0.1" a="1" />
+      <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+      <ambient r="0.1" g="0.1" b="0.1" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Wall material -->
+    <MATERIAL id="wallMaterial">
+      <shininess value="100" />
+      <specular r="0.2" g="0.2" b="0.2" a="0.5" />
+      <diffuse r="0.2" g="0.2" b="0.2" a="1" />
+      <ambient r="0.9" g="0.9" b="0.9" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
 </MATERIALS>
 
 
@@ -135,8 +164,72 @@
             <NODEREF id="table" />
             <NODEREF id="chairLeft" />
             <NODEREF id="chairRight" />
+            <NODEREF id="walls" />
         </DESCENDANTS>
 
+    </NODE>
+
+    <!-- Walls -->
+    <NODE id="walls">
+      <MATERIAL id="null" />
+      <TEXTURE id="null" />
+
+      <DESCENDANTS>
+        <NODEREF id="backWall" />
+        <NODEREF id="leftWall" />
+        <NODEREF id="rightWall" />
+      </DESCENDANTS>
+    </NODE> 
+
+    <!-- Right wall -->
+    <NODE id="rightWall">
+      <MATERIAL id="null" />
+      <TEXTURE id="wallSidesTexture" />
+
+      <TRANSLATION x="95" y="22.5" z="0" />
+      <ROTATION axis="y" angle="-90" />
+
+      <DESCENDANTS>
+        <NODEREF id="wall" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Left wall -->
+    <NODE id="leftWall">
+      <MATERIAL id="null" />
+      <TEXTURE id="wallSidesTexture" />
+
+      <TRANSLATION x="-95" y="22.5" z="0" />
+      <ROTATION axis="y" angle="90" />
+      <ROTATION axis="z" angle="180" />
+
+      <DESCENDANTS>
+        <NODEREF id="wall" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- Back wall -->
+    <NODE id="backWall">
+      <MATERIAL id="null" />
+      <TEXTURE id="wallSidesTexture" />
+
+      <TRANSLATION x="0" y="22.5" z="-95" />
+
+      <DESCENDANTS>
+        <NODEREF id="wall" />
+      </DESCENDANTS>
+    </NODE>
+
+    <!-- A generic wall -->
+    <NODE id="wall">
+      <MATERIAL id="wallMaterial" />
+      <TEXTURE id="null" />
+
+      <SCALE sx="190" sy="100" sz="0" />
+
+      <DESCENDANTS>
+        <LEAF type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+      </DESCENDANTS>
     </NODE>
 
     <NODE id="chairRight">
@@ -193,7 +286,7 @@
 
         <TRANSLATION x="0" y="-26.5" z="0" />
         <ROTATION axis="x" angle="-90" />
-        <SCALE sx="110" sy="100" sz="1" />
+        <SCALE sx="160" sy="110.4" sz="1" />
 
         <DESCENDANTS>
             <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
@@ -208,6 +301,7 @@
             <NODEREF id="tableTop" />
             <NODEREF id="tableLeg" />
             <NODEREF id="tableBottom" />
+            <NODEREF id="sidePlatforms" />
         </DESCENDANTS>
     </NODE>
 
@@ -246,6 +340,42 @@
 
         <DESCENDANTS>
             <LEAF type="cylinder" args="1 1 1 10 4 1 1" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="sidePlatforms">
+        <MATERIAL id="chairMaterial" />
+        <TEXTURE id="leatherTexture" />
+
+        <DESCENDANTS>
+            <NODEREF id="sidePlatformLeft" />
+            <NODEREF id="sidePlatformRight" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="sidePlatformLeft">
+        <MATERIAL id="defaultMaterial" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="-14.85" y="0.1" z="0" />
+        <SCALE sx="4.75" sy="1" sz="23" />
+        <ROTATION axis="x" angle="-90" />
+
+        <DESCENDANTS>
+            <LEAF type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="sidePlatformRight">
+        <MATERIAL id="defaultMaterial" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="14.85" y="0.1" z="0" />
+        <SCALE sx="4.75" sy="1" sz="23" />
+        <ROTATION axis="x" angle="-90" />
+
+        <DESCENDANTS>
+            <LEAF type="rectangle" args="-0.5 0.5 0.5 -0.5" />
         </DESCENDANTS>
     </NODE>
 

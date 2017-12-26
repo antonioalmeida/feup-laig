@@ -126,7 +126,6 @@ MyCheversi.prototype.getTileFromCoordinates = function(x,y) {
 
 MyCheversi.prototype.createBoardMarker = function() {
     this.board = new MyBoard(this);
-    this.sidePlatforms = [new MySidePlatform(this, 1), new MySidePlatform(this, -1)];
     this.marker = new MyMarker(this);
 }
 
@@ -396,8 +395,6 @@ MyCheversi.prototype.display = function() {
 
     this.scene.pushMatrix();
 
-    this.sidePlatforms[0].display();
-    this.sidePlatforms[1].display();
     this.marker.display();
     this.board.display();
     for(let id in this.pieces)
