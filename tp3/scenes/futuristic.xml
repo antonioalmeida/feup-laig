@@ -179,7 +179,7 @@
         <NODEREF id="leftWall" />
         <NODEREF id="rightWall" />
       </DESCENDANTS>
-    </NODE> 
+    </NODE>
 
     <!-- Right wall -->
     <NODE id="rightWall">
@@ -237,7 +237,7 @@
         <TEXTURE id="null" />
 
         <TRANSLATION x="50" y="-27" z="0" />
-        <ROTATION axis="y" angle="100" /> 
+        <ROTATION axis="y" angle="100" />
 
         <DESCENDANTS>
             <NODEREF id="chair" />
@@ -249,7 +249,7 @@
         <TEXTURE id="null" />
 
         <TRANSLATION x="-50" y="-27" z="0" />
-        <ROTATION axis="y" angle="-100" /> 
+        <ROTATION axis="y" angle="-100" />
 
         <DESCENDANTS>
             <NODEREF id="chair" />
@@ -260,10 +260,59 @@
         <MATERIAL id="defaultMaterial" />
         <TEXTURE id="null" />
 
-        <SCALE sx="30" sy="30" sz="30" />
+        <DESCENDANTS>
+            <NODEREF id="chair_back" />
+            <NODEREF id="chair_base" />
+            <NODEREF id="chair_support" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="chair_back">
+        <MATERIAL id="null" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="0" y="25" z="2.5" />
+        <ROTATION axis="x" angle="-90" />
+        <SCALE sx="5" sy="5" sz="7.5"/>
 
         <DESCENDANTS>
-            <LEAF type="obj" args="objs/chair_chesterfield.obj" />
+            <LEAF type="patch" args="15 15" >
+              <CPLINE>
+                <CPOINT xx="-4" yy="3" zz="-1" ww="1"/>
+                <CPOINT xx="0" yy="-3" zz="-0.5" ww="3"/>
+                <CPOINT xx="4" yy="3" zz="-1" ww="1"/>
+              </CPLINE>
+              <CPLINE>
+                <CPOINT xx="-4" yy="3" zz="1" ww="1"/>
+                <CPOINT xx="0" yy="-3" zz="0.5" ww="3"/>
+                <CPOINT xx="4" yy="3" zz="1" ww="1"/>
+              </CPLINE>
+          </LEAF>
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="chair_base">
+        <MATERIAL id="null" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="0" y="20" z="0"/>
+        <ROTATION axis="x" angle="-90"/>
+        <SCALE sx="10" sy="10" sz="0.75"/>
+
+        <DESCENDANTS>
+            <LEAF type="cylinder" args="2 1 1 10 20 1 1"/>
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="chair_support">
+        <MATERIAL id="null"/>
+        <TEXTURE id="null" />
+
+        <SCALE sx="5" sy="10" sz="1.5" />
+        <ROTATION axis="x" angle="-90"/>
+
+        <DESCENDANTS>
+            <LEAF type="cylinder" args="2 0 1 10 20 1 1"/>
         </DESCENDANTS>
     </NODE>
 

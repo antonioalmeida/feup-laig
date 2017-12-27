@@ -42,7 +42,6 @@ serialInclude(
 'game/MyKnight.js',
 'game/MyRook.js',
 'game/MyTile.js',
-'game/MySidePlatform.js',
 'game/MyMarker.js',
 
 main=function() {
@@ -57,16 +56,9 @@ main=function() {
     app.setScene(myScene);
     app.setInterface(myInterface);
 
-    //myInterface.setActiveCamera(myScene.camera);
+    myInterface.setActiveCamera(myScene.camera);
 
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
-
-	//var filename=getUrlVars()['file'] || "demo.xml";
-
-	// create and load graph, and associate it to scene.
-	// Check console for loading errors
-	//var myGraph = new MySceneGraph(filename, myScene);
+    //Load scenarios
     myScene.loadGraphs(['demo','futuristic']);
 
 	// start
