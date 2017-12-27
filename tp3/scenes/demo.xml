@@ -87,12 +87,6 @@
       <amplif_factor s="1" t="1" />
   </TEXTURE>
 
-  <!-- Wall Sides texture -->
-  <TEXTURE id="wallSidesTexture">
-      <file path="images/wallSides.png" />
-      <amplif_factor s="1" t="1" />
-  </TEXTURE>
-
 </TEXTURES>
 
 
@@ -184,7 +178,7 @@
     <!-- Right wall -->
     <NODE id="rightWall">
       <MATERIAL id="null" />
-      <TEXTURE id="wallSidesTexture" />
+      <TEXTURE id="wallTexture" />
 
       <TRANSLATION x="95" y="22.5" z="0" />
       <ROTATION axis="y" angle="-90" />
@@ -197,7 +191,7 @@
     <!-- Left wall -->
     <NODE id="leftWall">
       <MATERIAL id="null" />
-      <TEXTURE id="wallSidesTexture" />
+      <TEXTURE id="wallTexture" />
 
       <TRANSLATION x="-95" y="22.5" z="0" />
       <ROTATION axis="y" angle="90" />
@@ -211,7 +205,7 @@
     <!-- Back wall -->
     <NODE id="backWall">
       <MATERIAL id="null" />
-      <TEXTURE id="wallSidesTexture" />
+      <TEXTURE id="wallTexture" />
 
       <TRANSLATION x="0" y="22.5" z="-95" />
 
