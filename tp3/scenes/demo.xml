@@ -31,26 +31,18 @@
 
     <LIGHT id="light1">
         <enable value ="1" />
-        <position x="-60" y="70" z="60" w="1" />
-        <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-    </LIGHT>
-
-    <LIGHT id="light2">
-        <enable value ="1" />
         <position  x="60" y="70" z="60" w="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="1.0" g="1.0" b="1.0" a="1.0" />
     </LIGHT>
 
-    <LIGHT id="light3">
+    <LIGHT id="bulbLight">
         <enable value ="1" />
-        <position x="60" y="70" z="-60" w="1" />
+        <position x="0" y="23" z="0" w="1" />
         <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        <diffuse r="1.0" g="1.0" b="0.5" a="1.0" />
+        <specular r="1.0" g="1.0" b="0.5" a="1.0" />
     </LIGHT>
 </LIGHTS>
 
@@ -84,6 +76,12 @@
   <!-- Wall texture -->
   <TEXTURE id="wallTexture">
       <file path="images/wall.jpg" />
+      <amplif_factor s="1" t="1" />
+  </TEXTURE>
+
+  <!-- Lamp texture -->
+  <TEXTURE id="lampTexture">
+      <file path="images/lamp.png" />
       <amplif_factor s="1" t="1" />
   </TEXTURE>
 
@@ -135,6 +133,16 @@
       <ambient r="0.9" g="0.9" b="0.9" a="1" />
       <emission r="0.0" g="0.0" b="0.0" a="1" />
     </MATERIAL>
+
+    <!-- Bulb material -->
+    <MATERIAL id="bulbMaterial">
+        <shininess value="1" />
+        <specular r="0.4" g="0.4" b="0.4" a="1" />
+        <diffuse r="0.4" g="0.4" b="0.4" a="1" />
+        <ambient r="0.4" g="0.4" b="0.4" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
 </MATERIALS>
 
 
@@ -156,6 +164,7 @@
             <NODEREF id="floor" />
             <NODEREF id="carpet" />
             <NODEREF id="table" />
+            <NODEREF id="lamp" />
             <NODEREF id="chairLeft" />
             <NODEREF id="chairRight" />
             <NODEREF id="walls" />
@@ -284,6 +293,43 @@
 
         <DESCENDANTS>
             <LEAF  type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="lamp">
+        <MATERIAL id="null" />
+        <TEXTURE id="null" />
+
+        <DESCENDANTS>
+            <NODEREF id="lampBulb" />
+            <NODEREF id="lampCover" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="lampBulb">
+        <MATERIAL id="bulbMaterial" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="0" y="31" z="0" />
+        <ROTATION axis="y" angle="180" />
+        <ROTATION axis="x" angle="90" />
+        <SCALE sx="4" sy="4" sz="4" />
+
+        <DESCENDANTS>
+            <LEAF type="sphere" args="1 20 20" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="lampCover">
+        <MATERIAL id="defaultMaterial" />
+        <TEXTURE id="lampTexture" />
+
+        <TRANSLATION x="0" y="30" z="0" />
+        <SCALE sx="10" sy="10" sz="10" />
+        <ROTATION axis="x" angle="-90" />
+
+        <DESCENDANTS>
+            <LEAF type="cylinder" args="1 1 0.4 30 30 0 0" />
         </DESCENDANTS>
     </NODE>
 
@@ -473,5 +519,24 @@
    </NODE>
 
 </NODES>
+
+<GAMEVISUALS>
+    <MARKERTEXTURE src="textures/board.png" />
+    <BOARDTEXTURE src="textures/board.png" />
+    <BLACKMATERIAL>
+        <shinines value="1" />
+        <specular r="0.9" g="0.9" b="0.9" a="1" />
+        <diffuse r="0.1" g="0.1" b="0.1" a="1" />
+        <ambient r="0.05" g="0.05" b="0.05" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </BLACKMATERIAL>
+    <WHITEMATERIAL>
+        <shinines value="1" />
+        <specular r="0.3" g="0.3" b="0.3" a="1" />
+        <diffuse r="0.8" g="0.8" b="0.8" a="1" />
+        <ambient r="0.05" g="0.05" b="0.05" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </WHITEMATERIAL>
+</GAMEVISUALS>
 
 </SCENE>
