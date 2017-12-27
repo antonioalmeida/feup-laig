@@ -65,6 +65,10 @@ MyMarker.prototype.resetStatus = function() {
     this.resetTurnTime();
 }
 
+MyMarker.prototype.updateTexture = function(newTexture) {
+    this.textures.background = newTexture;
+}
+
 MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
 

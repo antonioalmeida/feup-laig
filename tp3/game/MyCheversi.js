@@ -389,6 +389,13 @@ MyCheversi.prototype.resetStatus = function() {
     this.selectedPiece = null;
 }
 
+MyCheversi.prototype.updateVisuals = function(visuals) {
+    this.board.updateTexture(visuals.boardtexture);
+    this.marker.updateTexture(visuals.markertexture);
+    this.materials.white = visuals.whitematerial;
+    this.materials.black = visuals.blackmaterial;
+}
+
 MyCheversi.prototype.display = function() {
     //Reset pick ID
     this.registerForPickID = 1;

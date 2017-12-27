@@ -132,6 +132,9 @@ XMLscene.prototype.onGraphLoaded = function()
 
     // Adds lights group.
     this.interface.addLightsGroup(this.graphs[this.graphIndex].lights);
+
+    // Update game visuals' properties
+    this.game.updateVisuals(this.graphs[this.graphIndex].gamevisuals);
 }
 
 /**
