@@ -263,17 +263,9 @@ updateMadeMoves( Game, Player, Piece, X, Y, NewGame ):-
 %% undo move %%
 %%%%%%%%%%%%%%%
 
-% AIvsAI - do nothing
-undoMove(Game, Game):-
-	getGameType(Game, 'noPlayer').
-
-% if AI is playing, just need to undo once
-%undoMove(Game, NewGame):-
-%	getGameType(Game, 'singlePlayer'),
-%	getCurrentPlayer(Game, CurrentPlayer),
-%	getAIPlayer(Game, AIPlayer),
-%	AIPlayer == CurrentPlayer,
-%	undoMoveAux(Game, NewGame).
+% case when it is first turn
+undoMoveAux(Game, Game):-
+	getTurnIndex(Game, 0).
 
 % if user is playing, need to undo twice
 undoMove(Game, NewGame):-
@@ -287,10 +279,6 @@ undoMove(Game, NewGame):-
 undoMove(Game, NewGame):-
 	getGameType(Game, 'multiPlayer'),
 	undoMoveAux(Game, NewGame).
-
-% case when it is first turn
-undoMoveAux(Game, Game):-
-	getTurnIndex(Game, 0).
 
 % case where game is over
 %undoMoveAux(Game, NewGame):-
@@ -338,6 +326,8 @@ checkLastMoveIsQueen(Game, NewGame):-
 	getLastPlayedPiece(Game, OtherPlayer, Piece, X, Y),
 	isQueen(Piece, OtherPlayer),
 	setNeedsToPlayQueen(Game, Player, true, NewGame).
+
+checkLastMoveIsQueen(Game, Game).
 
 switchPlayer( Game, NewGame ):-
 	getCurrentPlayer( Game, CurrentPlayer ),

@@ -27,7 +27,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(6655);
+    this.client = new MyClient(8084);
 
     this.difficulty = null;
     this.mode = null;
@@ -239,6 +239,8 @@ MyCheversi.prototype.pickPiece = function(piece) {
             this.turnState = MyCheversi.turnState.USER_TURN;
 
         this.resetStatus();
+
+        alertify.success('Game started!');
     });
 }
 
@@ -259,6 +261,8 @@ MyCheversi.prototype.makeMove = function(tile) {
         console.log(validMove);
         if(validMove)
            this.movePiece(tile);
+        else
+            alertify.error('Invalid move!');
     });
 }
 
@@ -343,6 +347,8 @@ MyCheversi.prototype.undoMove = function() {
             this.board.highlightTiles(this.match.blackAttacked);
         else
             this.board.highlightTiles(this.match.whiteAttacked);
+
+        alertify.success('Last turn undone!');
     });
 }
 
@@ -355,11 +361,16 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     // Reset highlighted tiles
     this.board.resetHighlighted();
 
+    let msg;
     if((dueToTurnTime && this.match.currentPlayer == MyCheversi.player.WHITE) ||
         (!dueToTurnTime && this.marker.scores.black > this.marker.scores.white))
-        alert('Black won!');
+        msg = "<img src='https://placehold.it/256x128'>"+
+        "<h3><strong>Black wins!</strong></h3>";
     else
-        alert('White won!');
+        msg = "<img src='https://placehold.it/256x128'>"+
+        "<h3><strong>White wins!</strong></h3>";
+    msg += "<p>Final score: White "+this.marker.scores.white+" - "+this.marker.scores.black+" Black</p>";
+    alertify.delay(5000).log(msg);
 }
 
 MyCheversi.prototype.watchMovie = function() {
@@ -377,7 +388,7 @@ MyCheversi.prototype.watchMovie = function() {
         // Need to update tile-piece bidirectional reference here because setTile is called asynchronously
         currentTile.piece = currentPiece;
         currentPiece.tile = currentTile;
-        setTimeout(() => {currentPiece.setTile(currentTile);}, (nMoves-i)*1500);
+        setTimeout(() => {currentPiece.setTile(currentTile);}, (nMoves-i)*2000);
     }
 }
 
@@ -387,6 +398,8 @@ MyCheversi.prototype.resetStatus = function() {
     for(let id in this.pieces)
         this.pieces[id].resetStatus();
     this.selectedPiece = null;
+
+    alertify.success('Game reset!');
 }
 
 MyCheversi.prototype.updateVisuals = function(visuals) {
