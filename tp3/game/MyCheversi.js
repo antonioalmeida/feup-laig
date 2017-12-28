@@ -33,6 +33,8 @@ MyCheversi.turnState = {
     GAME_OVER: 3
 }
 
+MyCheversi.MOVE_DELAY = 2500;
+
 /**
  * MyCheversi
  * @constructor
@@ -44,7 +46,7 @@ function MyCheversi(scene) {
     this.match = null; //Object used for comunication with Prolog module
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8082);
+    this.client = new MyClient(8888);
 
     this.difficulty = null;
     this.mode = null;
@@ -279,7 +281,7 @@ MyCheversi.prototype.pickPiece = function(piece) {
         if((this.mode == MyCheversi.mode.SINGLEPLAYER && this.userPlayer == MyCheversi.player.BLACK)
          || this.mode == MyCheversi.mode.NOPLAYER) {
             this.turnState = MyCheversi.turnState.AI_TURN;
-            setTimeout(this.makeMoveAI, 1500);
+            setTimeout(this.makeMoveAI, MyCheversi.MOVE_DELAY);
         }
         else
             this.turnState = MyCheversi.turnState.USER_TURN;
@@ -346,7 +348,7 @@ MyCheversi.prototype.updateMatch = function() {
 
     //At this point, turn info is updated
     if(this.turnState == MyCheversi.turnState.AI_TURN)
-        setTimeout(this.makeMoveAI, 1500);
+        setTimeout(this.makeMoveAI, MyCheversi.MOVE_DELAY);
 
     // Update score on marker
     this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
@@ -446,7 +448,7 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     else
         msg = "<h3><strong>White wins!</strong></h3>";
     msg += "<p>Final score: White "+this.marker.scores.white+" - "+this.marker.scores.black+" Black</p>";
-    alertify.delay(5000).log(msg);
+    alertify.delay(MyCheversi.MOVE_DELAY*2).log(msg);
 }
 
 /**
@@ -467,7 +469,7 @@ MyCheversi.prototype.watchMovie = function() {
         // Need to update tile-piece bidirectional reference here because setTile is called asynchronously
         currentTile.piece = currentPiece;
         currentPiece.tile = currentTile;
-        setTimeout(() => {currentPiece.setTile(currentTile);}, (nMoves-i)*2000);
+        setTimeout(() => {currentPiece.setTile(currentTile);}, (nMoves-i)*MyCheversi.MOVE_DELAY);
     }
 }
 
