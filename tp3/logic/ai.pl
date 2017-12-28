@@ -32,11 +32,6 @@ getAllMoves( Game, Player, MovesList ):-
  	getDifficulty(Game, 'medium'),
  	getBestMove( Game, Player, Piece, X, Y ).
 
- % Hard AI
- getAIMove( Game, Player, Piece, X, Y ):-
- 	getDifficulty(Game, 'hard'),
- 	hardGetMove( Game, Player, Piece, X, Y ).
-
  % AI vs AI first turn
  getAIMove( Game, Player, Piece, X, Y ):-
  	getGameType(Game, 'noPlayer'),
@@ -77,49 +72,4 @@ evaluateMove(Player, Piece, X, Y, Board, Score):-
 	updateAttackedBoard( NewBoard, Player, AttackedBoard ),
 	!,
 	evaluateBoard( AttackedBoard, Score ).
-
-evaluatehardGetMove( MovesList, BestMove ):-
-	sort( MovesList, SortedMoves ),
-	last( MovesList, _-LastPiece-LastX-LastY ),
-	!,
-	connected( TempPiece-TempX-TempY, LastPiece-LastX-LastY ),
-	connected( Piece-X-Y, TempPiece-TempX-TempY ),
-	BestMove = Piece-X-Y.
-
-hardGetMove( Game, Player, Piece, X, Y ):-
-	getAllMoves( Game, Player, MovesList ),
-	getOpponentBestMoves( Game, Player, MovesList, [], OtherMoves ),
-	otherPlayer( Player, Other ),
-	getNextBestMove( OtherMoves, Other, [], MagicMoves ),
-	evaluatehardGetMove( MagicMoves, Piece-X-Y ).
-
-getNextBestMove( [], _, NewMoves, NewMoves).
-
-getNextBestMove( [ Piece-X-Y-Game | RestOfMoves ], Player, TempMoves, NewMoves ):-
-	simulateGameProgression( Game, Player, Piece, X, Y, NewGame ),
-	otherPlayer( Player, Other ),
-	!,
-	getBestMoveWithScore( NewGame, Other, OtherScore, OtherPiece, OtherX, OtherY ),
-	assert(connected(Piece-X-Y, OtherPiece-OtherX-OtherY)),
-	getNextBestMove( RestOfMoves, Player, [ OtherScore-OtherPiece-OtherX-OtherY | TempMoves], NewMoves ).
-
-getOpponentBestMoves( _, _, [], OthersMoves, OthersMoves).
-
-getOpponentBestMoves( Game, Player, [ Piece-X-Y | RestOfMoves ], TempNewMoves, OthersMoves ):-
-	simulateGameProgression( Game, Player, Piece, X, Y, NewGame ),
-	otherPlayer( Player, Other ),
-	getBestMove( NewGame, Other, OtherPiece, OtherX, OtherY ),
-	assert(connected(Piece-X-Y, OtherPiece-OtherX-OtherY)),
-	write('Connected : '), write(Piece-X-Y), write(' with '), write(OtherPiece-OtherX-OtherY), nl, !, 
-	getOpponentBestMoves( Game, Player, RestOfMoves, [ OtherPiece-OtherX-OtherY-NewGame | TempNewMoves ], OthersMoves ).
-
-simulateGameProgression( Game, Player, Piece, X, Y, NewGame ):-
-	getBoard( Game, Board ),
-	makeMove( Board, Piece, X, Y, NextBoard ),	
-	updateMadeMoves( Game, Player, Piece, GameTemp ),
-	setBoard( GameTemp, NextBoard, GameTemp2 ),
-	!,
-	updateAttackedBoard( GameTemp2, GameTemp3 ),
-	incTurnIndex( GameTemp3, GameTemp4 ),
-	switchPlayer( GameTemp4, NewGame ).
 
