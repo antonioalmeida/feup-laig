@@ -1,3 +1,8 @@
+/**
+ * MyBoard
+ * @constructor
+ * @param game - game instance where board will be used
+ */
 function MyBoard(game) {
     CGFobject.call(this,game.scene);
     this.game = game;
@@ -14,11 +19,14 @@ function MyBoard(game) {
 MyBoard.prototype = Object.create(CGFobject.prototype);
 MyBoard.prototype.constructor = MyBoard;
 
+/**
+ * Highlights valid playing positions (tiles) through an auxiliar board provided by the Prolog module
+ * @param board - auxiliar board to help determine if position is to be highlighted
+ */
 MyBoard.prototype.highlightTiles = function (board) {
     for(let j = 0; j <= 7; j++) {
         for(let i = 0; i <= 7; i++) {
             // 8*i+j because tiles are added to array by column
-            // should probably replace this with i and j of MyTile
             if(board[j][i] > 0 && this.tiles[8*i+j].piece === null) //See if position is valid and not already occupied
                 this.tiles[8*i+j].highlighted = true;
             else
@@ -27,20 +35,33 @@ MyBoard.prototype.highlightTiles = function (board) {
     }
 }
 
+/**
+ * Resets the highlight status for all tiles
+ */
 MyBoard.prototype.resetHighlighted = function() {
     for(let id in this.tiles)
         this.tiles[id].resetHighlighted();
 }
 
+/**
+ * Resets the board's status
+ */
 MyBoard.prototype.resetStatus = function() {
     for(let id in this.tiles)
         this.tiles[id].resetStatus();
 }
 
+/**
+ * Updates the board's texture. Called when scenario is switched
+ * @param newTexture - new board texture
+ */
 MyBoard.prototype.updateTexture = function(newTexture) {
     this.boardTexture = newTexture;
 }
 
+/**
+ * Display the board and its tiles
+ */
 MyBoard.prototype.display = function() {
     this.scene.pushMatrix();
 

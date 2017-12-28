@@ -368,11 +368,9 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     let msg;
     if((dueToTurnTime && this.match.currentPlayer == MyCheversi.player.WHITE) ||
         (!dueToTurnTime && this.marker.scores.black > this.marker.scores.white))
-        msg = "<img src='https://placehold.it/256x128'>"+
-        "<h3><strong>Black wins!</strong></h3>";
+        msg = "<h3><strong>Black wins!</strong></h3>";
     else
-        msg = "<img src='https://placehold.it/256x128'>"+
-        "<h3><strong>White wins!</strong></h3>";
+        msg = "<h3><strong>White wins!</strong></h3>";
     msg += "<p>Final score: White "+this.marker.scores.white+" - "+this.marker.scores.black+" Black</p>";
     alertify.delay(5000).log(msg);
 }
