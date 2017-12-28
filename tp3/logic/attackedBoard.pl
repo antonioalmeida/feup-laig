@@ -1,4 +1,3 @@
-% this might be a better approach
 updateAttackedBoard( Board, Player, AttackedBoard ):-
     initialBoard( Temp ),
     updateAttackedBoardAux( Player, Board, Temp, X, Y, AttackedBoard ).

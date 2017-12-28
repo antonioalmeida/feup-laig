@@ -6,13 +6,6 @@
 %%%%                                        Server                                                   %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% To run, enter 'server.' on sicstus command line after consulting this file.
-% You can test requests to this server by going to http://localhost:8081/<request>.
-% Go to http://localhost:8081/quit to close server.
-
-% Made by Luis Reis (ei12085@fe.up.pt) for LAIG course at FEUP.
-
-
 % Server Entry Point
 server(Port) :-
 	write('Opened Server'),nl,nl,
@@ -116,7 +109,6 @@ parse_input(initGame(noPlayer, Playercolor, Difficulty), Game):-
 	initNoPlayerGame(Temp), 
 	parseGame(Temp,Game).
 
-
 % move validation
 parse_input(checkMove(Game, Piece, X, Y), Result):-
 	parseGameJS(Game, Temp),
@@ -155,8 +147,6 @@ parse_input(undoMove(Game), NewGame):-
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).
-
-parse_input(cenas, {ola}).
 
 test(_,[],N) :- N =< 0.
 test(A,[A|Bs],N) :- N1 is N-1, test(A,Bs,N1).
