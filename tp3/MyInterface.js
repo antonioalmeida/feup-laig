@@ -65,6 +65,10 @@ MyInterface.prototype.removeFolder = function(name) {
     this.gui.onResize();
 }
 
+/**
+ * Adds all the necessary game buttons visible in the GUI
+ * @param filenames - scenario filenames
+ */
 MyInterface.prototype.addGameButtons = function(filenames) {
     let customizationGroup = this.gui.addFolder('Game Customization');
     customizationGroup.open();

@@ -1,6 +1,7 @@
 /**
  * MyClient
  * @constructor
+ * @param port - Prolog module port to be used for connection
  */
  function MyClient(port) {
     this.port = port || 8081;
@@ -15,6 +16,12 @@
 
 MyClient.prototype.constructor = MyClient;
 
+/**
+ * Makes a request to the Prolog module and acts accordingly to the response
+ * @param {string} requestString - request to be made
+ * @param onSuccess - callback for when request is successful
+ * @param onError - callback for when request is not successful
+ */
 MyClient.prototype.makeRequest = function (requestString, onSuccess, onError) {
     let request = new XMLHttpRequest();
     let url = 'http://localhost:' + this.port + '/' + requestString;
