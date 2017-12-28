@@ -73,6 +73,14 @@ XMLscene.prototype.initLights = function() {
     if(this.graphIndex === null)
         return;
 
+    //Reset lights so lights from previous scene do not interfere
+    this.lightValues = {};
+    for(let i = 0; i < 8; ++i) {
+        this.lights[i].setVisible(false);
+        this.lights[i].disable();
+        this.lights[i].update();
+    }
+
     var i = 0;
     // Lights index.
 
