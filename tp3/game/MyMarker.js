@@ -1,3 +1,8 @@
+/**
+ * MyMarker
+ * @constructor
+ * @param game - game instance where marker will be used
+ */
 function MyMarker(game) {
     CGFobject.call(this,game.scene);
     this.game = game;
@@ -35,6 +40,10 @@ function MyMarker(game) {
 MyMarker.prototype = Object.create(CGFobject.prototype);
 MyMarker.prototype.constructor = MyMarker;
 
+/**
+ * Updates the turn time, if necessary
+ * @param currTime time elapsed since application started to run
+ */
 MyMarker.prototype.update = function(currTime) {
     if(this.game.turnState !== MyCheversi.turnState.NONE && this.game.turnState !== MyCheversi.turnState.GAME_OVER) {
         let turnTimerDelta = (currTime - this.lastCurrTime) / 1000;
@@ -46,11 +55,19 @@ MyMarker.prototype.update = function(currTime) {
     }
 }
 
+/**
+ * Resets the turn time
+ */
 MyMarker.prototype.resetTurnTime = function() {
     this.turnTime = this.scene.turnTime;
     this.lastCurrTime = this.scene.currTime;
 }
 
+/**
+ * Updates the players' scores according to auxiliar boards from the server module
+ * @param white - auxiliar board used for calculating white's score
+ * @param black - auxiliar board used for calculating black's score
+ */
 MyMarker.prototype.updateScore = function(white, black) {
     let add = function(a,b){return a+b;};
     let reduce = function(arr){return arr.reduce(add);};
@@ -59,16 +76,25 @@ MyMarker.prototype.updateScore = function(white, black) {
     this.resetTurnTime();
 }
 
+/**
+ * Resets the marker's status (scores and turn time)
+ */
 MyMarker.prototype.resetStatus = function() {
     this.scores.white = 0;
     this.scores.black = 0;
     this.resetTurnTime();
 }
 
+/**
+ * Updates the marker's background texture. Called when scenarios are exchanged
+ */
 MyMarker.prototype.updateTexture = function(newTexture) {
     this.textures.background = newTexture;
 }
 
+/**
+ * Displays the marker and its contents
+ */
 MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
 
