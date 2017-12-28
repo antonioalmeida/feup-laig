@@ -1,3 +1,12 @@
+/**
+ * MyKnight
+ * @constructor
+ * @param game - game instance where knight will be used
+ * @param {string} color - piece's color
+ * @param representation - piece's internal representation for the server module
+ * @param initialPosition - piece's initial position in the scene
+ * @param file - file where piece object is stored (for realistic pieces)
+ */
 function MyKnight(game, color, representation, initialPosition, file) {
     MyPiece.call(this, game, color, representation, initialPosition, file);
 
@@ -6,7 +15,6 @@ function MyKnight(game, color, representation, initialPosition, file) {
         new MyCylinder(game.scene,[1, 0.7, 0.3, 5, 10, 0, 0]),
         new MyQuad(game.scene,[0,1, 1,0]),
         new MyQuad(game.scene,[1,1, 0,0]),
-
         new MyCylinder(game.scene, [1,1,1,3,10,1,1]),
         new MyCylinder(game.scene, [1,1,0.3,3,10,1,1]),
     ];
@@ -15,6 +23,9 @@ function MyKnight(game, color, representation, initialPosition, file) {
 MyKnight.prototype = Object.create(MyPiece.prototype);
 MyKnight.prototype.constructor = MyKnight;
 
+/**
+ * Displays the knight using previously defined primitives
+ */
 MyKnight.prototype.displayWithPrimitives = function() {
     this.scene.pushMatrix();
 

@@ -1,3 +1,12 @@
+/**
+ * MyKing
+ * @constructor
+ * @param game - game instance where king will be used
+ * @param {string} color - piece's color
+ * @param representation - piece's internal representation for the server module
+ * @param initialPosition - piece's initial position in the scene
+ * @param file - file where piece object is stored (for realistic pieces)
+ */
 function MyKing(game, color, representation, initialPosition, file) {
     MyPiece.call(this, game, color, representation, initialPosition, file);
 
@@ -11,6 +20,9 @@ function MyKing(game, color, representation, initialPosition, file) {
 MyKing.prototype = Object.create(MyPiece.prototype);
 MyKing.prototype.constructor = MyKing;
 
+/**
+ * Displays the king using previously defined primitives
+ */
 MyKing.prototype.displayWithPrimitives = function() {
     this.scene.pushMatrix();
 
@@ -35,13 +47,13 @@ MyKing.prototype.displayWithPrimitives = function() {
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-   	this.scene.translate(0, 2.9, 0); 
+   	this.scene.translate(0, 2.9, 0);
    	this.scene.scale(0.5, 0.3, 1.1);
     this.primitiveComponents[2].display();
     this.scene.popMatrix();
 
     this.scene.pushMatrix();
-   	this.scene.translate(0, 3.15, 0); 
+   	this.scene.translate(0, 3.15, 0);
    	this.scene.scale(0.5, 0.5, 0.2);
     this.primitiveComponents[2].display();
     this.scene.popMatrix();
