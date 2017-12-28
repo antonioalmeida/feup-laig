@@ -473,10 +473,10 @@
     <BOARDTEXTURE src="textures/boardFuturistic.png" />
     <BLACKMATERIAL>
         <shininess value="1" />
-        <specular r="0.07" g="0.173" b="0.212" a="1" />
-        <diffuse r="0.07" g="0.173" b="0.212" a="1" />
+        <specular r="0.14" g="0.346" b="0.424" a="1" />
+        <diffuse r="0.14" g="0.346" b="0.424" a="1" />
         <ambient r="0.07" g="0.173" b="0.212" a="1" />
-        <emission r="0.07" g="0.173" b="0.212" a="1" />
+        <emission r="0.0" g="0.0" b="0.0" a="1" />
     </BLACKMATERIAL>
     <WHITEMATERIAL>
         <shininess value="1" />
