@@ -1,10 +1,8 @@
 :-include('board.pl').
 :-include('moveValidation.pl').
 :-include('attackedBoard.pl').
-:-include('userInput.pl').
 :-include('ai.pl').
 :-include('utils.pl').
-:-include('main.pl').
 :-include('emojis.pl').
 
 :-dynamic connected/2.

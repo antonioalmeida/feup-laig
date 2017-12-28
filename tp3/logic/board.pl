@@ -28,40 +28,6 @@ getPieceAtAux( [ CurrentLine | RestOfBoard ], N, X, Y, Piece ):-
 	N1 is N+1,
 	getPieceAtAux( RestOfBoard, N1, X, Y, Piece).
 
-displayBoard( Board ) :-
-	displayBoardHeader,
-	N is 8,
-	displayBoardTail(Board, N),
-	displayBottom.
-
-displayBoardTail([], 0).
-
-displayBoardTail( [ Row | T ], N ):-
-	write('---------------------------------'), nl,
-	displayRow(Row, N), nl,
-	N1 is N-1,
-	displayBoardTail(T, N1).
-
-displayRow([], N):-
-	write('| '), displayNumber(N).
-
-displayRow( [ CurrentPiece | T ] , N ):-
-	write('| '),
-	getPieceDisplay(CurrentPiece, PieceDisplay),
-	put_code(PieceDisplay),
-	write(' '),
-	displayRow(T, N).
-
-displayBoardHeader:-
-	nl,
-	write('  a   b   c   d   e   f   g   h '),
-	nl.
-
-displayBottom:-
-	write('---------------------------------'), nl.
-
-displayNumber(N) :- write(N), !.
-
 makeMove( Board, Piece, X, Y, NewBoard ):-
 	isWithinLimits(X),
 	isWithinLimits(Y),

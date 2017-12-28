@@ -385,9 +385,9 @@
         <TEXTURE id="null" />
 
         <DESCENDANTS>
-            <NODEREF id="tableTop" />
-            <NODEREF id="tableLeg" />
             <NODEREF id="tableBottom" />
+            <NODEREF id="tableLeg" />
+            <NODEREF id="tableTop" />
         </DESCENDANTS>
     </NODE>
 
