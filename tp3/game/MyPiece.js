@@ -52,11 +52,15 @@ MyPiece.prototype.resetStatus = function() {
 MyPiece.prototype.retractPiece = function() {
     let oldTileCoords = this.tile.coords;
     this.tile.resetStatus();
-    this.resetStatus();
 
     //Create movement animation
-    let p1 = [oldTileCoords[0]-this.initialPosition[0], 0, oldTileCoords[2]-this.initialPosition[2]];
-    //TODO: Check if current control points are generic enough to avoid collisions, etc
+    let p1;
+    if(this.animation !== null)
+        p1 = [this.animation.currentQ[0], this.animation.currentQ[1], this.animation.currentQ[2]];
+    else
+        p1 = [oldTileCoords[0]-this.initialPosition[0], 0, oldTileCoords[2]-this.initialPosition[2]];
+
+    this.resetStatus();
     this.animation = new MyBezierAnimation('bezier', 5, [
         p1,
         [p1[0],p1[1]+5,p1[2]],
@@ -78,7 +82,7 @@ MyPiece.prototype.display = function () {
     this.scene.multMatrix(this.animationMatrix);
     this.scene.registerForPick(this.game.registerForPickID++, this);
     if(this.scene.realisticPieces) {
-        this.scene.translate(0, 1, 0); //TODO: Check situation for king and queen for now, later try to see if models can be re-exported so this translation is not needed
+        this.scene.translate(0, 1, 0);
         CGFobject.prototype.display.call(this);
     }
     else
