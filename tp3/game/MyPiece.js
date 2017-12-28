@@ -116,7 +116,7 @@ MyPiece.prototype.setTile = function (tile) {
     //TODO: Check if current control points are generic enough to avoid collisions, etc
     this.animation = new MyBezierAnimation('bezier', 5, [
         [0,0,0],
-        [p4[0]/4,p4[1]/4+5,p4[2]/4],
+        [p4[0]/4,p4[1]/2+5,p4[2]/4],
         [p4[0],p4[1]+5,p4[2]],
         p4
     ]);
