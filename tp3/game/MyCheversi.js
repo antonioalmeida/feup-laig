@@ -183,6 +183,10 @@ MyCheversi.prototype.pickPiece = function(piece) {
     if(piece.tile !== null)
         return;
 
+    //Piece in mid air (let it land!)
+    if(piece.animation !== null)
+        return;
+
     //Unselect previous piece, if necessary
     if(this.selectedPiece !== null)
         this.selectedPiece.selected = false;
