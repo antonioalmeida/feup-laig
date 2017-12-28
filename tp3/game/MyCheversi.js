@@ -27,7 +27,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8084);
+    this.client = new MyClient(8082);
 
     this.difficulty = null;
     this.mode = null;
@@ -310,7 +310,22 @@ MyCheversi.prototype.updateMatch = function() {
 }
 
 MyCheversi.prototype.updateTurnState = function() {
-    // i think this one is redundant but let's leave it here for now just for logic's sake
+    switch(this.mode) {
+        case MyCheversi.mode.MULTIPLAYER:
+            this.turnState = MyCheversi.turnState.USER_TURN;
+            break;
+        case MyCheversi.mode.SINGLEPLAYER:
+            if(this.match.currentPlayer == this.userPlayer)
+                this.turnState = MyCheversi.turnState.USER_TURN;
+            else
+                this.turnState = MyCheversi.turnState.AI_TURN;
+            break;
+        case MyCheversi.mode.NOPLAYER:
+            this.turnState = MyCheversi.turnState.AI_TURN;
+            break;
+    }
+
+    /*
     if(this.mode == MyCheversi.mode.MULTIPLAYER) {
         this.turnState = MyCheversi.turnState.USER_TURN;
     }
@@ -321,7 +336,7 @@ MyCheversi.prototype.updateTurnState = function() {
             this.turnState = MyCheversi.turnState.AI_TURN;
     }
     else // also redundant i think (NoPlayer)
-        this.turnState = MyCheversi.turnState.AI_TURN;
+        this.turnState = MyCheversi.turnState.AI_TURN;*/
 }
 
 MyCheversi.prototype.undoMove = function() {
@@ -365,6 +380,7 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     // Reset highlighted tiles
     this.board.resetHighlighted();
 
+    // Show game over notofication
     let msg;
     if((dueToTurnTime && this.match.currentPlayer == MyCheversi.player.WHITE) ||
         (!dueToTurnTime && this.marker.scores.black > this.marker.scores.white))
@@ -400,8 +416,6 @@ MyCheversi.prototype.resetStatus = function() {
     for(let id in this.pieces)
         this.pieces[id].resetStatus();
     this.selectedPiece = null;
-
-    alertify.success('Game reset!');
 }
 
 MyCheversi.prototype.updateVisuals = function(visuals) {
