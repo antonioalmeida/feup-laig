@@ -1,3 +1,12 @@
+/**
+ * MyQueen
+ * @constructor
+ * @param game - game instance where queen will be used
+ * @param {string} color - piece's color
+ * @param representation - piece's internal representation for the server module
+ * @param initialPosition - piece's initial position in the scene
+ * @param file - file where piece object is stored (for realistic pieces)
+ */
 function MyQueen(game, color, representation, initialPosition, file) {
     MyPiece.call(this, game, color, representation, initialPosition, file);
 
@@ -12,6 +21,9 @@ function MyQueen(game, color, representation, initialPosition, file) {
 MyQueen.prototype = Object.create(MyPiece.prototype);
 MyQueen.prototype.constructor = MyQueen;
 
+/**
+ * Displays queen using previously defined primitives
+ */
 MyQueen.prototype.displayWithPrimitives = function() {
     this.scene.pushMatrix();
 

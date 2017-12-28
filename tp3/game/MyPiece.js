@@ -1,3 +1,12 @@
+/**
+ * MyPiece
+ * @constructor
+ * @param game - game instance where piece will be used
+ * @param {string} color - piece's color
+ * @param representation - piece's internal representation for the server module
+ * @param initialPosition - piece's initial position in the scene
+ * @param file - file where piece object is stored (for realistic pieces)
+ */
 function MyPiece(game, color, representation, initialPosition, file) {
     if (this.constructor === MyPiece){
         throw new Error("Can't instantiate abstract class!");
@@ -41,6 +50,9 @@ function MyPiece(game, color, representation, initialPosition, file) {
 MyPiece.prototype = Object.create(CGFobject.prototype);
 MyPiece.prototype.constructor = MyPiece;
 
+/**
+ * Resets the piece's status
+ */
 MyPiece.prototype.resetStatus = function() {
     this.tile = null;
     this.animation = null;
@@ -49,6 +61,9 @@ MyPiece.prototype.resetStatus = function() {
     this.selected = false;
 }
 
+/**
+ * Retracts the piece from its position on the board back to its starting point
+ */
 MyPiece.prototype.retractPiece = function() {
     let oldTileCoords = this.tile.coords;
     this.tile.resetStatus();
@@ -71,6 +86,9 @@ MyPiece.prototype.retractPiece = function() {
     this.animationStartTime = this.scene.currTime;
 }
 
+/**
+ * Displays the piece
+ */
 MyPiece.prototype.display = function () {
     this.updateAnimationMatrix();
     this.scene.pushMatrix();
@@ -93,6 +111,9 @@ MyPiece.prototype.display = function () {
     this.scene.popMatrix();
 }
 
+/**
+ * Updates the piece's animation matrix, if it is moving
+ */
 MyPiece.prototype.updateAnimationMatrix = function() {
     if(this.animation === null)
         return;
@@ -106,6 +127,10 @@ MyPiece.prototype.updateAnimationMatrix = function() {
     this.animationMatrix = this.animation.matrixAfter(delta);
 }
 
+/**
+ * Sets the piece's position on the board by binding it to a tile. Also sets up transition animation
+ * @param tile - destination tile on the board
+ */
 MyPiece.prototype.setTile = function (tile) {
     //Bidirectional reference
     this.tile = tile;
@@ -113,7 +138,6 @@ MyPiece.prototype.setTile = function (tile) {
 
     //Create movement animation
     let p4 = [tile.coords[0]-this.initialPosition[0], 0, tile.coords[2]-this.initialPosition[2]];
-    //TODO: Check if current control points are generic enough to avoid collisions, etc
     this.animation = new MyBezierAnimation('bezier', 5, [
         [0,0,0],
         [p4[0]/4,p4[1]/2+5,p4[2]/4],
@@ -124,6 +148,11 @@ MyPiece.prototype.setTile = function (tile) {
     this.animationStartTime = this.scene.currTime;
 }
 
+/**
+ * Loads an object stored in an .obj file.
+ * @param file - file where object is stored
+ * @return array ready to be VAO bound in OpenGL with object vertices and normals
+ */
 MyPiece.prototype.loadObj = function (file) {
    var lines = file.split("\n");
    var positions = [];
@@ -176,6 +205,5 @@ MyPiece.prototype.loadObj = function (file) {
        }
      }
    }
-   var vertexCount = vertices.length / 6;
    return vertices;
 }
