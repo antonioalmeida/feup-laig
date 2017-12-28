@@ -85,6 +85,12 @@
       <amplif_factor s="1" t="1" />
   </TEXTURE>
 
+    <!-- Marker texture -->
+  <TEXTURE id="markerTexture">
+      <file path="images/marker.jpg" />
+      <amplif_factor s="5" t="3" />
+  </TEXTURE>
+
 </TEXTURES>
 
 
@@ -338,6 +344,7 @@
         <TEXTURE id="woodTexture" />
 
         <DESCENDANTS>
+            <NODEREF id="marker" />
             <NODEREF id="tableTop" />
             <NODEREF id="tableLeg" />
             <NODEREF id="tableBottom" />
@@ -345,11 +352,24 @@
         </DESCENDANTS>
     </NODE>
 
+    <NODE id="marker">
+        <MATERIAL id="defaultMaterial" />
+        <TEXTURE id="markerTexture" />
+
+        <TRANSLATION x="-32.5" y="-14" z="-14.1" />
+        <SCALE sx="6.5" sy="3.5" sz="0.2" />
+
+        <DESCENDANTS>
+            <NODEREF id="cube" />
+        </DESCENDANTS>
+    </NODE>
+
+
     <NODE id="tableTop">
         <MATERIAL id="defaultMaterial" />
         <TEXTURE id="null" />
 
-        <TRANSLATION x="-45" y="-4.2" z="-30" />
+        <TRANSLATION x="-45" y="-4.2" z="-32" />
         <SCALE sx="9" sy="0.5" sz="6" />
 
         <DESCENDANTS>
@@ -491,7 +511,7 @@
     </NODE>
 
     <!-- Another cube face -->
-    <NODE id="faceCubo5" selectable="true">
+    <NODE id="faceCubo5">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -505,7 +525,7 @@
     </NODE>
 
     <!-- Another cube face -->
-    <NODE id="faceCubo6" selectable="false">
+    <NODE id="faceCubo6">
         <MATERIAL id="null" />
         <TEXTURE id="null" />
 
@@ -521,7 +541,7 @@
 </NODES>
 
 <GAMEVISUALS>
-    <MARKERTEXTURE src="textures/board.png" />
+    <MARKERTEXTURE src="scenes/images/marker_background_demo.jpg" />
     <BOARDTEXTURE src="textures/board.png" />
     <BLACKMATERIAL>
         <shinines value="1" />

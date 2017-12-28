@@ -25,33 +25,25 @@
         <enable value ="1" />
         <position  x="-60" y="70" z="60" w="1" />
         <ambient r="0.1" g="0.1" b="0.3" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
+        <specular r="0.6" g="0.6" b="0.6" a="1.0" />
     </LIGHT>
 
     <LIGHT id="light1">
         <enable value ="1" />
-        <position x="-60" y="70" z="60" w="1" />
-        <ambient r="0.1" g="0.1" b="0.3" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-    </LIGHT>
-
-    <LIGHT id="light2">
-        <enable value ="1" />
         <position  x="60" y="70" z="60" w="1" />
         <ambient r="0.1" g="0.1" b="0.3" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
+        <specular r="0.6" g="0.6" b="0.6" a="1.0" />
     </LIGHT>
 
-    <LIGHT id="light3">
+    <LIGHT id="bulbLight">
         <enable value ="1" />
-        <position x="60" y="70" z="-60" w="1" />
-        <ambient r="0.1" g="0.1" b="0.3" a="1.0" />
-        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-    </LIGHT>
+        <position x="0" y="23" z="0" w="1" />
+        <ambient r="0.28" g="0.692" b="0.848" a="1" />
+        <diffuse r="0.28" g="0.692" b="0.848" a="1" />
+        <specular r="0.28" g="0.692" b="0.848" a="1" />
+     </LIGHT>
 </LIGHTS>
 
 <!-- Textures -->
@@ -124,7 +116,16 @@
       <specular r="0.5" g="0.5" b="0.5" a="1" />
       <diffuse r="0.1" g="0.1" b="0.1" a="1" />
       <ambient r="0.2" g="0.2" b="0.2" a="1" />
-      <emission r="0.5" g="0.5" b="0.5" a="1" />
+      <emission r="0.0" g="0.0" b="0.0" a="1" />
+    </MATERIAL>
+
+    <!-- Bulb material -->
+    <MATERIAL id="bulbMaterial">
+        <shininess value="300" />
+        <specular r="0.14" g="0.346" b="0.424" a="1" />
+        <diffuse r="0.14" g="0.346" b="0.424" a="1" />
+        <ambient r="0.14" g="0.346" b="0.424" a="1" />
+        <emission r="0" g="0" b="0" a="1" />
     </MATERIAL>
 </MATERIALS>
 
@@ -148,6 +149,7 @@
             <NODEREF id="floor2" />
             <NODEREF id="floor" />
             <NODEREF id="table" />
+            <NODEREF id="lamp" />
             <NODEREF id="chairLeft" />
             <NODEREF id="chairRight" />
             <NODEREF id="walls" />
@@ -163,6 +165,42 @@
         <TRANSLATION x="0" y="-200" z="0" />
         <SCALE sx="-400" sy="680" sz="400" />
         <ROTATION axis="x" angle="-90" />
+
+        <DESCENDANTS>
+            <LEAF type="cylinder" args="1 1 1 40 40 1 1" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="lamp">
+        <MATERIAL id="null" />
+        <TEXTURE id="null" />
+
+        <DESCENDANTS>
+            <NODEREF id="lampTop" />
+            <NODEREF id="lampBulb" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="lampTop">
+        <MATERIAL id="defaultMaterial" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="0" y="31" z="0" />
+        <SCALE sx="5" sy="2" sz="5" />
+        <ROTATION axis="x" angle="90" />
+
+        <DESCENDANTS>
+            <LEAF type="cylinder" args="1 1 1 40 40 1 1" />
+        </DESCENDANTS>
+    </NODE>
+
+    <NODE id="lampBulb">
+        <MATERIAL id="bulbMaterial" />
+        <TEXTURE id="null" />
+
+        <TRANSLATION x="0" y="30" z="0" />
+        <ROTATION axis="x" angle="90" />
+        <SCALE sx="4" sy="4" sz="4" />
 
         <DESCENDANTS>
             <LEAF type="cylinder" args="1 1 1 40 40 1 1" />
@@ -428,21 +466,20 @@
         </DESCENDANTS>
     </NODE>
 
-
 </NODES>
 
 <GAMEVISUALS>
-    <MARKERTEXTURE src="textures/board.png" />
+    <MARKERTEXTURE src="scenes/images_futuristic/marker_background_futuristic.png" />
     <BOARDTEXTURE src="textures/boardFuturistic.png" />
     <BLACKMATERIAL>
-        <shinines value="1" />
+        <shininess value="1" />
         <specular r="0.07" g="0.173" b="0.212" a="1" />
         <diffuse r="0.07" g="0.173" b="0.212" a="1" />
         <ambient r="0.07" g="0.173" b="0.212" a="1" />
         <emission r="0.07" g="0.173" b="0.212" a="1" />
     </BLACKMATERIAL>
     <WHITEMATERIAL>
-        <shinines value="1" />
+        <shininess value="1" />
         <specular r="0.3" g="0.3" b="0.3" a="1" />
         <diffuse r="0.8" g="0.8" b="0.8" a="1" />
         <ambient r="0.05" g="0.05" b="0.05" a="1" />
