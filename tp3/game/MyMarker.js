@@ -72,7 +72,7 @@ MyMarker.prototype.updateTexture = function(newTexture) {
 MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
 
-    //Panel background TODO: Create texture for it later (with the captions basically)
+    //Panel background
     this.scene.pushMatrix();
     this.scene.translate(0, 8, -12.5);
     this.scene.scale(30, 10, 1);
