@@ -11,20 +11,9 @@
 
 % case where game is finished
 playGame( Game, Piece, X, Y, Game ):-
-%playGame( Game):-
 	gameOver( Game ),
 	getBoard( Game, Board ),
 	displayBoard( Board ),
-
-	%getAttackedBoard( Game, 'white', AttackedBoardWhite ),
-	%getAttackedBoard( Game, 'black', AttackedBoardBlack ),
-
-	%evaluateBoard( AttackedBoardWhite, WhiteScore ),
-	%evaluateBoard( AttackedBoardBlack, BlackScore ),
-
-	% TODO: add final scores to final game object
-	%displayScore( WhiteScore, BlackScore ),
-	%displayWinner( WhiteScore, BlackScore ),
 
 	retractall(connected(_,_)),
 	!.
@@ -34,11 +23,8 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	% get stuff from game class
 	getBoard( Game, Board ),
 	getCurrentPlayer( Game, Player ),
-	% displayTurnInfo( Game ),
-	% displayBoard( Board ),
 
 	% read and validate move
-	% getNextMove( Game, Player, Piece, X, Y ),
 	validateMove( Game, Player, Piece, X, Y ),
 
 	% make and update moves
@@ -51,9 +37,6 @@ playGame( Game, Piece, X, Y, NewGame ):-
 	incTurnIndex( GameTemp3, GameTemp4 ),
 	switchPlayer( GameTemp4, GameTemp5 ),
 	checkGameOver( GameTemp5, NewGame ).
-
-	%clearScreen,
-	%playGame(NewGame).
 
 playGameAI(Game, NewGame):-
 	% get stuff from game class
@@ -83,24 +66,11 @@ getNextMove( Game, Player, Piece, X, Y ):-
 	write('AI is thinking...'), nl,
 	getAIMove( Game, Player, Piece, X, Y ).
 
-% Single Player user's turn
-% getNextMove( Game, Player, Piece, X, Y ):-
-%	getGameType( Game, 'singlePlayer' ),
-%	readMoveFromUser( Player, Piece, X, Y ).
-
-%  Multiplayer regular turn
-%getNextMove( Game, Player, Piece, X, Y ):-
-%	getGameType( Game, 'multiPlayer' ),
-%	readMoveFromUser( Player, Piece, X, Y ).
-
 % AI vs AI regular turn
 getNextMove( Game, Player, Piece, X, Y ):-
 	getGameType( Game, 'noPlayer' ),
 	write('AI is thinking...'), nl,
 	getAIMove( Game, Player, Piece, X, Y ).
-	%write('The AI has decided!'), nl,
-	%write('Press ENTER to apply the move.'), nl.
-	%read_line(_).
 
 %%%%%%%%%%%%%%%%
 % Game "class" %
@@ -280,15 +250,6 @@ undoMove(Game, NewGame):-
 	getGameType(Game, 'multiPlayer'),
 	undoMoveAux(Game, NewGame).
 
-% case where game is over
-%undoMoveAux(Game, NewGame):-
-%	gameOver(Game),
-%	setGameOver(Game, false, TempGame),
-%	getLastPlayedPiece(TempGame, Player, Piece, X, Y),
-%	removeLastPlayedPiece(TempGame, TempGame2),
-%	removeMove(TempGame2, X, Y, TempGame3),
-%	decTurnIndex(TempGame3, NewGame).
-
 % case where current player needs to play queen
 undoMoveAux(Game, NewGame):-
 	getCurrentPlayer(Game, Player),
@@ -326,48 +287,13 @@ checkLastMoveIsQueen(Game, NewGame):-
 	getLastPlayedPiece(Game, OtherPlayer, Piece, X, Y),
 	isQueen(Piece, OtherPlayer),
 	setNeedsToPlayQueen(Game, Player, true, NewGame).
-
+% base case - do nothing
 checkLastMoveIsQueen(Game, Game).
 
 switchPlayer( Game, NewGame ):-
 	getCurrentPlayer( Game, CurrentPlayer ),
 	otherPlayer( CurrentPlayer, NewPlayer ),
 	replace( Game, 1, NewPlayer, NewGame ).
-
-displayTurnInfo( Game ):-
-	getCurrentPlayer( Game, CurrentPlayer ),
-	getTurnIndex( Game, N ),
-	write('Turn Number: '), write(N), nl,
-	write('Current Player: '), displayPlayer( CurrentPlayer ), nl.
-
-displayScore( White, Black ):-
-	nl,	emoji(flag),
-	write(' Game Over! '),
-	emoji(flag), nl,
-	emoji('white'), write(' White Score: '), write(White), nl,
-	emoji('black'), write(' Black Score: '), write(Black), nl.
-
-displayWinner( White, Black ):-
-	White > Black,
-	emoji(trophy, 8), nl,
-	emoji( trophy ),
-	write(' White Wins '),
-	emoji(trophy), nl,
-	emoji(trophy, 8), nl.
-
-displayWinner( White, Black ):-
-	Black > White,
-	nl, emoji(trophy, 8), nl,
-	emoji( trophy ),
-	write(' Black Wins '),
-	emoji(trophy), nl,
-	emoji(trophy, 8), nl.
-
-displayWinner( White, Black ):-
-	write('The match is a tie! '), nl.
-
-displayPlayer('white'):- emoji('white'), write(' White ').
-displayPlayer('black'):- emoji('black'), write(' Black ').
 
 otherPlayer('white', 'black').
 otherPlayer('black', 'white').
