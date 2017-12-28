@@ -6,7 +6,6 @@
  */
 function MyObj(scene, args) {
   CGFobject.call(this,scene);
-  console.log('OBJ: ' + args);
 
   this.fileName = args;
 
@@ -18,6 +17,7 @@ function MyObj(scene, args) {
   xhttp.send();
   let buffer = this.loadObj(xhttp.responseText);
 
+  // Loading information retrieved to necessary buffers
   for(let i = 0; i < buffer.length; i += 6) {
     this.vertices.push(buffer[i], buffer[i+1], buffer[i+2]);
     this.normals.push(buffer[i+3], buffer[i+4], buffer[i+5]);
@@ -32,6 +32,9 @@ function MyObj(scene, args) {
 MyObj.prototype = Object.create(CGFobject.prototype);
 MyObj.prototype.constructor = MyObj;
 
+/**
+ * Empties vertices, normals, texCoords and indices buffers
+ */
 MyObj.prototype.initBuffers = function() {
 	this.vertices = [];
   this.normals = [];
@@ -39,8 +42,15 @@ MyObj.prototype.initBuffers = function() {
   this.indices = [];
 };
 
-MyObj.prototype.updateTexCoords = function(afS, afT) { }
+MyObj.prototype.updateTexCoords = function(afS, afT) {
+    //Amplification factors do not apply to MyObj
+}
 
+/**
+ * Loads object from .obj file that was exported with triangulated faces
+ * @param file - .obj file where object is stored
+ * @return array ready to be VAO bounded in OpenGL
+ */
 MyObj.prototype.loadObj = function (file) {
    var lines = file.split("\n");
    var positions = [];
@@ -93,6 +103,5 @@ MyObj.prototype.loadObj = function (file) {
        }
      }
    }
-   var vertexCount = vertices.length / 6;
    return vertices;
 }

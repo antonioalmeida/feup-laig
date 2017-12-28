@@ -12,6 +12,9 @@ function MyCube(scene) {
 MyCube.prototype = Object.create(CGFobject.prototype);
 MyCube.prototype.constructor=MyCube;
 
+/**
+ * Display the unit cube with its center in (0,0,0)
+ */
 MyCube.prototype.display = function() {
     this.scene.pushMatrix();
 
