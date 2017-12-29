@@ -44,8 +44,7 @@ serialInclude(
 'game/MyTile.js',
 'game/MyMarker.js',
 
-main=function() {
-
+main = function() {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
     var myInterface = new MyInterface();
@@ -56,9 +55,10 @@ main=function() {
     app.setScene(myScene);
     app.setInterface(myInterface);
 
-    myInterface.setActiveCamera(myScene.camera);
+    // Uncoment this to active mouse controlled camera
+    //myInterface.setActiveCamera(myScene.camera);
 
-    //Load scenarios
+	// Create and load graphs
     myScene.loadGraphs(['demo','futuristic']);
 
 	// start

@@ -29,7 +29,7 @@ function MyCheversi(scene) {
     this.match = null;
     this.turnState = MyCheversi.turnState.NONE;
 
-    this.client = new MyClient(8888);
+    this.client = new MyClient(8081);
 
     this.difficulty = null;
     this.mode = null;
@@ -326,19 +326,6 @@ MyCheversi.prototype.updateTurnState = function() {
             this.turnState = MyCheversi.turnState.AI_TURN;
             break;
     }
-
-    /*
-    if(this.mode == MyCheversi.mode.MULTIPLAYER) {
-        this.turnState = MyCheversi.turnState.USER_TURN;
-    }
-    else if(this.mode == MyCheversi.mode.SINGLEPLAYER) {
-        if(this.match.currentPlayer == this.userPlayer)
-            this.turnState = MyCheversi.turnState.USER_TURN;
-        else
-            this.turnState = MyCheversi.turnState.AI_TURN;
-    }
-    else // also redundant i think (NoPlayer)
-        this.turnState = MyCheversi.turnState.AI_TURN;*/
 }
 
 MyCheversi.prototype.undoMove = function() {

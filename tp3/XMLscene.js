@@ -166,10 +166,8 @@ XMLscene.prototype.update = function(currTime) {
     //Change camera perspective, if the case
     if(this.cameraTransition !== null) {
         this.cameraTransition.update();
-        if(this.cameraTransition.done) {
-            console.log("Done!");
+        if(this.cameraTransition.done)
             this.cameraTransition = null;
-        }
     }
 }
 

@@ -1,13 +1,13 @@
 /**
  * MyClient
  * @constructor
- * @param port - Prolog module port to be used for connection
+ * @param port - Port to make requests to
  */
  function MyClient(port) {
     this.port = port || 8081;
 
     this.defaultOnSuccess = function(data) {
-        console.log('Reques successful. Reply ' + data.target.response);
+        console.log('Request successful. Reply ' + data.target.response);
     }
     this.defaultOnError = function(data) {
         console.log('Error waiting for response');
@@ -17,7 +17,7 @@
 MyClient.prototype.constructor = MyClient;
 
 /**
- * Makes a request to the Prolog module and acts accordingly to the response
+ * Makes a request to the prolog server
  * @param {string} requestString - request to be made
  * @param onSuccess - callback for when request is successful
  * @param onError - callback for when request is not successful
