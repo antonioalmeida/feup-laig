@@ -97,7 +97,7 @@ XMLscene.prototype.initLights = function() {
             this.lights[i].setDiffuse(light[3][0], light[3][1], light[3][2], light[3][3]);
             this.lights[i].setSpecular(light[4][0], light[4][1], light[4][2], light[4][3]);
 
-            this.lights[i].setVisible(true);
+            this.lights[i].setVisible(false);
             if (light[0])
                 this.lights[i].enable();
             else
@@ -247,25 +247,17 @@ XMLscene.prototype.display = function() {
 
     this.pushMatrix();
 
-    if (this.graphIndex !== null && this.graphs[this.graphIndex].loadedOk)
-    {
+    if (this.graphIndex !== null && this.graphs[this.graphIndex].loadedOk) {
         // Applies initial transformations.
         this.multMatrix(this.graphs[this.graphIndex].initialTransforms);
-
-		// Draw axis
-		this.axis.display();
 
         var i = 0;
         for (var key in this.lightValues) {
             if (this.lightValues.hasOwnProperty(key)) {
-                if (this.lightValues[key]) {
-                    this.lights[i].setVisible(true);
+                if (this.lightValues[key])
                     this.lights[i].enable();
-                }
-                else {
-                    this.lights[i].setVisible(false);
+                else
                     this.lights[i].disable();
-                }
                 this.lights[i].update();
                 i++;
             }
@@ -273,16 +265,11 @@ XMLscene.prototype.display = function() {
 
         // Displays the scene.
         this.graphs[this.graphIndex].displayScene();
-
     }
-	else
-	{
-		// Draw axis
+	else // Draw axis
 		this.axis.display();
-	}
 
     this.game.display();
-
 
     this.popMatrix();
 

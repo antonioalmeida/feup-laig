@@ -58,7 +58,7 @@ main = function() {
     // Uncoment this to active mouse controlled camera
     //myInterface.setActiveCamera(myScene.camera);
 
-	// Create and load graphs
+	// Load scenarios
     myScene.loadGraphs(['demo','futuristic']);
 
 	// start
