@@ -6,6 +6,7 @@
 * @param {array} controlPoints - array containing the patch's control points
 */
 function MyPatch(scene, args, controlPoints) {
+  this.scene = scene;
     this.degreeU = controlPoints.length - 1;
     this.degreeV = controlPoints[0].length - 1;
 
@@ -44,7 +45,9 @@ MyPatch.prototype.getKnotsVector = function (degree) {
 };
 
 MyPatch.prototype.display = function () {
+    this.scene.gl.disable(this.scene.gl.CULL_FACE);
     this.patch.display();
+    this.scene.gl.enable(this.scene.gl.CULL_FACE);
 };
 
 MyPatch.prototype.updateTexCoords = function(afS, afT) {
