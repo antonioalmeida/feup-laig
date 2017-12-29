@@ -8,7 +8,13 @@ function MyBoard(game) {
     this.game = game;
     this.scene = game.scene;
 
-    this.boardTexture = new CGFtexture(this.scene, 'textures/board.png');
+    this.boardTexture = new CGFappearance(this.scene);
+    this.boardTexture.setShininess(128);
+    this.boardTexture.setAmbient(0, 0, 0, 1);
+    this.boardTexture.setDiffuse(0.3, 0.3, 0.3, 1);
+    this.boardTexture.setSpecular(0.8, 0.8, 0.8, 1);
+    this.boardTexture.setEmission(0, 0, 0, 1);
+    this.boardTexture.loadTexture(this.scene, 'textures/board.png');
     this.primitive = new MyPatch(this.scene, [20,20], [[[ 0.5, 0.0, -0.5, 1], [0.5, 0.0, 0.5, 1] ], [[-0.5, 0.0, -0.5, 1], [-0.5, 0.0, 0.5, 1]]]);
     this.tiles = [];
     for(let i = 1; i <= 8; ++i)
@@ -56,7 +62,7 @@ MyBoard.prototype.resetStatus = function() {
  * @param newTexture - new board texture
  */
 MyBoard.prototype.updateTexture = function(newTexture) {
-    this.boardTexture = newTexture;
+    this.boardTexture.setTexture(newTexture);
 }
 
 /**
@@ -78,7 +84,7 @@ MyBoard.prototype.display = function() {
 
     this.scene.scale(20, 1, 20);
 
-    this.boardTexture.bind();
+    this.boardTexture.apply();
     this.primitive.display();
 
     this.scene.popMatrix();

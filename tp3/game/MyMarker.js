@@ -19,6 +19,13 @@ function MyMarker(game) {
 
     this.turnTime = 0;
 
+    this.material = new CGFappearance(this.scene);
+    this.material.setShininess(128);
+    this.material.setAmbient(0, 0, 0, 1);
+    this.material.setDiffuse(0.3, 0.3, 0.3, 1);
+    this.material.setSpecular(0.8, 0.8, 0.8, 1);
+    this.material.setEmission(0, 0, 0, 1);
+
     this.textures = {
         0: new CGFtexture(this.scene, 'textures/0.png'),
         1: new CGFtexture(this.scene, 'textures/1.png'),
@@ -97,6 +104,8 @@ MyMarker.prototype.updateTexture = function(newTexture) {
  */
 MyMarker.prototype.display = function() {
     this.scene.pushMatrix();
+
+    this.material.apply();
 
     //Panel background
     this.scene.pushMatrix();
