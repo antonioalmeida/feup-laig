@@ -1,19 +1,31 @@
+/**
+ * Game difficulty (singleplayer only)
+ */
 MyCheversi.difficulty = {
     EASY: 0,
     MEDIUM: 1,
 };
 
+/**
+ * Game mode
+ */
 MyCheversi.mode = {
     SINGLEPLAYER: 0,
     MULTIPLAYER: 1,
     NOPLAYER: 2,
 };
 
+/**
+ * Player's piece color
+ */
 MyCheversi.player = {
     WHITE: 0,
     BLACK: 1,
 };
 
+/**
+ * Game turn state
+ */
 MyCheversi.turnState = {
     NONE: 0,
     USER_TURN: 1,
@@ -23,10 +35,15 @@ MyCheversi.turnState = {
 
 MyCheversi.MOVE_DELAY = 2500;
 
+/**
+ * MyCheversi
+ * @constructor
+ * @param scene - scene where game will be drawn
+ */
 function MyCheversi(scene) {
     CGFobject.call(this,scene);
     this.scene = scene;
-    this.match = null;
+    this.match = null; //Object used for comunication with Prolog module
     this.turnState = MyCheversi.turnState.NONE;
 
     this.client = new MyClient(8081);
@@ -36,6 +53,7 @@ function MyCheversi(scene) {
     this.userPlayer = null;
     this.AIPlayer = null;
 
+    //Function used to parse server's answer upon a successful request (new game object)
     this.parseGameObject = (data) => {
         let dataArr = JSON.parse(data.target.response);
         let obj = {};
@@ -45,7 +63,6 @@ function MyCheversi(scene) {
         obj.currentPlayer = dataArr[1];
         obj.turnCounter = dataArr[2];
 
-        // Not sure if we'll need these
         obj.whiteAttacked = dataArr[3];
         obj.blackAttacked = dataArr[4];
 
@@ -54,7 +71,6 @@ function MyCheversi(scene) {
 
         obj.movesList = dataArr[6];
 
-        // maybe use these to improve UX when user needs to choose queen?
         obj.whiteNeedsQueen = dataArr[7];
         obj.blackNeedsQueen = dataArr[8];
 
@@ -64,10 +80,10 @@ function MyCheversi(scene) {
 
         this.marker.resetTurnTime();
 
-        console.log(obj);
         this.match = obj;
     }
 
+    //Function used to make AI's move (makes the request for an AI play and upon a successful answer makes the actual move)
     this.makeMoveAI = () => {
         let request = 'makeMoveAI(' + this.match.raw + ')';
 
@@ -81,7 +97,6 @@ function MyCheversi(scene) {
             //madeMove is an array with format [Player, Piece, X, Y]
             this.getPieceFromInternalRepresentation(madeMove[1], function(a){return a === null;}).setTile(this.getTileFromCoordinates(madeMove[2], madeMove[3]));
 
-            //uncoment once movepiece is implemented (not tested)
             this.updateMatch();
         })
     }
@@ -96,6 +111,14 @@ function MyCheversi(scene) {
 MyCheversi.prototype = Object.create(CGFobject.prototype);
 MyCheversi.prototype.constructor = MyCheversi;
 
+/**
+ * Retrieves a piece from the piece array
+ * @param index - piece's index in the Prolog module (reasonably synced with JS module)
+ * @param comparisonFunc - function to be used when selecting a piece that is not King or Queen.
+ * Since this function is used in undoing a move and making an AI move, the function is needed for, when using one of the mentioned pieces,
+ * knowing if we want the piece that's been played at a given position (to undo) or this first of the two that's free (to make an AI move)
+ * @return piece that matches criteria
+ */
 MyCheversi.prototype.getPieceFromInternalRepresentation = function(index, comparisonFunc) {
     let firstPieceIndex;
     switch(index) {
@@ -122,15 +145,27 @@ MyCheversi.prototype.getPieceFromInternalRepresentation = function(index, compar
     return this.pieces[firstPieceIndex+1];
 }
 
+/**
+ * Retrives a tile object through it's board coordinates
+ * @param x - tile's x coordinate
+ * @param y - tile's y coordinate
+ * @return respective tile object
+ */
 MyCheversi.prototype.getTileFromCoordinates = function(x,y) {
     return this.board.tiles[8*x+y];
 }
 
+/**
+ * Creates the board and marker to be used
+ */
 MyCheversi.prototype.createBoardMarker = function() {
     this.board = new MyBoard(this);
     this.marker = new MyMarker(this);
 }
 
+/**
+ * Creates the necessary shaders and initial default materials for the pieces
+ */
 MyCheversi.prototype.createMaterialsShaders = function() {
     this.shaders = {
         selected: new CGFshader(this.scene.gl, "shaders/selectedVertexShader.glsl", "shaders/selectedFragmentShader.glsl"),
@@ -152,6 +187,9 @@ MyCheversi.prototype.createMaterialsShaders = function() {
     this.materials = {'black': blackMaterial, 'white': whiteMaterial};
 }
 
+/**
+ * Creates the game pieces in an order that's coherent with their Prolog module internal representation
+ */
 MyCheversi.prototype.createPieces = function() {
     this.pieces = [
     //White pieces
@@ -176,6 +214,10 @@ MyCheversi.prototype.createPieces = function() {
     this.selectedPiece = null;
 }
 
+/**
+ * Handler for when the user clicks a piece. It will select it, if valid.
+ * @param piece - piece clicked
+ */
 MyCheversi.prototype.pickPiece = function(piece) {
     // not user's turn
     if(this.turnState != MyCheversi.turnState.USER_TURN)
@@ -272,6 +314,10 @@ MyCheversi.prototype.makeMove = function(tile) {
     });
 }
 
+/**
+ * Actually moves a piece in the board
+ * @param tile - tile where the currently selected piece will be moved to
+ */
 MyCheversi.prototype.movePiece = function(tile) {
     let request = 'makeMove(' + this.match.raw + ',' + this.selectedPiece.representation + ',' + (tile.row-1) + ',' + (tile.col-1) + ')';
 
@@ -287,6 +333,9 @@ MyCheversi.prototype.movePiece = function(tile) {
     });
 }
 
+/**
+ * Updates the match status (game over status, turn state, scores and tile highlighting)
+ */
 MyCheversi.prototype.updateMatch = function() {
     // Check game over
     if(this.match.isOver) {
@@ -311,6 +360,9 @@ MyCheversi.prototype.updateMatch = function() {
         this.board.highlightTiles(this.match.whiteAttacked);
 }
 
+/**
+ * Updates the turn state (not between colors, but between User and AI)
+ */
 MyCheversi.prototype.updateTurnState = function() {
     switch(this.mode) {
         case MyCheversi.mode.MULTIPLAYER:
@@ -328,6 +380,9 @@ MyCheversi.prototype.updateTurnState = function() {
     }
 }
 
+/**
+ * Undoes the last turn (last two moves if Singleplayer since it is only allowed when it's the user's turn, or last move if Multiplayer)
+ */
 MyCheversi.prototype.undoMove = function() {
     if(this.match.turnState == MyCheversi.turnState.NONE || this.match.turnState == MyCheversi.turnState.GAME_OVER ||
         this.mode == MyCheversi.mode.NOPLAYER ||
@@ -347,7 +402,7 @@ MyCheversi.prototype.undoMove = function() {
         let removedMoves = previousObject.movesList.slice(0, length1-length2);
 
         for(let i = 0; i < removedMoves.length; i++)
-            this.getPieceFromInternalRepresentation(removedMoves[i][1], function(a){return a !== null;}).retractPiece();
+            this.getPieceFromInternalRepresentation(removedMoves[i][1], function(a){return a !== null && a.row === (removedMoves[i][2]+1) && a.col === (removedMoves[i][3]+1);}).retractPiece();
 
         this.marker.updateScore(this.match.whiteAttacked, this.match.blackAttacked);
         // Update highlighted tiles
@@ -360,6 +415,9 @@ MyCheversi.prototype.undoMove = function() {
     });
 }
 
+/**
+ * Match over handler. Resets the game and displays the winner accordingly
+ */
 MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     this.turnState = MyCheversi.turnState.GAME_OVER;
 
@@ -380,6 +438,9 @@ MyCheversi.prototype.matchOver = function(dueToTurnTime) {
     alertify.delay(MyCheversi.MOVE_DELAY*2).log(msg);
 }
 
+/**
+ * Plays the last played game's movie
+ */
 MyCheversi.prototype.watchMovie = function() {
     if(this.turnState !== MyCheversi.turnState.GAME_OVER)
         return;
@@ -399,6 +460,9 @@ MyCheversi.prototype.watchMovie = function() {
     }
 }
 
+/**
+ * Resets the game's status
+ */
 MyCheversi.prototype.resetStatus = function() {
     this.marker.resetStatus();
     this.board.resetStatus();
@@ -407,6 +471,9 @@ MyCheversi.prototype.resetStatus = function() {
     this.selectedPiece = null;
 }
 
+/**
+ * Updates the game's visuals according to new scenario's details
+ */
 MyCheversi.prototype.updateVisuals = function(visuals) {
     this.board.updateTexture(visuals.boardtexture);
     this.marker.updateTexture(visuals.markertexture);
@@ -414,6 +481,9 @@ MyCheversi.prototype.updateVisuals = function(visuals) {
     this.materials.black = visuals.blackmaterial;
 }
 
+/**
+ * Displays the game and its components
+ */
 MyCheversi.prototype.display = function() {
     //Reset pick ID
     this.registerForPickID = 1;
