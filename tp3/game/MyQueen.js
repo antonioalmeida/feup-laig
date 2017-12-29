@@ -13,7 +13,8 @@ function MyQueen(game, color, representation, initialPosition, file) {
     this.primitiveComponents = [
         new MyCylinder(game.scene,[1, 1, 1, 5, 10, 1, 1]),
         new MyCylinder(game.scene,[1, 0.7, 0.3, 5, 10, 0, 0]),
-		new MyCylinder(game.scene,[1, 0.4, 0.25, 5, 10, 1, 1]),
+        new MyCylinder(game.scene,[1, 1, 1, 10, 10, 1, 1]),
+		new MyCylinder(game.scene,[1, 0.3, 0.5, 5, 10, 1, 1]),
         new MySphere(game.scene,[1, 10, 15])
     	];
 	}
@@ -49,15 +50,24 @@ MyQueen.prototype.displayWithPrimitives = function() {
 
     this.scene.pushMatrix();
     this.scene.rotate(-Math.PI/2, 1, 0, 0);
-    this.scene.translate(0, 0, 2.55);
-    this.scene.scale(1, 1, 0.6);
+    this.scene.translate(0, 0, 2.50);
+    this.scene.scale(0.4, 0.4, 0.1);
     this.primitiveComponents[2].display();
     this.scene.popMatrix();
 
+    // top inverted cylinder
     this.scene.pushMatrix();
-    this.scene.translate(0, 3.2, 0);
-    this.scene.scale(0.1, 0.1, 0.1);
+    this.scene.rotate(-Math.PI/2, 1, 0, 0);
+    this.scene.translate(0, 0, 2.55);
+    this.scene.scale(1, 1, 0.6);
     this.primitiveComponents[3].display();
+    this.scene.popMatrix();
+
+    // sphere at the top
+    this.scene.pushMatrix();
+    this.scene.translate(0, 3.25, 0);
+    this.scene.scale(0.1, 0.1, 0.1);
+    this.primitiveComponents[4].display();
     this.scene.popMatrix();
 
     this.scene.popMatrix();
