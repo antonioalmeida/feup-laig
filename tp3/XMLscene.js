@@ -11,12 +11,27 @@ function XMLscene(interface) {
 
     this.lightValues = {};
 
-    this.graphs = []; //For different game scenarios
+    this.graphs = [];
+    this.graphIndex = null;
 
     this.game = null;
 
+    this.currTime = new Date().getTime();
     this.startTime = -1;
     this.delta = 0;
+
+    //Auxiliar variables for camera
+    this.oldPerspective = 0;
+    this.cameraTransition = null;
+
+    // Game options retrieved from GUI in their default values
+    this.perspective = 0;
+    this.difficulty = MyCheversi.difficulty.MEDIUM;
+    this.gameMode = MyCheversi.mode.SINGLEPLAYER;
+    this.player = MyCheversi.player.WHITE;
+    this.turnTime = 30;
+    this.realisticPieces = false;
+    this.highlightTiles = true;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -39,8 +54,6 @@ XMLscene.prototype.init = function(application) {
     this.gl.enable(this.gl.BLEND);
 	this.gl.blendEquation(this.gl.FUNC_ADD);
 	this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-    this.gl.depthFunc(this.gl.LEQUAL);
-	this.gl.depthMask(true);
 
     this.axis = new CGFaxis(this);
 
@@ -57,23 +70,34 @@ XMLscene.prototype.init = function(application) {
  * Initializes the scene lights with the values read from the LSX file.
  */
 XMLscene.prototype.initLights = function() {
+    if(this.graphIndex === null)
+        return;
+
+    //Reset lights so lights from previous scene do not interfere
+    this.lightValues = {};
+    for(let i = 0; i < 8; ++i) {
+        this.lights[i].setVisible(false);
+        this.lights[i].disable();
+        this.lights[i].update();
+    }
+
     var i = 0;
     // Lights index.
 
     // Reads the lights from the scene graph.
-    for (var key in this.graph.lights) {
+    for (var key in this.graphs[this.graphIndex].lights) {
         if (i >= 8)
             break;              // Only eight lights allowed by WebGL.
 
-        if (this.graph.lights.hasOwnProperty(key)) {
-            var light = this.graph.lights[key];
+        if (this.graphs[this.graphIndex].lights.hasOwnProperty(key)) {
+            var light = this.graphs[this.graphIndex].lights[key];
 
             this.lights[i].setPosition(light[1][0], light[1][1], light[1][2], light[1][3]);
             this.lights[i].setAmbient(light[2][0], light[2][1], light[2][2], light[2][3]);
             this.lights[i].setDiffuse(light[3][0], light[3][1], light[3][2], light[3][3]);
             this.lights[i].setSpecular(light[4][0], light[4][1], light[4][2], light[4][3]);
 
-            this.lights[i].setVisible(true);
+            this.lights[i].setVisible(false);
             if (light[0])
                 this.lights[i].enable();
             else
@@ -91,7 +115,8 @@ XMLscene.prototype.initLights = function() {
  * Initializes the scene cameras.
  */
 XMLscene.prototype.initCameras = function() {
-    this.camera = new CGFcamera(0.4,0.1,500,vec3.fromValues(15, 15, 15),vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.6,0.1,500,vec3.fromValues(20, 20, 20),vec3.fromValues(0, 7.5, 0));
+    this.camera.zoom(20);
 }
 
 /* Handler called when the graph is finally loaded.
@@ -99,33 +124,51 @@ XMLscene.prototype.initCameras = function() {
  */
 XMLscene.prototype.onGraphLoaded = function()
 {
-    this.camera.near = this.graph.near;
-    this.camera.far = this.graph.far;
-    this.axis = new CGFaxis(this,this.graph.referenceLength);
+    if(this.graphIndex === null)
+        return;
 
-    this.setGlobalAmbientLight(this.graph.ambientIllumination[0], this.graph.ambientIllumination[1],
-    this.graph.ambientIllumination[2], this.graph.ambientIllumination[3]);
+    this.camera.near = this.graphs[this.graphIndex].near;
+    this.camera.far = this.graphs[this.graphIndex].far;
+    this.axis = new CGFaxis(this,this.graphs[this.graphIndex].referenceLength);
 
-    this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+    this.setGlobalAmbientLight(this.graphs[this.graphIndex].ambientIllumination[0], this.graphs[this.graphIndex].ambientIllumination[1],
+    this.graphs[this.graphIndex].ambientIllumination[2], this.graphs[this.graphIndex].ambientIllumination[3]);
+
+    this.gl.clearColor(this.graphs[this.graphIndex].background[0], this.graphs[this.graphIndex].background[1], this.graphs[this.graphIndex].background[2], this.graphs[this.graphIndex].background[3]);
 
     this.initLights();
 
     // Adds lights group.
-    this.interface.addLightsGroup(this.graph.lights);
+    this.interface.addLightsGroup(this.graphs[this.graphIndex].lights);
+
+    // Update game visuals' properties
+    this.game.updateVisuals(this.graphs[this.graphIndex].gamevisuals);
 }
 
 /**
- * Update scene (which is basically update animations)
+ * Update scene
  */
 XMLscene.prototype.update = function(currTime) {
+    //Update time gone since start of app
+    this.currTime = currTime;
     if(this.startTime == -1)
         this.startTime = currTime;
     else
         this.delta = (currTime - this.startTime) / 1000;
 
+    //Update selection shader and marker time
     let factor = Math.abs(Math.sin(0.005*currTime));
-    if(this.game != null)
-        this.game.selectedShader.setUniformsValues({timeFactor: factor});
+    if(this.game != null) {
+        this.game.shaders.selected.setUniformsValues({timeFactor: factor});
+        this.game.marker.update(currTime);
+    }
+
+    //Change camera perspective, if the case
+    if(this.cameraTransition !== null) {
+        this.cameraTransition.update();
+        if(this.cameraTransition.done)
+            this.cameraTransition = null;
+    }
 }
 
 /**
@@ -136,21 +179,59 @@ XMLscene.prototype.logPicking = function() {
     	if (this.pickResults != null && this.pickResults.length > 0) {
     		for (var i=0; i< this.pickResults.length; i++) {
     			var obj = this.pickResults[i][0];
-                if(!(obj instanceof MyTile)) //TODO: Lel sort this out to something decent
-                    this.game.pickPiece(obj);
-
-                var customId = this.pickResults[i][1];
-                console.log("Picked object: " + obj + ", with pick id " + customId);
+                  if(obj) {
+                        if(!(obj instanceof MyTile))
+                            this.game.pickPiece(obj);
+                        else
+                            this.game.makeMove(obj);
+                        var customId = this.pickResults[i][1];
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
+                  }
     		}
     		this.pickResults.splice(0,this.pickResults.length);
     	}
     }
 }
 
+XMLscene.prototype.changePerspective = function() {
+    this.cameraTransition = new MyCameraAnimation(this, parseInt(this.oldPerspective), parseInt(this.perspective));
+    this.oldPerspective = this.perspective;
+}
+
+XMLscene.prototype.startGame = function() {
+    // values from dat.gui get casted to string
+    let mode = parseInt(this.gameMode);
+    let player = parseInt(this.player);
+    let difficulty = parseInt(this.difficulty);
+
+    this.game.startGame(mode, player, difficulty);
+}
+
+XMLscene.prototype.undoMove = function() {
+    this.game.undoMove();
+}
+
+XMLscene.prototype.watchMovie = function() {
+    this.game.watchMovie();
+}
+
+XMLscene.prototype.loadGraphs = function(filenames) {
+    this.scenarioNames = filenames;
+    for(let id in filenames)
+        this.graphs.push(new MySceneGraph(filenames[id]+'.xml', this));
+
+    this.graphIndex = 0;
+
+    //Add game buttons
+    this.interface.addGameButtons(filenames);
+}
+
 /**
  * Displays the scene.
  */
 XMLscene.prototype.display = function() {
+    this.logPicking();
+    this.clearPickRegistration();
     // ---- BEGIN Background, camera and axis setup
 
     // Clear image and depth buffer everytime we update the scene
@@ -166,44 +247,29 @@ XMLscene.prototype.display = function() {
 
     this.pushMatrix();
 
-    if (this.graph.loadedOk)
-    {
+    if (this.graphIndex !== null && this.graphs[this.graphIndex].loadedOk) {
         // Applies initial transformations.
-        this.multMatrix(this.graph.initialTransforms);
-
-		// Draw axis
-		this.axis.display();
+        this.multMatrix(this.graphs[this.graphIndex].initialTransforms);
 
         var i = 0;
         for (var key in this.lightValues) {
             if (this.lightValues.hasOwnProperty(key)) {
-                if (this.lightValues[key]) {
-                    this.lights[i].setVisible(true);
+                if (this.lightValues[key])
                     this.lights[i].enable();
-                }
-                else {
-                    this.lights[i].setVisible(false);
+                else
                     this.lights[i].disable();
-                }
                 this.lights[i].update();
                 i++;
             }
         }
 
         // Displays the scene.
-        //this.graph.displayScene();
-
+        this.graphs[this.graphIndex].displayScene();
     }
-	else
-	{
-		// Draw axis
+	else // Draw axis
 		this.axis.display();
-	}
 
-    this.logPicking();
-    this.clearPickRegistration();
     this.game.display();
-
 
     this.popMatrix();
 

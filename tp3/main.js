@@ -19,12 +19,16 @@ serialInclude(
 'primitives/MyCircle.js',
 'primitives/MyCylinder.js',
 'primitives/MySphere.js',
+'primitives/MyCube.js',
+'primitives/MyObj.js',
 'XMLscene.js',
 'MySceneGraph.js',
 'MyGraphNode.js',
 'MyGraphLeaf.js',
 'MyInterface.js',
+'MyClient.js',
 'animations/MyAnimation.js',
+'animations/MyCameraAnimation.js',
 'animations/MyLinearAnimation.js',
 'animations/MyCircularAnimation.js',
 'animations/MyBezierAnimation.js',
@@ -38,9 +42,9 @@ serialInclude(
 'game/MyKnight.js',
 'game/MyRook.js',
 'game/MyTile.js',
+'game/MyMarker.js',
 
-main=function() {
-
+main = function() {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
     var myInterface = new MyInterface();
@@ -51,16 +55,11 @@ main=function() {
     app.setScene(myScene);
     app.setInterface(myInterface);
 
-    myInterface.setActiveCamera(myScene.camera);
+    // Uncoment this to active mouse controlled camera
+    //myInterface.setActiveCamera(myScene.camera);
 
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
-
-	var filename=getUrlVars()['file'] || "demo.xml";
-
-	// create and load graph, and associate it to scene.
-	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
+	// Load scenarios
+    myScene.loadGraphs(['demo','futuristic']);
 
 	// start
     app.run();

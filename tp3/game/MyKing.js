@@ -1,27 +1,80 @@
-function MyKing(game, color) {
-    MyPiece.call(this, game, color);
+/**
+ * MyKing
+ * @constructor
+ * @param game - game instance where king will be used
+ * @param {string} color - piece's color
+ * @param representation - piece's internal representation for the server module
+ * @param initialPosition - piece's initial position in the scene
+ * @param file - file where piece object is stored (for realistic pieces)
+ */
+function MyKing(game, color, representation, initialPosition, file) {
+    MyPiece.call(this, game, color, representation, initialPosition, file);
 
-    this.primitive = new MyCylinder(game.scene, [2.5, 1, 0, 5, 10, 1, 1]);
+    this.primitiveComponents = [
+        new MyCylinder(game.scene,[1, 1, 1, 5, 10, 1, 1]),
+        new MyCylinder(game.scene,[1, 0.7, 0.3, 5, 10, 0, 0]),
+        new MyCylinder(game.scene,[1, 1, 1, 10, 10, 1, 1]),
+		new MyCylinder(game.scene,[1, 0.3, 0.55, 5, 10, 1, 1]),
+        new MyCube(game.scene)
+    ];
 }
 
 MyKing.prototype = Object.create(MyPiece.prototype);
 MyKing.prototype.constructor = MyKing;
 
-MyKing.prototype.display = function () {
+/**
+ * Displays the king using previously defined primitives
+ */
+MyKing.prototype.displayWithPrimitives = function() {
     this.scene.pushMatrix();
-    if(this.selected)
-        this.scene.setActiveShader(this.game.selectedShader);
 
-    this.game.materials[this.color].apply();
-    this.scene.rotate(-Math.PI/2, 1, 0, 0); //TODO: Only here while primitive is cylinder
-    this.scene.registerForPick(this.game.registerForPickID++, this);
-    this.primitive.display();
-
-    if(this.selected)
-        this.scene.setActiveShader(this.game.defaultShader);
+    this.scene.pushMatrix();
+    this.scene.rotate(-Math.PI/2, 1, 0, 0);
+    this.scene.scale(1, 1, 0.5);
+    this.primitiveComponents[0].display();
     this.scene.popMatrix();
-}
 
-MyKing.prototype.setTile = function (tile) {
-    this.tile = tile;
+    this.scene.pushMatrix();
+    this.scene.rotate(-Math.PI/2, 1, 0, 0);
+    this.scene.translate(0, 0, 0.25);
+    this.scene.scale(1, 1, 1.5);
+    this.primitiveComponents[1].display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.rotate(-Math.PI/2, 1, 0, 0);
+    this.scene.translate(0, 0, 1.75);
+    this.scene.scale(0.3, 0.3, 0.8);
+    this.primitiveComponents[0].display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+    this.scene.rotate(-Math.PI/2, 1, 0, 0);
+    this.scene.translate(0, 0, 2.50);
+    this.scene.scale(0.4, 0.4, 0.1);
+    this.primitiveComponents[2].display();
+    this.scene.popMatrix();
+
+    // top inverted cylinder
+    this.scene.pushMatrix();
+    this.scene.rotate(-Math.PI/2, 1, 0, 0);
+    this.scene.translate(0, 0, 2.55);
+    this.scene.scale(1, 1, 0.8);
+    this.primitiveComponents[3].display();
+    this.scene.popMatrix();
+
+    // cross at the top
+    this.scene.pushMatrix();
+   	this.scene.translate(0, 3.8, 0);
+   	this.scene.scale(0.2, 0.2, 1.1);
+    this.primitiveComponents[4].display();
+    this.scene.popMatrix();
+
+    this.scene.pushMatrix();
+   	this.scene.translate(0, 3.8, 0);
+   	this.scene.scale(0.2, 0.9, 0.2);
+    this.primitiveComponents[4].display();
+    this.scene.popMatrix();
+
+    this.scene.popMatrix();
 }

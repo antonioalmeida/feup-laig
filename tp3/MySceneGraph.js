@@ -8,6 +8,7 @@ var TEXTURES_INDEX = 3;
 var MATERIALS_INDEX = 4;
 var ANIMATIONS_INDEX = 5;
 var NODES_INDEX = 6;
+var GAMEVISUALS_INDEX = 7;
 
 var STOP = false;
 
@@ -18,9 +19,9 @@ var STOP = false;
 function MySceneGraph(filename, scene) {
     this.loadedOk = null;
 
-    // Establish bidirectional references between scene and graph.
+    this.filename = filename.replace(/\.xml/g, '');
+
     this.scene = scene;
-    scene.graph = this;
 
     this.nodes = [];
     this.idRoot = null; // The id of the root element.
@@ -28,6 +29,8 @@ function MySceneGraph(filename, scene) {
     this.animations = [];
 
     this.selectableNodes = [];
+
+    this.gamevisuals = {};
 
     // Sequential numerical ID for intermediate nodes
     this.currentNumericID = 0;
@@ -65,8 +68,9 @@ MySceneGraph.prototype.onXMLReady = function() {
 
     this.loadedOk = true;
 
-    // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-    this.scene.onGraphLoaded();
+    //So that first loaded scenario is set as the initial one
+    if(this.scene.scenarioNames[0] === this.filename)
+        this.scene.onGraphLoaded();
 }
 
 /**
@@ -87,8 +91,8 @@ MySceneGraph.prototype.parseLSXFile = function(rootElement) {
     var error;
 
     // Processes each node, verifying errors.
-    var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "ANIMATIONS", "NODES"];
-    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, ANIMATIONS_INDEX, NODES_INDEX];
+    var tags = ["INITIALS", "ILLUMINATION", "LIGHTS", "TEXTURES", "MATERIALS", "ANIMATIONS", "NODES", "GAMEVISUALS"];
+    var indexes = [INITIALS_INDEX, ILLUMINATION_INDEX, LIGHTS_INDEX, TEXTURES_INDEX, MATERIALS_INDEX, ANIMATIONS_INDEX, NODES_INDEX, GAMEVISUALS_INDEX];
     var index;
 
     for (let i = 0; i < tags.length; ++i) {
@@ -122,6 +126,8 @@ MySceneGraph.prototype.parseElement = function(index, element) {
             return this.parseAnimations(element);
         case NODES_INDEX:
             return this.parseNodes(element);
+        case GAMEVISUALS_INDEX:
+            return this.parseGameVisuals(element);
     }
 }
 
@@ -1085,7 +1091,7 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                 else if (descendants[j].nodeName == "LEAF") {
                     var leafInfo = {};
 
-                    var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch']);
+                    var type = this.reader.getItem(descendants[j], 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'patch', 'obj']);
                     if (type == null) {
                         this.onXMLMinorError("leaf type for node " + nodeID + " descendant unrecognised or couldn't be parsed; skipping");
                         continue;
@@ -1095,10 +1101,13 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                     console.log("   Leaf: " + type);
 
                     var argsStr = this.reader.getString(descendants[j], 'args');
-                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Split numbers from string (integer or decimal) - returns values as strings
                     var argsFloat = [];
-                    for(let m = 0; m < args.length; m++) // Parse args values to float
-                        argsFloat[m] = parseFloat(args[m]);
+
+                    var args = argsStr.match(/[+-]?\d+(\.\d+)?/g); //Split numbers from string (integer or decimal) - returns values as strings
+                    if(type != 'obj') {
+                        for(let m = 0; m < args.length; m++) // Parse args values to float
+                            argsFloat[m] = parseFloat(args[m]);
+                    }
 
                     var argsError = null;
                     if((argsError = this.checkLeafArgs(type, argsFloat)) != null) {
@@ -1135,6 +1144,11 @@ MySceneGraph.prototype.parseNodes = function(nodesNode) {
                         }
 
                         leafInfo.controlPoints = controlPoints;
+                    }
+
+                    if(type == 'obj') {
+                        // arg of obj is filename - need unparsed string value
+                        leafInfo.args = argsStr;
                     }
 
                     this.nodes[nodeID].addLeaf(new MyGraphLeaf(this, leafInfo));
@@ -1205,6 +1219,10 @@ MySceneGraph.prototype.checkLeafArgs = function(type, args) {
             if(args.length > 3) this.onXMLMinorError("too many arguments for primitive sphere");
             if(args.filter(function(a) {return a > 0;}).length < 3) return "sphere args must be positive values";
             return null;
+        case 'obj':
+            if(args.length < 0) return "insufficient number of arguments for primitive obj";
+            if(args.length > 1) this.onXMLMinorError("too many arguments for primitive obj");
+            return null;
     }
 }
 
@@ -1215,6 +1233,93 @@ MySceneGraph.prototype.checkControlPoints = function(elem) {
         else if(elem[i].length != length) return "all CPLINEs must have the same number of CPOINTs";
     }
     return null;
+}
+
+/**
+ * Parses the game visuals properties, i.e board and marker textures, piece materials
+ */
+MySceneGraph.prototype.parseGameVisuals = function(node) {
+    let visuals = node.children;
+
+    for(let i = 0; i < visuals.length; ++i) {
+        switch(visuals[i].nodeName) {
+            case "MARKERTEXTURE":
+                this.gamevisuals.markertexture = new CGFtexture(this.scene, this.reader.getString(visuals[i], 'src'));
+                break;
+            case "BOARDTEXTURE":
+                this.gamevisuals.boardtexture = new CGFtexture(this.scene, this.reader.getString(visuals[i], 'src'));
+                break;
+            case "WHITEMATERIAL":
+            case "BLACKMATERIAL": {
+                var materialSpecs = visuals[i].children;
+
+                var nodeNames = [];
+
+                for (var j = 0; j < materialSpecs.length; j++)
+                    nodeNames.push(materialSpecs[j].nodeName);
+
+                // Determines the values for each field.
+                var vars = ['r', 'g', 'b', 'a'];
+                // Shininess.
+                var shininessIndex = nodeNames.indexOf("shininess");
+                var shininess;
+                if (shininessIndex == -1) {
+                    this.onXMLMinorError("no shininess value defined for piece material; defaulting to n = 1");
+                    shininess = 1;
+                }else{
+                    shininess = this.reader.getFloat(materialSpecs[shininessIndex], 'value');
+                    var shininessError = null;
+                    if ((shininessError = this.checkNullAndNaN(shininess, "unable to parse shininess value for pieces materials", "shininess is a non numeric value")) != null) {
+                        this.onXMLMinorError(shininessError + "; defaulting to n = 1");
+                        shininess = 1;
+                    }
+                }
+
+                // Specular component.
+                var specularIndex = nodeNames.indexOf("specular");
+                var specularComponent = [];
+                var specularError = null;
+
+                // Diffuse component.
+                var diffuseIndex = nodeNames.indexOf("diffuse");
+                var diffuseComponent = [];
+                var diffuseError = null;
+
+                // Ambient component.
+                var ambientIndex = nodeNames.indexOf("ambient");
+                var ambientComponent = [];
+                var ambientError = null;
+
+                // Emission component.
+                var emissionIndex = nodeNames.indexOf("emission");
+                var emissionComponent = [];
+                var emissionError = null;
+
+                for (let i = 0; i < vars.length; ++i) {
+                    if ((specularError = this.parseRGBAvalue(materialSpecs[specularIndex], specularComponent, "specular", vars[i], visuals[i].nodeName)) != null)
+                        return specularError;
+                    if ((diffuseError = this.parseRGBAvalue(materialSpecs[diffuseIndex], diffuseComponent, "diffuse", vars[i], visuals[i].nodeName)) != null)
+                        return diffuseError;
+                    if ((ambientError = this.parseRGBAvalue(materialSpecs[ambientIndex], ambientComponent, "ambient", vars[i], visuals[i].nodeName)) != null)
+                        return ambientError;
+                    if ((emissionError = this.parseRGBAvalue(materialSpecs[emissionIndex], emissionComponent, "emission", vars[i], visuals[i].nodeName)) != null)
+                        return emissionError;
+                }
+
+                // Creates material with the specified characteristics.
+                var newMaterial = new CGFappearance(this.scene);
+                newMaterial.setShininess(shininess);
+                newMaterial.setAmbient(ambientComponent[0], ambientComponent[1], ambientComponent[2], ambientComponent[3]);
+                newMaterial.setDiffuse(diffuseComponent[0], diffuseComponent[1], diffuseComponent[2], diffuseComponent[3]);
+                newMaterial.setSpecular(specularComponent[0], specularComponent[1], specularComponent[2], specularComponent[3]);
+                newMaterial.setEmission(emissionComponent[0], emissionComponent[1], emissionComponent[2], emissionComponent[3]);
+                if(visuals[i].nodeName === "WHITEMATERIAL")
+                    this.gamevisuals.whitematerial = newMaterial;
+                else //BLACKMATERIAL
+                    this.gamevisuals.blackmaterial = newMaterial;
+            }
+        }
+    }
 }
 
 /*
